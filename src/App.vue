@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <router-view></router-view>
+        <!--tab选项卡-->
         <div class="bottom">
             <mu-paper>
                 <mu-bottom-nav :value="bottomNav" @change="handleChange">
@@ -10,12 +11,15 @@
                 </mu-bottom-nav>
             </mu-paper>
         </div>
+        <!--聊天组件-->
         <chat></chat>
+        <!--注册组件-->
         <register></register>
+        <!--登录组件-->
         <login></login>
+        <!--提示组件-->
         <dialogmodel></dialogmodel>
     </div>
-
 </template>
 
 <script>

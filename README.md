@@ -1,21 +1,23 @@
-# vuepro
+# webchat
 
-> vuepro
-
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
+npm install -----安装依赖
+npm run dev -----运行
+npm run build -----打包
+node prod.server.js -----打包后运行
+//记得替换
+Index.vue和Chat.vue下的io.connect('http://qiufengh.com:8081')
+http://qiufengh.com:8081改成自己的项目地址。
+```
+效果图
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+![](https://github.com/hua1995116/webchat/blob/master/img/1.gif)
+![](https://github.com/hua1995116/webchat/blob/master/img/2.gif)
+![](https://github.com/hua1995116/webchat/blob/master/img/3.gif)
+![](https://github.com/hua1995116/webchat/blob/master/img/4.gif)
+
+
+在线观看
+
+[http://www.qiufengh.com:8081/#/](http://www.qiufengh.com:8081/#/)
+

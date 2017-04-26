@@ -48,7 +48,9 @@
           }
         },
         created() {
+            // socket内部，this指针指向问题
             const that = this
+            // 连接websocket地址
             this.socket = io.connect('http://qiufengh.com:8081')
             this.socket.on('message', function(obj) {
                 that.$store.commit('addroomdetailinfos', obj)
@@ -64,12 +66,14 @@
                 this.socket.emit('logout', this.getusername)
             },
             submess() {
+                // 判断发送信息是否为空
                 if (document.getElementById('message').value !== '') {
                     let obj = {
                         username: this.getusername,
                         src: this.getusersrc,
                         msg: document.getElementById('message').value
                     }
+                    // 传递消息信息
                     this.socket.emit('message', obj)
                     document.getElementById('message').value = ''
                 } else {

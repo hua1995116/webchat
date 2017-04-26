@@ -1,5 +1,5 @@
 var mongoose = require('mongoose')
-
+//聊天记录模型
 var MessageSchema = new mongoose.Schema({
   username: String,
   src:String,
@@ -10,7 +10,7 @@ var MessageSchema = new mongoose.Schema({
     default: Date.now()
   }
 })
-
+//静态方法
 MessageSchema.statics = {
   fetch: function (cb) {
     return this
