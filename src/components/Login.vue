@@ -28,15 +28,21 @@
         },
         methods: {
             submit() {
-                var name = document.form2.username.value
-                var password = document.form2.password.value
-                var data = {
-                    name: name,
-                    password: password
+                var name = document.form2.username.value.trim()
+                var password = document.form2.password.value.trim()
+                console.log(password)
+                if (name !== '' && password !== '') {
+                    var data = {
+                        name: name,
+                        password: password
+                    }
+    //                this.loading = 'loading'
+                    this.$store.dispatch('loginsubmit', data)
+                    document.form2.reset()
+                } else {
+                    this.$store.commit('changedialog')
+                    this.$store.commit('changedialoginfo', '帐号密码不能为空')
                 }
-//                this.loading = 'loading'
-                this.$store.dispatch('loginsubmit', data)
-                document.form2.reset()
             },
             register() {
                 this.$store.commit('openregistertoggle')

@@ -42,38 +42,48 @@ module.exports = function (app) {
     var _user = req.body
     var name = _user.name
     var password = _user.password
-
+    console.log(password)
     User.findOne({name: name}, function (err, user) {
       if (err) {
         console.log(err);
       }
+      console.log(user)
       if (!user) {
         res.json({
           errno: 1,
           data: '用户不存在'
         })
-      }
-      user.comparePassword(password, function (err, isMatch) {
-        if (err) {
-          console.log(err);
-        }
-        if (isMatch) {
-          req.session.user = user;
-          console.log('success');
-          res.json({
-            errno: 0,
-            data: '登录成功',
-            name: name,
-            src: user.src
+      } else{
+        if (!!password) {
+          user.comparePassword(password, function (err, isMatch) {
+            if (err) {
+              console.log(err);
+            }
+            if (isMatch) {
+              req.session.user = user;
+              console.log('success');
+              res.json({
+                errno: 0,
+                data: '登录成功',
+                name: name,
+                src: user.src
+              })
+            } else {
+              res.json({
+                errno: 1,
+                data: '密码不正确'
+              })
+              console.log('password is not meached');
+            }
           })
         } else {
           res.json({
             errno: 1,
-            data: '密码不正确'
+            data: '登录失败'
           })
-          console.log('password is not meached');
         }
-      })
+      }
+
     })
   }),
   // 信息

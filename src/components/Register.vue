@@ -23,15 +23,20 @@
     export default {
         methods: {
             submit() {
-                var name = document.form1.username.value
-                var password = document.form1.password.value
+                var name = document.form1.username.value.trim()
+                var password = document.form1.password.value.trim()
                 var src = './static/img/' + Math.ceil(Math.random() * 10) + '.jpg'
-                var data = {
-                    name: name,
-                    password: password,
-                    src: src
+                if (name !== '' && password !== '') {
+                    var data = {
+                        name: name,
+                        password: password,
+                        src: src
+                    }
+                    this.$store.dispatch('registersubmit', data)
+                } else {
+                    this.$store.commit('changedialog')
+                    this.$store.commit('changedialoginfo', '帐号密码不能为空')
                 }
-                this.$store.dispatch('registersubmit', data)
             },
             login() {
                 this.$store.commit('openlogintoggle')
