@@ -51,7 +51,7 @@
             // socket内部，this指针指向问题
             const that = this
             // 连接websocket地址
-            this.socket = io.connect('http://qiufengh.com:8081')
+            this.socket = io.connect('localhost:8081')
             this.socket.on('message', function(obj) {
                 that.$store.commit('addroomdetailinfos', obj)
                 window.scrollTo(0, 900000)

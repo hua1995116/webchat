@@ -52,7 +52,7 @@
         },
         created() {
             var that = this
-            this.socket = io.connect('http://qiufengh.com:8081')
+            this.socket = io.connect('localhost:8081')
             this.socket.on('login', function (obj) {
                 that.$store.commit('setusers', obj)
             })

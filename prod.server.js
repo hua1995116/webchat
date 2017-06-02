@@ -74,12 +74,19 @@ io.on('connection', function (socket) {
     console.log(obj.username + '说：' + obj.msg)
   })
   socket.on('login',function (obj) {
+    socket.name = obj.name;
     users[obj.name] = obj
     //用于监听用户进行聊天室
     io.emit('login', users)
   })
   socket.on('logout',function (name) {
     delete users[name]
+    //用户监听用退出聊天室
+    io.emit('logout', users)
+  })
+
+  socket.on('disconnect', function () {
+    delete users[socket.name]
     //用户监听用退出聊天室
     io.emit('logout', users)
   })
