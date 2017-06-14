@@ -16,8 +16,15 @@ http://qiufengh.com:8081改成自己的项目地址。
 继上一个项目[用vuejs仿网易云音乐（实现听歌以及搜索功能）](https://github.com/hua1995116/musiccloudWebapp)后，发现上一个项目单纯用vue的model管理十分混乱，然后我去看了看vuex，打算做一个项目练练手，又不想做一个重复的项目，这次我就放弃颜值，打算走心派。结合了后台nodejs，以及数据库mongodb来开发了一个实时聊天系统。这个系统可以说是一统江山，也算是实现前端程序员的一个梦了，前后通吃。自认为是一个比全的项目。项目地址：[https://github.com/hua1995116/webchat](https://github.com/hua1995116/webchat) 觉得好的请顺手来个star。
 
 ![这里写图片描述](http://img.blog.csdn.net/20170426135802018)
+### 实现功能
+- [x] 聊天功能 -- 完成
+- [x] 多个聊天室 -- 完成
+- [x] 与机器人对接 -- 完成
+- [x] 图片发送 -- 完成
+- [x] 注册功能 -- 完成
+- [x] 登录功能 -- 完成
 
-**技术栈**
+### 技术栈
 
  - 前端 vue，vue-router ,vuex
  - 后端 nodejs，express
@@ -25,7 +32,7 @@ http://qiufengh.com:8081改成自己的项目地址。
  - 通讯 websocket
  - 脚手架工具 vue-cli
 
-**结构**
+### 结构
 ├─build 
 ├─config 
 ├─models(存放mongoose对象)
@@ -52,7 +59,7 @@ vue init webpack my-project-name
 
 ![这里写图片描述](http://img.blog.csdn.net/20170426140218399?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-**前端**
+### 前端
 
 首先看src目录下的页面布局。
 main.js// 主入口
@@ -169,7 +176,7 @@ state: {
 ```
 由于控制代码太多，所以之后的内容请大家移步，我的github地址。[https://github.com/hua1995116/webchat/](https://github.com/hua1995116/webchat/)
 
-**服务器端**
+### 服务器端
 
 由于build下dev-server.js中webpack代码太多，太杂乱，不易于讲解。主要来看看用于打包后的服务器端。两份代码是一样的。
 prod.server.js（根目录下）
@@ -265,7 +272,7 @@ io.on('connection', function (socket) {
 app.use(express.static('./dist'));
 ```
 
-**schema模型**
+### schema模型
 
 schema/user.js
 ```
