@@ -2,9 +2,16 @@ var mongoose = require('mongoose')
 //聊天记录模型
 var MessageSchema = new mongoose.Schema({
   username: String,
-  src:String,
-  msg: String,
-  roomid:String,
+  src: String,
+  msg: {
+    type: String,
+    default: ''
+  },
+  roomid: String,
+  img: {
+    type: String,
+    default: ''
+  },
   time: {
     type: Date,
     default: Date.now()

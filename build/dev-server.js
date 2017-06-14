@@ -125,41 +125,55 @@ var server = app.listen(port)
 // var http = require('http').Server(app);
 var io = require('socket.io')(server);
 var Message = require('../models/message')
-var users = {}
+global.users = {}
+
 io.on('connection', function (socket) {
   //监听用户发布聊天内容
   socket.on('message', function (obj) {
     //向所有客户端广播发布的消息
-    console.log(obj)
-    io.emit('message', obj)
     var mess = {
       username: obj.username,
       src:obj.src,
       msg: obj.msg,
-      roomid:'room1'
+      img: obj.img,
+      roomid: obj.room
     }
-    var message = new Message(mess)
-    message.save(function (err, mess) {
-      if (err) {
-        console.log(err)
-      }
-      console.log(mess)
-    })
-    console.log(obj.username + '说：' + obj.msg)
+    io.to(mess.roomid).emit('message', mess)
+    console.log(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
+    if (obj.img === '') {
+      var message = new Message(mess)
+      message.save(function (err, mess) {
+        if (err) {
+          console.log(err)
+        }
+        console.log(mess)
+      })
+    }
   })
   socket.on('login',function (obj) {
-    socket.name = obj.name;
-    users[obj.name] = obj
-    io.emit('login', users)
+    socket.name = obj.name
+    socket.room = obj.roomid
+    if (!global.users[obj.roomid]) {
+      global.users[obj.roomid] = {}
+    }
+    global.users[obj.roomid][obj.name] = obj
+    socket.join(obj.roomid)
+    io.to(obj.roomid).emit('login', global.users[obj.roomid])
+    console.log(obj.name + '加入了' + obj.roomid)
   })
-  socket.on('logout',function (name) {
-    delete users[name]
-    io.emit('logout', users)
+  socket.on('logout',function (obj) {
+    delete  global.users[obj.roomid][obj.name]
+    console.log(obj.name + '退出了' + obj.roomid)
+    io.to(obj.roomid).emit('logout', global.users[obj.roomid])
   })
+
   socket.on('disconnect', function () {
-    delete users[socket.name]
-    //用户监听用退出聊天室
-    io.emit('logout', users)
+    if (global.users[socket.room]) {
+      delete global.users[socket.room][socket.name]
+      // 用户监听用退出聊天室
+      console.log(socket.name + '退出了' + socket.room)
+      io.to(socket.room).emit('logout', global.users[socket.room])
+    }
   })
 })
 

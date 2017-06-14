@@ -1,8 +1,8 @@
 <template>
     <div>
         <div v-for="obj in getrobotmsg">
-            <othermsg v-if="obj.user!=getusername" :name="obj.user" img="./static/img/robot.jpg" :msg="obj.message"></othermsg>
-            <mymsg v-if="obj.user==getusername" :name="getusername" :img="getusersrc" :msg="obj.message"></mymsg>
+            <othermsg v-if="obj.user!=getusername" :name="obj.user" head="./static/img/robot.jpg" :msg="obj.message"></othermsg>
+            <mymsg v-if="obj.user==getusername" :name="getusername" :head="getusersrc" :msg="obj.message"></mymsg>
         </div>
         <div style="height:250px"></div>
         <div class="con-input">

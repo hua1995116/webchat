@@ -7,9 +7,11 @@
         </div>
         <div class="content">
             <form action="" name="form1">
-                <mu-text-field label="帐号" labelFloat name="username" /><br/>
-                <mu-text-field label="密码" type="password" labelFloat name="password"/><br/>
-                <mu-raised-button label="注册" fullWidth @click="submit" primary />
+                <mu-text-field label="帐号" labelFloat name="username"/>
+                <br/>
+                <mu-text-field label="密码" type="password" labelFloat name="password"/>
+                <br/>
+                <mu-raised-button label="注册" fullWidth @click="submit" primary/>
             </form>
             <div @click="login">
                 我已有帐号
@@ -19,7 +21,7 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-    import { mapGetters } from 'vuex'
+    import {mapGetters} from 'vuex'
     export default {
         methods: {
             submit() {
@@ -52,20 +54,20 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-.register
-    position: absolute
-    left:0
-    right:0
-    top:0
-    bottom:0
-    background:#fff
-    .mu-appbar
-        text-align: center
-        .mu-flat-button-label
-            font-size: 20px
-    .content
-        width:80%
-        margin:20px auto
-        .mu-text-field
-            width:100%
+    .register
+        position: absolute
+        left: 0
+        right: 0
+        top: 0
+        bottom: 0
+        background: #fff
+        .mu-appbar
+            text-align: center
+            .mu-flat-button-label
+                font-size: 20px
+        .content
+            width: 80%
+            margin: 20px auto
+            .mu-text-field
+                width: 100%
 </style>

@@ -4,14 +4,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+// import qs from 'qs'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
     // 存放用户
+    socket: '',
     user: {
       name: '',
-      src: ''
+      src: '',
+      room: ''
     },
     // 存放历史记录
     messhistory: {
@@ -36,10 +39,11 @@ const store = new Vuex.Store({
     registertoggle: true,
     // 提示框显示控制
     dialog: false,
-     // 提示框内容
+    // 提示框内容
     dialoginfo: ''
   },
   getters: {
+    getsocket: state => state.socket,
     getid: state => state.roomdetail.id,
     getusers: state => state.roomdetail.users,
     getinfos: state => state.roomdetail.infos,
@@ -50,10 +54,14 @@ const store = new Vuex.Store({
     getdialoginfo: state => state.dialoginfo,
     getusername: state => state.user.name,
     getusersrc: state => state.user.src,
+    getuserroom: state => state.user.room,
     getmesshistoryinfos: state => state.messhistory.infos,
     getrobotmsg: state => state.robotmsg
   },
   mutations: {
+    setgetsocket (state, data) {
+      state.socket = data
+    },
     changechattoggle(state) {
       state.chattoggle = !state.chattoggle
     },
@@ -81,8 +89,14 @@ const store = new Vuex.Store({
     setusersrc(state, data) {
       state.user.src = data
     },
+    setuserroom(state, data) {
+      state.user.room = data
+    },
     addroomdetailinfos(state, data) {
       state.roomdetail.infos.push(data)
+    },
+    setroomdetailinfos(state) {
+      state.roomdetail.infos = []
     },
     setusers(state, data) {
       state.roomdetail.users = data
@@ -95,6 +109,20 @@ const store = new Vuex.Store({
     }
   },
   actions: {
+    uploadimg({commit}, data) {
+      var config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      }
+      axios.post('/file/uploadimg', data, config)
+        .then(function (data) {
+          if (data.data.errno === 0) {
+            console.log('上传成功')
+          }
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+    },
     registersubmit({commit}, data) {
       console.log(data)
       axios.post('/user/signup', data)
@@ -131,8 +159,8 @@ const store = new Vuex.Store({
           console.log(err)
         })
     },
-    getmesshistory({commit}) {
-      axios.get('/message')
+    getmesshistory({commit}, data) {
+      axios.get('/message', {params: data})
         .then(function (data) {
           commit('setmesshistoryinfos', data.data.data)
         })
