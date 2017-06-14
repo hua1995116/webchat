@@ -52,7 +52,7 @@
         },
         created() {
             var that = this
-            this.$store.commit('setgetsocket', io.connect('localhost:8083/'))
+            this.$store.commit('setgetsocket', io.connect('localhost:8081/'))
             // this.socket = io.connect('localhost:8081')
             this.getsocket.on('login', function (obj) {
                 console.log('member', obj)
