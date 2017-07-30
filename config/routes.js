@@ -152,15 +152,13 @@ module.exports = function (app) {
     // 信息
     app.get('/message', function (req, res) {
       var id = req.query.roomid
-      // console.log(id)
-      Message.find({roomid: id}, function (err, message) {
+      Message.find({roomid: id}).sort({"time": -1}).limit(80).exec(function (err, message) {
         if (err) {
           console.log(err)
         } else {
-          // console.log(message)
           res.json({
             errno: 0,
-            data: message
+            data: message.reverse()
           })
         }
       })

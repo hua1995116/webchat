@@ -34,10 +34,10 @@
             </div>
             <div class="bottom">
                 <div class="chat">
-                    <div class="input">
+                    <div class="input" @keyup.enter="submess">
                         <input type="text" id="message">
                     </div>
-                    <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
+                    <mu-raised-button label="发送" class="demo-raised-button" primary  @click="submess"/>
                 </div>
                 <div class="functions">
                     <div class="fun-li" @click="imgupload"></div>
@@ -66,7 +66,6 @@
             // 连接websocket地址
             // this.socket = io.connect('localhost:8081')
             this.getsocket.on('message', function (obj) {
-                console.log(obj)
                 that.$store.commit('addroomdetailinfos', obj)
                 window.scrollTo(0, 900000)
             })
@@ -100,7 +99,6 @@
                             msg: '',
                             room: that.getuserroom
                         }
-                        console.log(obj)
                         that.getsocket.emit('message', obj)
                     }
                     fr.readAsDataURL(file1)
@@ -164,7 +162,7 @@
         transform translate3d(0, 0, 0)
 
     &.fade-enter, &.fade-leave-active
-        opacity: 0
+        opacity: 1
         transform translate3d(100%, 0, 0)
 
     .container

@@ -16,6 +16,7 @@ const store = new Vuex.Store({
       src: '',
       room: ''
     },
+    isLogin: false,
     // 存放历史记录
     messhistory: {
       infos: []
@@ -59,6 +60,9 @@ const store = new Vuex.Store({
     getrobotmsg: state => state.robotmsg
   },
   mutations: {
+    setIsLogin (state, data) {
+      state.isLogin = data
+    },
     setgetsocket (state, data) {
       state.socket = data
     },
