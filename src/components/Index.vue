@@ -27,11 +27,11 @@
             <mu-divider/>
             <mu-list>
                 <mu-sub-header>历史聊天记录</mu-sub-header>
-                <mu-list-item title="聊天室6">
+                <mu-list-item title="聊天室1">
                     <mu-avatar src="./static/img/6.jpg" slot="leftAvatar"/>
                     <mu-icon value="chat_bubble" slot="right"/>
                 </mu-list-item>
-                <mu-list-item title="聊天室7">
+                <mu-list-item title="聊天室2">
                     <mu-avatar src="./static/img/7.jpg" slot="leftAvatar"/>
                     <mu-icon value="chat_bubble" slot="right"/>
                 </mu-list-item>
@@ -55,7 +55,6 @@
             this.$store.commit('setgetsocket', io.connect('localhost:8081/'))
             // this.socket = io.connect('localhost:8081')
             this.getsocket.on('login', function (obj) {
-                // console.log('member', obj)
                 that.$store.commit('setusers', obj)
             })
             this.$nextTick(function () {
@@ -87,6 +86,7 @@
                 }
                 this.$store.dispatch('getmesshistory', data)
                 this.$store.commit('setroomdetailinfos')
+                this.$store.commit('setchat', true)
             }
         }
     }

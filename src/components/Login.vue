@@ -1,5 +1,5 @@
 <template>
-    <div class="login" v-show="getlogintoggle">
+    <div class="login" v-if="getlogintoggle">
         <div class="header">
             <mu-appbar title="Title">
                 <mu-flat-button label="登录" slot="default"/>
@@ -11,9 +11,9 @@
                 <br/>
                 <mu-text-field label="密码" type="password" labelFloat name="password"/>
                 <br/>
-                <mu-raised-button label="登录" fullWidth @click="submit" primary/>
+                <div class="btn-radius" @click="submit">登录</div>
             </form>
-            <div @click="register">
+            <div @click="register" class="tip-user">
                 注册帐号
             </div>
         </div>
@@ -40,7 +40,7 @@
                     //                this.loading = 'loading'
                     this.$store.dispatch('loginsubmit', data)
                     document.form2.reset()
-                    this.$store.commit('setIsLogin', true)
+                    this.getSvgModal.$root.$options.clear()
                 } else {
                     this.$store.commit('changedialog')
                     this.$store.commit('changedialoginfo', '帐号密码不能为空')
@@ -54,7 +54,10 @@
         computed: {
             ...mapGetters([
                 'getlogintoggle'
-            ])
+            ]),
+            getSvgModal() {
+              return this.$store.state.svgmodal
+            }
         }
     }
 </script>
@@ -66,14 +69,16 @@
         right: 0
         top: 0
         bottom: 0
-        background: #fff
+        background-image : url(../assets/bg.jpg)
+        background-size: 100% 100%
+        background-position : center center
         .mu-appbar
             text-align: center
             .mu-flat-button-label
                 font-size: 20px
         .content
             width: 80%
-            margin: 20px auto
+            margin: 70px auto 20px
             .mu-text-field
                 width: 100%
             .mu-raised-button

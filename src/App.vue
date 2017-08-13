@@ -12,7 +12,7 @@
       </mu-paper>
     </div>
     <!--聊天组件-->
-    <chat v-if="isLogin"></chat>
+    <chat v-if="ischat"></chat>
     <!--注册组件-->
     <register></register>
     <!--登录组件-->
@@ -41,7 +41,7 @@
     },
     computed: {
       ...mapState([
-        'isLogin'
+        'ischat'
       ])
     },
     components: {

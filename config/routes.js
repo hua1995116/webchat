@@ -163,6 +163,20 @@ module.exports = function (app) {
         }
       })
     }),
+    // 获取历史记录
+    app.get('/history/message', function (req, res) {
+      var id = req.query.roomid
+      Message.find({roomid: id}).exec(function (err, messsage) {
+        if (err) {
+          console.log(err)
+        } else {
+          res.json({
+            errno: 0,
+            data: messsage
+          })
+        }
+      })
+    }),
     // 机器人消息
     app.get('/robotapi', function (req, res) {
       var response = res

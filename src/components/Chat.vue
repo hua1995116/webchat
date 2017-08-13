@@ -20,15 +20,15 @@
             <div class="chat">
                 <div v-for="obj in getmesshistoryinfos">
                     <othermsg v-if="obj.username!=getusername" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                              :img="obj.img"></othermsg>
+                              :img="obj.img" :mytime="obj.time"></othermsg>
                     <mymsg v-if="obj.username==getusername" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                           :img="obj.img"></mymsg>
+                           :img="obj.img" :mytime="obj.time"></mymsg>
                 </div>
                 <div v-for="obj in getinfos">
                     <othermsg v-if="obj.username!=getusername" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                              :img="obj.img"></othermsg>
+                              :img="obj.img" :mytime="obj.time"></othermsg>
                     <mymsg v-if="obj.username==getusername" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                           :img="obj.img"></mymsg>
+                           :img="obj.img" :mytime="obj.time"></mymsg>
                 </div>
                 <div style="height:120px"></div>
             </div>
@@ -66,12 +66,16 @@
             // 连接websocket地址
             // this.socket = io.connect('localhost:8081')
             this.getsocket.on('message', function (obj) {
+                console.log(obj)
                 that.$store.commit('addroomdetailinfos', obj)
-                window.scrollTo(0, 900000)
+                window.scroll(0, 10000)
             })
             this.getsocket.on('logout', function (obj) {
                 that.$store.commit('setusers', obj)
             })
+        },
+        mounted() {
+          window.scroll(0, 10000)
         },
         methods: {
             shownotice() {
@@ -97,7 +101,8 @@
                             src: that.getusersrc,
                             img: fr.result,
                             msg: '',
-                            room: that.getuserroom
+                            room: that.getuserroom,
+                            time: new Date()
                         }
                         that.getsocket.emit('message', obj)
                     }
@@ -117,6 +122,7 @@
                     roomid: this.getuserroom
                 }
                 this.getsocket.emit('logout', obj)
+                this.$store.commit('setchat', false)
             },
             submess() {
                 // 判断发送信息是否为空
@@ -126,7 +132,8 @@
                         src: this.getusersrc,
                         img: '',
                         msg: document.getElementById('message').value,
-                        room: this.getuserroom
+                        room: this.getuserroom,
+                        time: new Date()
                     }
                     // 传递消息信息
                     this.getsocket.emit('message', obj)

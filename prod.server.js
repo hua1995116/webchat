@@ -24,7 +24,7 @@ var cookieParser = require('cookie-parser')
 var session = require('cookie-session')
 // 用于异步回调
 mongoose.Promise = require('bluebird')
-global.db = mongoose.connect("mongodb://localhost:27017/chat")
+global.db = mongoose.connect("mongodb://localhost:27017/vuechat")
 
 // 服务器提交的数据json化
 app.use(bodyParser.json())
@@ -62,7 +62,8 @@ io.on('connection', function (socket) {
       src:obj.src,
       msg: obj.msg,
       img: obj.img,
-      roomid: obj.room
+      roomid: obj.room,
+      time: obj.time
     }
     io.to(mess.roomid).emit('message', mess)
     console.log(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)

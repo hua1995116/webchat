@@ -136,7 +136,8 @@ io.on('connection', function (socket) {
       src:obj.src,
       msg: obj.msg,
       img: obj.img,
-      roomid: obj.room
+      roomid: obj.room,
+      time: obj.time
     }
     io.to(mess.roomid).emit('message', mess)
     console.log(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
