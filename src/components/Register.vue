@@ -1,5 +1,5 @@
 <template>
-    <div class="register" v-show="getregistertoggle">
+    <div class="register" v-if="getregistertoggle">
         <div class="header">
             <mu-appbar title="Title">
                 <mu-flat-button label="注册" slot="default"/>
@@ -11,9 +11,9 @@
                 <br/>
                 <mu-text-field label="密码" type="password" labelFloat name="password"/>
                 <br/>
-                <mu-raised-button label="注册" fullWidth @click="submit" primary/>
+                <div class="btn-radius" @click="submit">注册</div>
             </form>
-            <div @click="login">
+            <div @click="login" class="tip-user">
                 我已有帐号
             </div>
         </div>
@@ -22,6 +22,7 @@
 
 <script type="text/ecmascript-6" scoped>
     import {mapGetters} from 'vuex'
+//    import SvgModal from './svg-modal'
     export default {
         methods: {
             submit() {
@@ -49,25 +50,64 @@
             ...mapGetters([
                 'getregistertoggle'
             ])
+        },
+        mounted() {
+//          const svg = SvgModal()
+//          this.$store.commit('setSvgModal', svg)
         }
     }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+
+    .btn-radius
+        width: 100%
+        height: 40px
+        margin-top: 20px
+        border : 1px solid rgba(255, 255, 255, 0.38)
+        background: rgba(255,255,255 ,0.02)
+        color: #fff;
+        line-height: 40px
+        text-align : center
+        border-radius: 50px
+
+    div.mu-appbar
+        background-color: rgba(0, 0, 0, 0.78)
+    .header
+        .mu-appbar
+            background-color: transparent
+    .content
+        .mu-text-field-input
+            color: #fff
+        .mu-text-field.has-label .mu-text-field-label.float
+            color: rgba(255, 255, 255, 0.38)
+        .mu-text-field-label
+            color: #fff
+        .mu-text-field-line
+            background-color: rgba(255, 255, 255, 0.38)
+        .mu-text-field-focus-line
+            background-color: #fff
+        .tip-user
+            width:100%
+            text-align: center
+            margin-top 20px
+            color:#fff
     .register
         position: absolute
         left: 0
         right: 0
         top: 0
         bottom: 0
-        background: #fff
+        background-image : url(../assets/bg.jpg)
+        background-size: 100% 100%
+        background-position : center center
         .mu-appbar
             text-align: center
             .mu-flat-button-label
                 font-size: 20px
         .content
             width: 80%
-            margin: 20px auto
+            margin: 70px auto 20px
             .mu-text-field
                 width: 100%
 </style>

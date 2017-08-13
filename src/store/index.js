@@ -19,7 +19,8 @@ const store = new Vuex.Store({
     isLogin: false,
     // 存放历史记录
     messhistory: {
-      infos: []
+      infos: [],
+      allmessage: []
     },
     // 存放房间信息，为了方便以后做多房间
     roomdetail: {
@@ -41,7 +42,9 @@ const store = new Vuex.Store({
     // 提示框显示控制
     dialog: false,
     // 提示框内容
-    dialoginfo: ''
+    dialoginfo: '',
+    // svg
+    svgmodal: null
   },
   getters: {
     getsocket: state => state.socket,
@@ -60,6 +63,9 @@ const store = new Vuex.Store({
     getrobotmsg: state => state.robotmsg
   },
   mutations: {
+    setSvgModal(state, data) {
+      state.svgmodal = data
+    },
     setIsLogin (state, data) {
       state.isLogin = data
     },
@@ -104,6 +110,9 @@ const store = new Vuex.Store({
     },
     setusers(state, data) {
       state.roomdetail.users = data
+    },
+    setAllMessHistory(state, data) {
+      state.messhistory.allmessage = data
     },
     setmesshistoryinfos(state, data) {
       state.messhistory.infos = data
@@ -167,6 +176,15 @@ const store = new Vuex.Store({
       axios.get('/message', {params: data})
         .then(function (data) {
           commit('setmesshistoryinfos', data.data.data)
+        })
+        .catch(function (err) {
+          console.log(err)
+        })
+    },
+    getAllMessHistory({commit}, data) {
+      axios.get('/history/message', {params: data})
+        .then(function (data) {
+          commit('setAllMessHistory', data.data.data)
         })
         .catch(function (err) {
           console.log(err)

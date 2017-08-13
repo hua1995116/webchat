@@ -2,7 +2,7 @@
     <div class="clear">
         <div class="item">
             <div class="name">
-                {{name}}
+                {{getdate}} &nbsp;&nbsp;{{name}}
             </div>
             <img :src="head" alt="" class="head">
             <div v-if="img">
@@ -16,8 +16,15 @@
 </template>
 
 <script type="text/ecmascript-6">
+    import dateFormat from '../utils/date'
     export default{
-        props: ['name', 'head', 'msg', 'img']
+        props: ['name', 'img', 'msg', 'head', 'mytime'],
+        computed: {
+            getdate() {
+                return dateFormat(new Date(this.mytime), 'yyyy-MM-dd HH:mm:ss')
+            }
+        }
+
     }
 </script>
 
@@ -43,16 +50,23 @@
             .name
                 position: absolute
                 top: -20px
-                width: 50px
+                width: 280px
                 height: 20px
                 left: -70px;
-                text-align center
+                text-align: left
                 overflow: hidden
                 -ms-text-overflow: ellipsis
                 text-overflow: ellipsis
                 white-space: nowrap
             span
                 word-break: break-all
+            .time
+                position: absolute
+                top: -40px
+                width: 200px
+                height: 20px
+                right: -70px
+                text-align: right
             .head
                 position: absolute
                 top: 0

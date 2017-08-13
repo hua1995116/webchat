@@ -152,13 +152,27 @@ module.exports = function (app) {
     // 信息
     app.get('/message', function (req, res) {
       var id = req.query.roomid
-      Message.find({roomid: id}).sort({"time": -1}).limit(80).exec(function (err, message) {
+      Message.find({roomid: id}).sort({"time": -1}).limit(5).exec(function (err, message) {
         if (err) {
           console.log(err)
         } else {
           res.json({
             errno: 0,
             data: message.reverse()
+          })
+        }
+      })
+    }),
+    // 获取历史记录
+    app.get('/history/message', function (req, res) {
+      var id = req.query.roomid
+      Message.find({roomid: id}).exec(function (err, messsage) {
+        if (err) {
+          console.log(err)
+        } else {
+          res.json({
+            errno: 0,
+            data: messsage
           })
         }
       })

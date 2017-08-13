@@ -65,6 +65,7 @@
                 this.$store.commit('setusersrc', '')
                 this.$store.commit('openlogintoggle')
                 this.$store.commit('setIsLogin', false)
+                window.location.href = '/'
             }
         }
     }
