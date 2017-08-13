@@ -2,7 +2,7 @@
     <div class="clear">
         <div class="item">
             <div class="name">
-                {{getdate}} &nbsp;&nbsp;{{name}}
+                <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
             </div>
             <img :src="head" alt="" class="head">
             <div v-if="img">
