@@ -101,7 +101,8 @@
                             src: that.getusersrc,
                             img: fr.result,
                             msg: '',
-                            room: that.getuserroom
+                            room: that.getuserroom,
+                            time: new Date()
                         }
                         that.getsocket.emit('message', obj)
                     }
