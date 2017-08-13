@@ -16,7 +16,6 @@ const store = new Vuex.Store({
       src: '',
       room: ''
     },
-    isLogin: false,
     // 存放历史记录
     messhistory: {
       infos: [],
@@ -44,7 +43,9 @@ const store = new Vuex.Store({
     // 提示框内容
     dialoginfo: '',
     // svg
-    svgmodal: null
+    svgmodal: null,
+    // 是否在聊天
+    ischat: false
   },
   getters: {
     getsocket: state => state.socket,
@@ -63,11 +64,11 @@ const store = new Vuex.Store({
     getrobotmsg: state => state.robotmsg
   },
   mutations: {
+    setchat(state, data) {
+      state.ischat = data
+    },
     setSvgModal(state, data) {
       state.svgmodal = data
-    },
-    setIsLogin (state, data) {
-      state.isLogin = data
     },
     setgetsocket (state, data) {
       state.socket = data

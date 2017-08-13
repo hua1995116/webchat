@@ -40,7 +40,6 @@
                     //                this.loading = 'loading'
                     this.$store.dispatch('loginsubmit', data)
                     document.form2.reset()
-                    this.$store.commit('setIsLogin', true)
                     this.getSvgModal.$root.$options.clear()
                 } else {
                     this.$store.commit('changedialog')

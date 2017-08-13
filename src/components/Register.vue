@@ -22,7 +22,7 @@
 
 <script type="text/ecmascript-6" scoped>
     import {mapGetters} from 'vuex'
-//    import SvgModal from './svg-modal'
+    import SvgModal from './svg-modal'
     export default {
         methods: {
             submit() {
@@ -52,8 +52,8 @@
             ])
         },
         mounted() {
-//          const svg = SvgModal()
-//          this.$store.commit('setSvgModal', svg)
+          const svg = SvgModal()
+          this.$store.commit('setSvgModal', svg)
         }
     }
 </script>

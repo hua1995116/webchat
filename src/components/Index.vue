@@ -55,7 +55,6 @@
             this.$store.commit('setgetsocket', io.connect('localhost:8081/'))
             // this.socket = io.connect('localhost:8081')
             this.getsocket.on('login', function (obj) {
-                // console.log('member', obj)
                 that.$store.commit('setusers', obj)
             })
             this.$nextTick(function () {
@@ -87,6 +86,7 @@
                 }
                 this.$store.dispatch('getmesshistory', data)
                 this.$store.commit('setroomdetailinfos')
+                this.$store.commit('setchat', true)
             }
         }
     }

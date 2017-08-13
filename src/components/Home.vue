@@ -64,7 +64,6 @@
                 this.$store.commit('setusername', '')
                 this.$store.commit('setusersrc', '')
                 this.$store.commit('openlogintoggle')
-                this.$store.commit('setIsLogin', false)
                 window.location.href = '/'
             }
         }

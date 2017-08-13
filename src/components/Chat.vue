@@ -68,11 +68,14 @@
             this.getsocket.on('message', function (obj) {
                 console.log(obj)
                 that.$store.commit('addroomdetailinfos', obj)
-                window.scrollTop = (0, 900000)
+                window.scroll(0, 10000)
             })
             this.getsocket.on('logout', function (obj) {
                 that.$store.commit('setusers', obj)
             })
+        },
+        mounted() {
+          window.scroll(0, 10000)
         },
         methods: {
             shownotice() {
@@ -118,6 +121,7 @@
                     roomid: this.getuserroom
                 }
                 this.getsocket.emit('logout', obj)
+                this.$store.commit('setchat', false)
             },
             submess() {
                 // 判断发送信息是否为空

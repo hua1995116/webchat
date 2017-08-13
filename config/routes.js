@@ -152,7 +152,7 @@ module.exports = function (app) {
     // 信息
     app.get('/message', function (req, res) {
       var id = req.query.roomid
-      Message.find({roomid: id}).sort({"time": -1}).limit(5).exec(function (err, message) {
+      Message.find({roomid: id}).sort({"time": -1}).limit(20).exec(function (err, message) {
         if (err) {
           console.log(err)
         } else {
