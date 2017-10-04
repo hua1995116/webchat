@@ -2,91 +2,40 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8874ba95-1824-4fbe-a128-e86be945c0c8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/files/1502626088924.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/files/1502627059084.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/files/1507026028287.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/files/1507026133891.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/files/1507027156412.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/files/1507027180984.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/files/1507027345371.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/files/1507027625978.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/files/1507035626032.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/1.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/10.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/2.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/3.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/4.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/5.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/6.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/7.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/8.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/9.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/bg.ee7d128.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/bg.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/img/robot.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/files/1507026028287.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/files/1507026133891.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/files/1507027156412.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/files/1507027180984.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/files/1507027345371.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/files/1507027625978.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/files/1507035626032.jpg" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/config/routes-build.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/dist/static/css/reset.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/BaseTransition.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/api/axios.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/api/server.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/Alert/index.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/Alert/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/Confirm/index.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/Confirm/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/Toast/index.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/Toast/index.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/loading-over/loading.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/loading-over/loading.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/components/loading/loading.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/utils/localStorage.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/utils/queryString.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/view/Chat.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/view/Home.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/view/Loan.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/view/Login.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/view/Register.vue" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/view/Robot.vue" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/Chat.vue" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/Dialogmodel.vue" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/HistoryChat.vue" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/Home.vue" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/Index.vue" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/Login.vue" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/Register.vue" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/components/Robot.vue" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/components/ChatHistory.vue" afterPath="$PROJECT_DIR$/src/view/ChatHistory.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/1.jpg" afterPath="$PROJECT_DIR$/static/img/1.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/10.jpg" afterPath="$PROJECT_DIR$/static/img/10.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/2.jpg" afterPath="$PROJECT_DIR$/static/img/2.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/3.jpg" afterPath="$PROJECT_DIR$/static/img/3.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/4.jpg" afterPath="$PROJECT_DIR$/static/img/4.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/5.jpg" afterPath="$PROJECT_DIR$/static/img/5.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/6.jpg" afterPath="$PROJECT_DIR$/static/img/6.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/7.jpg" afterPath="$PROJECT_DIR$/static/img/7.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/8.jpg" afterPath="$PROJECT_DIR$/static/img/8.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/9.jpg" afterPath="$PROJECT_DIR$/static/img/9.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/img/robot.jpg" afterPath="$PROJECT_DIR$/static/img/robot.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/index.html" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/css/reset.css" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/files/1502626088924.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/files/1502627059084.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/files/1507026028287.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/files/1507026133891.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/files/1507027156412.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/files/1507027180984.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/files/1507027345371.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/files/1507027625978.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/files/1507035626032.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/1.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/10.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/2.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/3.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/4.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/5.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/6.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/7.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/8.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/9.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/bg.ee7d128.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/bg.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/dist/static/img/robot.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/files/1502626088924.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/files/1502627059084.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/files/1507026028287.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/files/1507026133891.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/files/1507027156412.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/files/1507027180984.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/files/1507027345371.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/files/1507027625978.jpg" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/files/1507035626032.jpg" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/dev-server.js" afterPath="$PROJECT_DIR$/build/dev-server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/index.js" afterPath="$PROJECT_DIR$/config/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/routes.js" afterPath="$PROJECT_DIR$/config/routes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/prod.server.js" afterPath="$PROJECT_DIR$/prod.server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/App.vue" afterPath="$PROJECT_DIR$/src/App.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main.js" afterPath="$PROJECT_DIR$/src/main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/router/index.js" afterPath="$PROJECT_DIR$/src/router/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/store/index.js" afterPath="$PROJECT_DIR$/src/store/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/styles/default.css" afterPath="$PROJECT_DIR$/src/styles/default.css" />
     </list>
     <ignored path="vuexchat.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -141,11 +90,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="213">
-              <caret line="16" column="36" lean-forward="false" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
+            <state relative-caret-position="315">
+              <caret line="22" column="4" lean-forward="true" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="392">
+              <caret line="43" column="13" lean-forward="true" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -173,29 +132,6 @@
                 <element signature="n#style#0;n#div#2;n#div#1;n#div#1;n#div#0;n#transition#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="e#1445#1488#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Chat.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/view/Chat.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2454">
-              <caret line="116" column="24" lean-forward="false" selection-start-line="116" selection-start-column="24" selection-end-line="116" selection-end-column="24" />
-              <folding>
-                <element signature="n#style#0;n#div#3;n#div#2;n#div#0;n#template#0;n#!!top" expanded="true" />
-                <element signature="e#2120#2163#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseTransition.vue" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/BaseTransition.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="37" column="5" lean-forward="false" selection-start-line="37" selection-start-column="5" selection-end-line="37" selection-end-column="23" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -335,7 +271,7 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="160" />
+    <option name="x" value="183" />
     <option name="y" value="23" />
     <option name="width" value="1253" />
     <option name="height" value="712" />
@@ -365,6 +301,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="webchat-new" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webchat-new" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="webchat-new" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -513,15 +463,15 @@
       <workItem from="1502600841951" duration="7405000" />
       <workItem from="1503842317094" duration="2888000" />
       <workItem from="1506777454048" duration="2018000" />
-      <workItem from="1506841118520" duration="49770000" />
+      <workItem from="1506841118520" duration="49930000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="187684000" />
+    <option name="totallyTimeSpent" value="187844000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="160" y="23" width="1253" height="712" extended-state="0" />
+    <frame x="183" y="23" width="1253" height="712" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2767857" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -583,27 +533,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/static/img/bg.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/assets/bg.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/Othermsg.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="54" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="54" />
-          <folding>
-            <element signature="e#148#154#0" expanded="false" />
-            <element signature="e#154#160#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/components/Mymsg.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
@@ -1010,18 +939,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="383">
-          <caret line="43" column="13" lean-forward="true" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
-          <folding />
-        </state>
+    <entry file="file://$PROJECT_DIR$/static/files/1507026133891.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/files/1502627059084.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/files/1502626088924.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="16" column="36" lean-forward="false" selection-start-line="16" selection-start-column="36" selection-end-line="16" selection-end-column="36" />
+        <state relative-caret-position="315">
+          <caret line="22" column="4" lean-forward="true" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="43" column="13" lean-forward="true" selection-start-line="43" selection-start-column="13" selection-end-line="43" selection-end-column="13" />
           <folding />
         </state>
       </provider>
