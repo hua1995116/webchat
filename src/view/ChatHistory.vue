@@ -1,35 +1,33 @@
 <template>
   <div>
-    <transition name="fade">
-      <div class="container">
-        <div class="title">
-          <mu-appbar title="Title">
-            <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
-            <div class="center">
-              聊天记录
-            </div>
-            <mu-icon-button icon="expand_more" slot="right" />
-          </mu-appbar>
-        </div>
-        <div class="all-chat" v-show="isLoadingAchieve">
-          <div style="height:70px"></div>
-          <div class="chat">
-            <div v-if="messageData.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-            <div v-for="obj in messageData">
-              <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                        :img="obj.img" :mytime="obj.time"></othermsg>
-              <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                     :img="obj.img" :mytime="obj.time"></mymsg>
-            </div>
-            <template>
-              <mu-pagination v-show="messageData.length > 10" :total="pages.total" :current="pages.current" :defaultPageSize="pages.defaultPageSize" @pageChange="handleClick">
-              </mu-pagination>
-            </template>
-            <div style="height:20px"></div>
+    <div class="container">
+      <div class="title">
+        <mu-appbar title="Title">
+          <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
+          <div class="center">
+            聊天记录
           </div>
+          <mu-icon-button icon="expand_more" slot="right" />
+        </mu-appbar>
+      </div>
+      <div class="all-chat" v-show="isLoadingAchieve">
+        <div style="height:70px"></div>
+        <div class="chat">
+          <div v-if="messageData.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
+          <div v-for="obj in messageData">
+            <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                      :img="obj.img" :mytime="obj.time"></othermsg>
+            <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                   :img="obj.img" :mytime="obj.time"></mymsg>
+          </div>
+          <template>
+            <mu-pagination v-show="messageData.length > 10" :total="pages.total" :current="pages.current" :defaultPageSize="pages.defaultPageSize" @pageChange="handleClick">
+            </mu-pagination>
+          </template>
+          <div style="height:20px"></div>
         </div>
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 
@@ -109,7 +107,9 @@
   .container
     width: 100%
     height: 100%
+    overflow-y: scroll
     background: #ffffff
+    -webkit-overflow-scrolling: touch
     .title
       position: fixed
       height: 50px

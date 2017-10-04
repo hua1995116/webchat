@@ -39,6 +39,7 @@
     z-index: 100;
     height: 100%;
     width: 100%;
+    overflow: hidden;
     transition: all .4s cubic-bezier(.55,0,.1,1);
   }
   .slide-left-enter{

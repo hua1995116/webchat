@@ -1,49 +1,52 @@
 <template>
-  <div class="container">
-    <div class="title">
-      <mu-appbar title="Title">
-        <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
-        <div class="center">
-          聊天({{Object.keys(getUsers).length}})
+  <div>
+    <div class="container">
+      <div class="title">
+        <mu-appbar title="Title">
+          <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
+          <div class="center">
+            聊天({{Object.keys(getUsers).length}})
+          </div>
+          <mu-icon-button icon="expand_more" slot="right" @click="setLog"/>
+        </mu-appbar>
+      </div>
+      <div class="all-chat">
+        <div style="height:70px"></div>
+        <div>在线人员</div>
+        <div v-for="obj in getUsers" class="online">
+          <img :src="obj.src" alt="">
         </div>
-        <mu-icon-button icon="expand_more" slot="right" @click="setLog"/>
-      </mu-appbar>
-    </div>
-    <div class="all-chat">
-      <div style="height:70px"></div>
-      <div>在线人员</div>
-      <div v-for="obj in getUsers" class="online">
-        <img :src="obj.src" alt="">
       </div>
-    </div>
-    <div class="chat" v-if="isLoadingAchieve">
-      <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-      <div v-for="obj in getMessHistoryInfos">
-        <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                  :img="obj.img" :mytime="obj.time"></othermsg>
-        <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-               :img="obj.img" :mytime="obj.time"></mymsg>
-      </div>
-      <div v-for="obj in getInfos">
-        <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                  :img="obj.img" :mytime="obj.time"></othermsg>
-        <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-               :img="obj.img" :mytime="obj.time"></mymsg>
-      </div>
-      <div style="height:120px"></div>
-    </div>
-    <div class="bottom">
-      <div class="chat">
-        <div class="input" @keyup.enter="submess">
-          <input type="text" id="message">
+      <div class="chat" v-if="isLoadingAchieve">
+        <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
+        <div v-for="obj in getMessHistoryInfos">
+          <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                    :img="obj.img" :mytime="obj.time"></othermsg>
+          <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                 :img="obj.img" :mytime="obj.time"></mymsg>
         </div>
-        <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
+        <div v-for="obj in getInfos">
+          <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                    :img="obj.img" :mytime="obj.time"></othermsg>
+          <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                 :img="obj.img" :mytime="obj.time"></mymsg>
+        </div>
+        <div class="clear"></div>
+        <div style="height:120px"></div>
       </div>
-      <div class="functions">
-        <div class="fun-li" @click="imgupload"></div>
+      <div class="bottom">
+        <div class="chat">
+          <div class="input" @keyup.enter="submess">
+            <input type="text" id="message">
+          </div>
+          <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
+        </div>
+        <div class="functions">
+          <div class="fun-li" @click="imgupload"></div>
+        </div>
+        <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/*;capture=camera"
+               style="display: none" @change="fileup">
       </div>
-      <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/*;capture=camera"
-             style="display: none" @change="fileup">
     </div>
   </div>
 </template>
@@ -194,18 +197,12 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-  &.fade-enter-active, &.fade-leave-active
-    transition: all 0.2s linear
-    transform translate3d(0, 0, 0)
-
-  &.fade-enter, &.fade-leave-active
-    opacity: 1
-    transform translate3d(100%, 0, 0)
-
   .container
     width: 100%
-    min-height: 100%
+    height: 100%
+    overflow-y: scroll
     background: #ffffff
+    -webkit-overflow-scrolling: touch
     .title
       position: fixed
       height: 50px
