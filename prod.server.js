@@ -89,21 +89,30 @@ io.on('connection', function (socket) {
     console.log(obj.name + '加入了' + obj.roomid)
   })
   socket.on('logout',function (obj) {
-    delete  global.users[obj.roomid][obj.name]
-    console.log(obj.name + '退出了' + obj.roomid)
-    io.to(obj.roomid).emit('logout', global.users[obj.roomid])
+    try{
+      const is = Object.hasOwnProperty.call(global.users[obj.roomid], obj.name)
+      if (is) {
+        delete  global.users[obj.roomid][obj.name]
+        console.log(obj.name + '退出了' + obj.roomid)
+        io.to(obj.roomid).emit('logout', global.users[obj.roomid])
+        socket.leave(obj.roomid)
+      }
+    } catch (e) {
+      console.log(e)
+    }
   })
 
   socket.on('disconnect', function () {
-    if (global.users[socket.room]) {
+    if (global.users[socket.room] && global.users[socket.room].length > 0) {
       delete global.users[socket.room][socket.name]
       // 用户监听用退出聊天室
       console.log(socket.name + '退出了' + socket.room)
+      socket.leave(obj.roomid)
       io.to(socket.room).emit('logout', global.users[socket.room])
     }
   })
 })
 
-require('./config/routes')(app)
+require('./config/routes-build.js')(app)
 //声明静态资源地址
 app.use(express.static('./dist'));

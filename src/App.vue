@@ -2,7 +2,7 @@
   <div id="app">
     <router-view></router-view>
     <!--tab选项卡-->
-    <div class="bottom">
+    <div class="app-bottom" v-if="istab">
       <mu-paper>
         <mu-bottom-nav :value="bottomNav" @change="handleChange">
           <mu-bottom-nav-item value="recents" title="主页" icon="restore" to="/"/>
@@ -11,23 +11,11 @@
         </mu-bottom-nav>
       </mu-paper>
     </div>
-    <!--聊天组件-->
-    <chat v-if="ischat"></chat>
-    <!--注册组件-->
-    <register></register>
-    <!--登录组件-->
-    <login></login>
-    <!--提示组件-->
-    <dialogmodel></dialogmodel>
   </div>
 </template>
 
 <script>
   import {mapState} from 'vuex'
-  import Chat from './components/Chat.vue'
-  import Login from './components/Login.vue'
-  import Register from './components/Register.vue'
-  import Dialogmodel from './components/Dialogmodel.vue'
   export default {
     data () {
       return {
@@ -41,14 +29,8 @@
     },
     computed: {
       ...mapState([
-        'ischat'
+        'istab'
       ])
-    },
-    components: {
-      Chat,
-      Login,
-      Register,
-      Dialogmodel
     }
   }
 </script>
@@ -56,10 +38,11 @@
 <style lang="stylus" rel="stylesheet/stylus">
   #app
     width: 100%
-    min-height: 100%
-    .bottom
+    height: 100%
+    .app-bottom
       position: fixed
       bottom: 0
+      z-index: 102
       width: 100%
 
 

@@ -52,7 +52,8 @@ module.exports = function (app) {
               username: fields.username,
               src: fields.src,
               img: dstPath,
-              roomid: fields.roomid
+              roomid: fields.roomid,
+              time: fields.time
             }
             var message = new Message(mess)
             message.save(function (err, mess) {
@@ -166,15 +167,45 @@ module.exports = function (app) {
     // 获取历史记录
     app.get('/history/message', function (req, res) {
       var id = req.query.roomid
-      Message.find({roomid: id}).exec(function (err, messsage) {
-        if (err) {
-          console.log(err)
-        } else {
-          res.json({
-            errno: 0,
-            data: messsage
-          })
-        }
+      var current = req.query.current
+      if (!id || !current) {
+        res.json({
+          errno: 1
+        })
+      }
+      var message = {
+        errno: 0,
+        data: {},
+        total: 0,
+        current: current
+      }
+      var task1 = new Promise(function(resolve, reject) {
+        var skip = parseInt((current - 1) * 40)
+        Message.find({roomid: id}).skip(skip).limit(40).exec(function (err, data) {
+          if (err) {
+            console.log(err)
+            return reject()
+          } else {
+            message.data = data
+            return resolve()
+          }
+        })
+      })
+      var task2 = new Promise(function(resolve, reject) {
+        Message.find({roomid: id}).count().exec(function (err, data) {
+          if (err) {
+            console.log(err)
+            return reject()
+          } else {
+            message.total = data
+            return resolve()
+          }
+        })
+      })
+      Promise.all([task1, task2]).then(() => {
+        res.json({
+          data: message
+        })
       })
     }),
     // 机器人消息

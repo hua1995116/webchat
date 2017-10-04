@@ -125,11 +125,11 @@ created() {
     const that = this
     this.socket = io.connect('http://qiufengh.com:8081')
     this.socket.on('message', function(obj) {
-        that.$store.commit('addroomdetailinfos', obj)
+        that.$store.commit('addRoomDetailInfos', obj)
         window.scrollTo(0, 900000)
     })
     this.socket.on('logout', function (obj) {
-        that.$store.commit('setusers', obj)
+        that.$store.commit('setUsers', obj)
     })
 },
 ```

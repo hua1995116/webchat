@@ -1,0 +1,15 @@
+.wind-confirm-btns {
+    display: flex;
+}
+
+.wind-confirm-btn {
+    flex-grow: 1;
+    color: #0582cd;
+    font-size: 15px;
+    line-height: 40px;
+    font-weight: bold;
+}
+
+.wind-confirm-btn:nth-of-type(1) {
+    border-right: 1px solid #ededed;
+}
