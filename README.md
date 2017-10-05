@@ -5,8 +5,8 @@ npm run dev -----运行
 npm run build -----打包
 node prod.server.js -----打包后运行
 //记得替换
-Index.vue和Chat.vue下的io.connect('http://qiufengh.com:8081')
-http://qiufengh.com:8081改成自己的项目地址。
+Index.vue和Chat.vue下的io.connect('http://qiufengh.com:9090/')
+http://qiufengh.com:9090改成自己的项目地址。
 ```
 在线观看
 [http://www.qiufengh.com:9090/#/](http://www.qiufengh.com:9090/#/)
@@ -30,7 +30,9 @@ http://qiufengh.com:8081改成自己的项目地址。
 
 
 最后上几张图。
-![这里写图片描述](http://img.blog.csdn.net/20171005164102567?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+![这里写图片描述](http://img.blog.csdn.net/20171005172806229?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
 
 ![这里写图片描述](http://img.blog.csdn.net/20171005164309491?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYmx1ZWJsdWVza3lodWE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
