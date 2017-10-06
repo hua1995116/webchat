@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './store'
+import './styles/default.css'
 // 使用museui组件
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'

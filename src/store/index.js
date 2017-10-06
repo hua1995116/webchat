@@ -3,7 +3,8 @@
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
+import url from '../api/server.js'
+
 // import qs from 'qs'
 Vue.use(Vuex)
 
@@ -11,11 +12,6 @@ const store = new Vuex.Store({
   state: {
     // 存放用户
     socket: '',
-    user: {
-      name: '',
-      src: '',
-      room: ''
-    },
     // 存放历史记录
     messhistory: {
       infos: [],
@@ -32,187 +28,116 @@ const store = new Vuex.Store({
       message: 'Hi~有什么想知道的可以问我',
       user: 'robot'
     }],
-    // 聊天页面显示控制
-    chattoggle: false,
-    // 登录页面显示控制
-    logintoggle: false,
-    // 注册页面显示控制
-    registertoggle: true,
-    // 提示框显示控制
-    dialog: false,
-    // 提示框内容
-    dialoginfo: '',
     // svg
     svgmodal: null,
-    // 是否在聊天
-    ischat: false
+    // 是否启动tab
+    istab: false
   },
   getters: {
-    getsocket: state => state.socket,
-    getid: state => state.roomdetail.id,
-    getusers: state => state.roomdetail.users,
-    getinfos: state => state.roomdetail.infos,
-    getchattoggle: state => state.chattoggle,
-    getlogintoggle: state => state.logintoggle,
-    getregistertoggle: state => state.registertoggle,
-    getdialog: state => state.dialog,
-    getdialoginfo: state => state.dialoginfo,
-    getusername: state => state.user.name,
-    getusersrc: state => state.user.src,
-    getuserroom: state => state.user.room,
-    getmesshistoryinfos: state => state.messhistory.infos,
-    getrobotmsg: state => state.robotmsg
+    getSocket: state => state.socket,
+    getUsers: state => state.roomdetail.users,
+    getInfos: state => state.roomdetail.infos,
+    getMessHistoryInfos: state => state.messhistory.infos,
+    getMessHistoryAll: state => state.messhistory.allmessage,
+    getRobotMsg: state => state.robotmsg
   },
   mutations: {
-    setchat(state, data) {
-      state.ischat = data
+    setTab(state, data) {
+      state.istab = data
     },
     setSvgModal(state, data) {
       state.svgmodal = data
     },
-    setgetsocket (state, data) {
+    setGetSocket (state, data) {
       state.socket = data
     },
-    changechattoggle(state) {
-      state.chattoggle = !state.chattoggle
-    },
-    openlogintoggle(state) {
-      state.logintoggle = true
-    },
-    closelogintoggle(state) {
-      state.logintoggle = false
-    },
-    openregistertoggle(state) {
-      state.registertoggle = true
-    },
-    closeregistertoggle(state) {
-      state.registertoggle = false
-    },
-    changedialog(state) {
-      state.dialog = !state.dialog
-    },
-    changedialoginfo(state, data) {
-      state.dialoginfo = data
-    },
-    setusername(state, data) {
-      state.user.name = data
-    },
-    setusersrc(state, data) {
-      state.user.src = data
-    },
-    setuserroom(state, data) {
-      state.user.room = data
-    },
-    addroomdetailinfos(state, data) {
+    addRoomDetailInfos(state, data) {
       state.roomdetail.infos.push(data)
     },
-    setroomdetailinfos(state) {
+    setRoomDetailInfos(state) {
       state.roomdetail.infos = []
     },
-    setusers(state, data) {
+    setUsers(state, data) {
       state.roomdetail.users = data
     },
     setAllMessHistory(state, data) {
       state.messhistory.allmessage = data
     },
-    setmesshistoryinfos(state, data) {
+    setMessHistoryInfos(state, data) {
       state.messhistory.infos = data
     },
-    setrobotmsg(state, data) {
+    setRobotMsg(state, data) {
       state.robotmsg.push(data)
     }
   },
   actions: {
-    uploadimg({commit}, data) {
-      var config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    async uploadImg({commit}, data) {
+      const res = await url.postUploadFile(data)
+      if (res) {
+        if (res.data.errno === 0) {
+          console.log('上传成功')
+        }
       }
-      axios.post('/file/uploadimg', data, config)
-        .then(function (data) {
-          if (data.data.errno === 0) {
-            console.log('上传成功')
-          }
-        })
-        .catch(function (err) {
-          console.log(err)
-        })
     },
-    registersubmit({commit}, data) {
-      console.log(data)
-      axios.post('/user/signup', data)
-        .then(function (data) {
-          if (data.data.errno === 0) {
-            commit('closeregistertoggle')
-            commit('openlogintoggle')
-            commit('changedialog')
-            commit('changedialoginfo', data.data.data)
-          } else {
-            commit('changedialog')
-            commit('changedialoginfo', data.data.data)
-          }
-        })
-        .catch(function (err) {
-          console.log(err)
-        })
+    async registerSubmit({commit}, data) {
+      const res = await url.RegisterUser(data)
+      if (res.data.errno === 0) {
+        return {
+          status: 'success',
+          data: res.data
+        }
+      }
+      return {
+        status: 'fail',
+        data: res.data.data
+      }
     },
-    loginsubmit({commit}, data) {
-      axios.post('/user/signin', data)
-        .then(function (data) {
-          if (data.data.errno === 0) {
-            commit('closelogintoggle')
-            commit('changedialog')
-            commit('changedialoginfo', data.data.data)
-            commit('setusername', data.data.name)
-            commit('setusersrc', data.data.src)
-          } else {
-            commit('changedialog')
-            commit('changedialoginfo', data.data.data)
-          }
-        })
-        .catch(function (err) {
-          console.log(err)
-        })
+    async loginSubmit({commit}, data) {
+      const res = await url.loginUser(data)
+      if (res.data.errno === 0) {
+        return {
+          status: 'success',
+          data: res.data
+        }
+      }
+      return {
+        status: 'fail',
+        data: res.data.data
+      }
     },
-    getmesshistory({commit}, data) {
-      axios.get('/message', {params: data})
-        .then(function (data) {
-          commit('setmesshistoryinfos', data.data.data)
-        })
-        .catch(function (err) {
-          console.log(err)
-        })
+    async getMessHistory({commit}, data) {
+      const res = await url.RoomHistory(data)
+      if (res) {
+        commit('setMessHistoryInfos', res.data.data)
+      }
     },
-    getAllMessHistory({commit}, data) {
-      axios.get('/history/message', {params: data})
-        .then(function (data) {
-          commit('setAllMessHistory', data.data.data)
-        })
-        .catch(function (err) {
-          console.log(err)
-        })
+    async getAllMessHistory({commit}, data) {
+      const res = await url.RoomHistoryAll(data)
+      if (res.data.data.errno === 0) {
+        return {
+          data: res.data.data.data,
+          total: res.data.data.total
+        }
+        // commit('setAllMessHistory', res.data.data.data)
+      }
     },
-    getrobatmess({commit}, data) {
-      var robotdata = ''
-      axios.get('/robotapi', {
-        params: data
-      })
-        .then(function (data) {
-          robotdata = JSON.parse(data.data.data)
-          // 分类信息
-          if (robotdata.code === 100000) {
-            commit('setrobotmsg', {message: robotdata.text, user: 'robot'})
-          } else if (robotdata.code === 200000) {
-            let data = robotdata.text + robotdata.url
-            commit('setrobotmsg', {message: data, user: 'robot'})
-          } else if (robotdata.code === 302000) {
-            commit('setrobotmsg', {message: '暂不支持此类对话', user: 'robot'})
-          } else {
-            commit('setrobotmsg', {message: '暂不支持此类对话', user: 'robot'})
-          }
-        })
-        .catch(function (err) {
-          console.log(err)
-        })
+    async getRobatMess({commit}, data) {
+      let robotdata = ''
+      const res = await url.getRobotMessage(data)
+      if (res) {
+        robotdata = JSON.parse(res.data.data)
+        // 分类信息
+        if (robotdata.code === 100000) {
+          commit('setRobotMsg', {message: robotdata.text, user: 'robot'})
+        } else if (robotdata.code === 200000) {
+          let data = robotdata.text + robotdata.url
+          commit('setRobotMsg', {message: data, user: 'robot'})
+        } else if (robotdata.code === 302000) {
+          commit('setRobotMsg', {message: '暂不支持此类对话', user: 'robot'})
+        } else {
+          commit('setRobotMsg', {message: '暂不支持此类对话', user: 'robot'})
+        }
+      }
     }
   }
 })

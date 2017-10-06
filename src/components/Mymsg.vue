@@ -1,17 +1,15 @@
 <template>
-    <div class="clear">
-        <div class="item">
-            <div class="name">
-                <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
-            </div>
-            <img :src="head" alt="" class="head">
-            <div v-if="img">
-                <img :src="img" alt="" class="img">
-            </div>
-            <span v-if="msg">
-                {{msg}}
-            </span>
+    <div class="item">
+        <div class="name">
+            <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
         </div>
+        <img :src="head" alt="" class="head">
+        <div v-if="img">
+            <img :src="img" alt="" class="img">
+        </div>
+        <span v-if="msg">
+            {{msg}}
+        </span>
     </div>
 </template>
 
@@ -29,9 +27,8 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-    .clear
-        margin-top: 10px
         .item
+            margin-top: 10px
             position: relative
             clear: both
             display: inline-block

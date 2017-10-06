@@ -39,9 +39,10 @@ module.exports = function (app) {
         var uploadedPath = inputFile.path
         var array = inputFile.originalFilename.split('.')
         var imgtype = array[array.length - 1]
+        var realPath = './dist/static/files/' + new Date().getTime() + '.' + imgtype
         var dstPath = './static/files/' + new Date().getTime() + '.' + imgtype
         //重命名为真实文件名
-        fs.rename(uploadedPath, dstPath, function (err) {
+        fs.rename(uploadedPath, realPath, function (err) {
           if (err) {
             console.log('rename error: ' + err)
             res.json({
