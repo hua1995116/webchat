@@ -1,51 +1,53 @@
 <template>
   <div>
     <div class="container">
-      <div class="title">
-        <mu-appbar title="Title">
-          <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
-          <div class="center">
-            聊天({{Object.keys(getUsers).length}})
+      <div id="container">
+        <div class="title">
+          <mu-appbar title="Title">
+            <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
+            <div class="center">
+              聊天({{Object.keys(getUsers).length}})
+            </div>
+            <mu-icon-button icon="expand_more" slot="right" @click="setLog"/>
+          </mu-appbar>
+        </div>
+        <div class="all-chat">
+          <div style="height:70px"></div>
+          <div>在线人员</div>
+          <div v-for="obj in getUsers" class="online">
+            <img :src="obj.src" alt="">
           </div>
-          <mu-icon-button icon="expand_more" slot="right" @click="setLog"/>
-        </mu-appbar>
-      </div>
-      <div class="all-chat">
-        <div style="height:70px"></div>
-        <div>在线人员</div>
-        <div v-for="obj in getUsers" class="online">
-          <img :src="obj.src" alt="">
         </div>
-      </div>
-      <div class="chat" v-if="isLoadingAchieve">
-        <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-        <div v-for="obj in getMessHistoryInfos">
-          <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                    :img="obj.img" :mytime="obj.time"></othermsg>
-          <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                 :img="obj.img" :mytime="obj.time"></mymsg>
-        </div>
-        <div v-for="obj in getInfos">
-          <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                    :img="obj.img" :mytime="obj.time"></othermsg>
-          <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                 :img="obj.img" :mytime="obj.time"></mymsg>
-        </div>
-        <div class="clear"></div>
-        <div style="height:120px"></div>
-      </div>
-      <div class="bottom">
-        <div class="chat">
-          <div class="input" @keyup.enter="submess">
-            <input type="text" id="message">
+        <div class="chat" v-if="isLoadingAchieve">
+          <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
+          <div v-for="obj in getMessHistoryInfos">
+            <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                      :img="obj.img" :mytime="obj.time"></othermsg>
+            <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                   :img="obj.img" :mytime="obj.time"></mymsg>
           </div>
-          <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
+          <div v-for="obj in getInfos">
+            <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                      :img="obj.img" :mytime="obj.time"></othermsg>
+            <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
+                   :img="obj.img" :mytime="obj.time"></mymsg>
+          </div>
+          <div class="clear"></div>
+          <div style="height:120px"></div>
         </div>
-        <div class="functions">
-          <div class="fun-li" @click="imgupload"></div>
+        <div class="bottom">
+          <div class="chat">
+            <div class="input" @keyup.enter="submess">
+              <input type="text" id="message">
+            </div>
+            <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
+          </div>
+          <div class="functions">
+            <div class="fun-li" @click="imgupload"></div>
+          </div>
+          <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/*;capture=camera"
+                 style="display: none" @change="fileup">
         </div>
-        <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/*;capture=camera"
-               style="display: none" @change="fileup">
       </div>
     </div>
   </div>
@@ -66,7 +68,8 @@
       return {
         roomid: '',
         useranme: '',
-        isLoadingAchieve: false
+        isLoadingAchieve: false,
+        container: {}
       }
     },
     created() {
@@ -82,6 +85,7 @@
       this.useranme = getItem('userid')
     },
     mounted() {
+      this.container = document.querySelector('.container')
       // socket内部，this指针指向问题
       const that = this
       this.$store.commit('setRoomDetailInfos')
@@ -107,7 +111,9 @@
         await this.$store.dispatch('getMessHistory', {roomid: this.roomid})
         loading.hide()
         this.isLoadingAchieve = true
-//        window.scroll(0, 10000)
+        this.$nextTick(() => {
+          this.container.scrollTop = 10000
+        })
       }, 1000)
     },
     methods: {
@@ -149,6 +155,9 @@
             that.getSocket.emit('message', obj)
           }
           fr.readAsDataURL(file1)
+          this.$nextTick(() => {
+            this.container.scrollTop = 10000
+          })
         } else {
           console.log('必须有文件')
         }
@@ -171,6 +180,9 @@
           // 传递消息信息
           this.getSocket.emit('message', obj)
           document.getElementById('message').value = ''
+          this.$nextTick(() => {
+            this.container.scrollTop = 10000
+          })
         } else {
           Alert({
             content: '内容不能为空'
