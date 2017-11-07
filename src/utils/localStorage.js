@@ -3,10 +3,14 @@ const localStorage = window.localStorage
 let storeStorage
 
 function store() {
-  if (!storeStorage) {
-    storeStorage = JSON.parse(localStorage.getItem(KEY) || '{}')
-  } else {
-    localStorage.setItem(KEY, JSON.stringify(storeStorage))
+  try {
+    if (!storeStorage) {
+      storeStorage = JSON.parse(localStorage.getItem(KEY) || '{}')
+    } else {
+      localStorage.setItem(KEY, JSON.stringify(storeStorage))
+    }
+  } catch (e) {
+    console.log(e);
   }
 }
 
