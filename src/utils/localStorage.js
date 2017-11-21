@@ -10,7 +10,7 @@ function store() {
       localStorage.setItem(KEY, JSON.stringify(storeStorage))
     }
   } catch (e) {
-    console.log(e);
+    console.log(e)
   }
 }
 
