@@ -160,9 +160,11 @@ io.on('connection', function (socket) {
       var message = new Message(mess)
       message.save(function (err, mess) {
         if (err) {
-          console.log(err)
+          // console.log(err)
+          global.logger.error(err)
         }
-        console.log(mess)
+        // console.log(mess)
+        global.logger.info(mess)
       })
     }
   })
@@ -175,19 +177,19 @@ io.on('connection', function (socket) {
     global.users[obj.roomid][obj.name] = obj
     socket.join(obj.roomid)
     io.to(obj.roomid).emit('login', global.users[obj.roomid])
-    console.log(obj.name + '加入了' + obj.roomid)
+    global.logger.info(obj.name + '加入了' + obj.roomid)
   })
   socket.on('logout',function (obj) {
     try{
       const is = Object.hasOwnProperty.call(global.users[obj.roomid], obj.name)
       if (is) {
         delete  global.users[obj.roomid][obj.name]
-        console.log(obj.name + '退出了' + obj.roomid)
+        global.logger.info(obj.name + '退出了' + obj.roomid)
         io.to(obj.roomid).emit('logout', global.users[obj.roomid])
         socket.leave(obj.roomid)
       }
     } catch (e) {
-      console.log(e)
+      global.logger.error(e)
     }
   })
 
@@ -195,7 +197,7 @@ io.on('connection', function (socket) {
     if (global.users[socket.room] && global.users[socket.room].length > 0) {
       delete global.users[socket.room][socket.name]
       // 用户监听用退出聊天室
-      console.log(socket.name + '退出了' + socket.room)
+      global.logger.info(socket.name + '退出了' + socket.room)
       socket.leave(obj.roomid)
       io.to(socket.room).emit('logout', global.users[socket.room])
     }

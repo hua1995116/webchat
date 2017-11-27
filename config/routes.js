@@ -28,9 +28,9 @@ module.exports = function (app) {
     form.parse(req, function (err, fields, files) {
       console.log(fields)
       var filesTmp = JSON.stringify(files, null, 2)
-      console.log(filesTmp)
+      // console.log(filesTmp)
       if (err) {
-        console.log('parse error: ' + err)
+        global.logger.error('parse error: ' + err)
         res.json({
           errno: 1
         })
@@ -43,7 +43,7 @@ module.exports = function (app) {
         //重命名为真实文件名
         fs.rename(uploadedPath, dstPath, function (err) {
           if (err) {
-            console.log('rename error: ' + err)
+            global.logger.error('rename error: ' + err)
             res.json({
               errno: 1
             })
@@ -58,11 +58,11 @@ module.exports = function (app) {
             var message = new Message(mess)
             message.save(function (err, mess) {
               if (err) {
-                console.log(err)
+                global.logger.error(err)
               }
-              console.log(mess)
+              global.logger.info(mess)
             })
-            console.log('rename ok')
+            global.logger.info('rename ok')
             res.json({
               errno: 0
             })
@@ -75,10 +75,10 @@ module.exports = function (app) {
   // 注册
   app.post('/user/signup', function (req, res) {
     var _user = req.body
-    console.log(_user)
+    // console.log(_user)
     User.findOne({name: _user.name}, function (err, user) {
       if (err) {
-        console.log(err)
+        global.logger.error(err)
       }
       if (user) {
         res.json({
@@ -89,7 +89,7 @@ module.exports = function (app) {
         var user = new User(_user)
         user.save(function (err, user) {
           if (err) {
-            console.log(err)
+            global.logger.error(err)
           }
           res.json({
             errno: 0,
@@ -101,16 +101,16 @@ module.exports = function (app) {
   }),
     // 登录
     app.post('/user/signin', function (req, res) {
-      console.log(req.body)
+      // console.log(req.body)
       var _user = req.body
       var name = _user.name
       var password = _user.password
-      console.log(password)
+      // console.log(password)
       User.findOne({name: name}, function (err, user) {
         if (err) {
-          console.log(err);
+          global.logger.error(err);
         }
-        console.log(user)
+        // console.log(user)
         if (!user) {
           res.json({
             errno: 1,
@@ -120,11 +120,11 @@ module.exports = function (app) {
           if (!!password) {
             user.comparePassword(password, function (err, isMatch) {
               if (err) {
-                console.log(err);
+                global.logger.error(err);
               }
               if (isMatch) {
                 req.session.user = user;
-                console.log('success');
+                global.logger.info('success');
                 res.json({
                   errno: 0,
                   data: '登录成功',
@@ -136,7 +136,7 @@ module.exports = function (app) {
                   errno: 1,
                   data: '密码不正确'
                 })
-                console.log('password is not meached');
+                global.logger.info('password is not meached');
               }
             })
           } else {
@@ -155,7 +155,7 @@ module.exports = function (app) {
       var id = req.query.roomid
       Message.find({roomid: id}).sort({"time": -1}).limit(80).exec(function (err, message) {
         if (err) {
-          console.log(err)
+          global.logger.error(err)
         } else {
           res.json({
             errno: 0,
@@ -183,7 +183,7 @@ module.exports = function (app) {
         var skip = parseInt((current - 1) * 40)
         Message.find({roomid: id}).skip(skip).limit(40).exec(function (err, data) {
           if (err) {
-            console.log(err)
+            global.logger.error(err)
             return reject()
           } else {
             message.data = data
@@ -194,7 +194,7 @@ module.exports = function (app) {
       var task2 = new Promise(function(resolve, reject) {
         Message.find({roomid: id}).count().exec(function (err, data) {
           if (err) {
-            console.log(err)
+            global.logger.error(err)
             return reject()
           } else {
             message.total = data
@@ -218,7 +218,7 @@ module.exports = function (app) {
         .send({info, userid, key})
         .end((err, res) => {
           if (err) {
-            console.log(err)
+            global.logger.error(err)
           }
           response.json({
             data: res.text

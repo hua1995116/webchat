@@ -11,6 +11,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "log4js": "^2.3.12",
     "vivus": "^0.4.1",
     "vue": "^2.2.2",
     "vue-router": "^2.3.0"
