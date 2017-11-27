@@ -17,7 +17,18 @@ app.use(router);
 /*引入*/
 var mongoose = require('mongoose')
 // 日志文件
-var morgan = require('morgan')
+// var morgan = require('morgan')
+var log4js = require('log4js');
+log4js.configure({
+    appenders: {
+      out: { type: 'stdout' },
+      app: { type: 'file', filename: 'application.log' }
+    },
+    categories: {
+      default: { appenders: [ 'out', 'app' ], level: 'debug' }
+    }
+})
+global.logger = log4js.getLogger()
 // sesstion 存储
 var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser')
@@ -40,7 +51,8 @@ app.use(session({
 var env = process.env.NODE_ENV || 'development'
 if ('development' === app.get('env')) {
   app.set('showStackError', true)
-  app.use(morgan(':method :url :status'))
+  // app.use(morgan(':method :url :status'))
+  app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO}))
   app.locals.pretty = true
   mongoose.set('debug', true)
 }
@@ -66,7 +78,8 @@ io.on('connection', function (socket) {
       time: obj.time
     }
     io.to(mess.roomid).emit('message', mess)
-    console.log(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
+    global.logger.info(obj.username + '对房' + mess.roomid+'说：'+ mess.msg);
+    // console.log(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
     if (obj.img === '') {
       var message = new Message(mess)
       message.save(function (err, mess) {
