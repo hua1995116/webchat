@@ -102,7 +102,7 @@ const store = new Vuex.Store({
       }
       return {
         status: 'fail',
-        data: res.data.data
+        data: res.data
       }
     },
     async getMessHistory({commit}, data) {

@@ -17,7 +17,18 @@ app.use(router);
 /*引入*/
 var mongoose = require('mongoose')
 // 日志文件
-var morgan = require('morgan')
+// var morgan = require('morgan')
+var log4js = require('log4js');
+log4js.configure({
+    appenders: {
+      out: { type: 'stdout' },
+      app: { type: 'file', filename: 'application.log' }
+    },
+    categories: {
+      default: { appenders: [ 'out', 'app' ], level: 'debug' }
+    }
+})
+global.logger = log4js.getLogger()
 // sesstion 存储
 var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser')
@@ -40,7 +51,8 @@ app.use(session({
 var env = process.env.NODE_ENV || 'development'
 if ('development' === app.get('env')) {
   app.set('showStackError', true)
-  app.use(morgan(':method :url :status'))
+  // app.use(morgan(':method :url :status'))
+  app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO}))
   app.locals.pretty = true
   mongoose.set('debug', true)
 }
@@ -66,14 +78,17 @@ io.on('connection', function (socket) {
       time: obj.time
     }
     io.to(mess.roomid).emit('message', mess)
-    console.log(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
+    global.logger.info(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
+    // console.log(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
     if (obj.img === '') {
       var message = new Message(mess)
       message.save(function (err, mess) {
         if (err) {
-          console.log(err)
+          // console.log(err)
+          global.logger.error(err)
         }
-        console.log(mess)
+        // console.log(mess)
+        global.logger.info(mess)
       })
     }
   })
@@ -86,19 +101,19 @@ io.on('connection', function (socket) {
     global.users[obj.roomid][obj.name] = obj
     socket.join(obj.roomid)
     io.to(obj.roomid).emit('login', global.users[obj.roomid])
-    console.log(obj.name + '加入了' + obj.roomid)
+    global.logger.info(obj.name + '加入了' + obj.roomid)
   })
   socket.on('logout',function (obj) {
     try{
       const is = Object.hasOwnProperty.call(global.users[obj.roomid], obj.name)
       if (is) {
         delete  global.users[obj.roomid][obj.name]
-        console.log(obj.name + '退出了' + obj.roomid)
+        global.logger.info(obj.name + '退出了' + obj.roomid)
         io.to(obj.roomid).emit('logout', global.users[obj.roomid])
         socket.leave(obj.roomid)
       }
     } catch (e) {
-      console.log(e)
+      global.logger.error(e)
     }
   })
 
@@ -106,7 +121,7 @@ io.on('connection', function (socket) {
     if (global.users[socket.room] && global.users[socket.room].length > 0) {
       delete global.users[socket.room][socket.name]
       // 用户监听用退出聊天室
-      console.log(socket.name + '退出了' + socket.room)
+      global.logger.info(socket.name + '退出了' + socket.room)
       socket.leave(obj.roomid)
       io.to(socket.room).emit('logout', global.users[socket.room])
     }
