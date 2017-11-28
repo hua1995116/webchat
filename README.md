@@ -1,11 +1,28 @@
 # webchat
+
+## 项目历程
+[vue+websocket+express+mongodb实战项目（实时聊天）（一）](http://blog.csdn.net/blueblueskyhua/article/details/70807847)
+
+[vue+websocket+express+mongodb实战项目（实时聊天）（二）](http://blog.csdn.net/blueblueskyhua/article/details/73250992)
+
+[vue-chat项目之重构与体验优化](http://blog.csdn.net/blueblueskyhua/article/details/78159672)
+
+## releases
+[1.1.0版本] (https://github.com/hua1995116/webchat/tree/v1.0.0)
+
+[1.2.0版本] (https://github.com/hua1995116/webchat/tree/v1.2.0)
+
+当前版本为重构后的版本。
+
+具体改动可以看 [vue-chat项目之重构与体验优化](http://blog.csdn.net/blueblueskyhua/article/details/78159672)
+
 ```
 npm install -----安装依赖
 npm run dev -----运行
 npm run build -----打包
 node prod.server.js -----打包后运行
 //记得替换
-Index.vue和Chat.vue下的io.connect('http://qiufengh.com:9090/')
+view/Loan.vue下的io.connect('http://qiufengh.com:9090/')
 http://qiufengh.com:9090改成自己的项目地址。
 ```
 在线观看
