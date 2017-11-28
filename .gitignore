@@ -48,5 +48,5 @@ Temporary Items
 
 node_modules
 dist
-application.log
 .idea
+application.log
