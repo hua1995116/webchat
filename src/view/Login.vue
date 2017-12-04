@@ -51,6 +51,10 @@
             this.getSvgModal.$root.$options.clear()
             this.$store.commit('setSvgModal', null)
             this.$router.push({path: '/'})
+          } else {
+            Alert({
+              content: res.data.data
+            })
           }
           document.form2.reset()
         } else {
