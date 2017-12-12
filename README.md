@@ -22,11 +22,11 @@ npm run dev -----运行
 npm run build -----打包
 node prod.server.js -----打包后运行
 //记得替换
-view/Loan.vue下的io.connect('http://qiufengh.com:9090/')
+view/Loan.vue下的io.connect('http://qiufengh.com/')
 http://qiufengh.com:9090改成自己的项目地址。
 ```
 在线观看
-[http://www.qiufengh.com:9090/#/](http://www.qiufengh.com:9090/#/)
+[http://www.qiufengh.com/](http://www.qiufengh.com/)
 
 ### 实现功能
 - [x] 聊天功能 -- 完成
