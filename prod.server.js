@@ -1,10 +1,9 @@
 var express = require('express');
 var config = require('./config/index');
 var port = process.env.PORT || config.dev.port;
-// const http = require('http');
-const parse = require('url').parse;
-const querystring = require('querystring');
-const fs = require('fs');
+// 监控引入
+const parse = require('./parse.js');
+const performance = require('./lib/performance.js');
 const redis = require("redis"),
 client = redis.createClient();
 
@@ -47,32 +46,7 @@ var session = require('cookie-session')
 mongoose.Promise = require('bluebird')
 global.db = mongoose.connect("mongodb://localhost:27017/vuechat")
 /*监控*/
-app.use(function(req, res, next) {
-  const url = parse(req.url);
-  if (url.pathname == '/action') {
-      let user_ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      user_ip = user_ip.replace('::ffff:', '');
-      const info = req.url.split('?')[1];
-      const parseInfo = querystring.parse(info);
-      const urlData = `user_ip=${user_ip}&whiteScreenTime=${parseInfo['whiteScreenTime']}&readyTime=${parseInfo['readyTime']}&allloadTime=${parseInfo['allloadTime']}&nowTime=${new Date().getTime()}&mobile=${parseInfo['mobile']}`;
-      client.hset(["hash key", urlData, "some value"], redis.print);
-      res.json({
-        code: 1
-      })
-  }
-  if(url.pathname == '/error') {
-      // console.log(req.url);
-      const info = req.url.split('?')[1];
-      const parseInfo = querystring.parse(info);
-      const urlData = `msg=${parseInfo['msg']}&url=${parseInfo['url']}&line=${parseInfo['line']}&col=${parseInfo['col']}&nowTime=${new Date().getTime()}`;
-      client.hset(["error key", urlData, "some value"], redis.print);
-      res.json({
-        code: 1
-      })
-  }
-  
-  next();
-})
+
 // 服务器提交的数据json化
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
@@ -82,6 +56,13 @@ app.use(session({
   secret: 'vuechat',
   resave: false,
   saveUninitialized: true
+}))
+
+// 监控引入
+app.use(performance({
+	time: 60, // 秒为单位
+	originalDir: './originalData', // 数据的目录
+	errorDir: './errorData' // 报错的目录
 }))
 
 var env = process.env.NODE_ENV || 'development'
@@ -168,59 +149,4 @@ require('./config/routes-build.js')(app)
 //声明静态资源地址
 app.use(express.static('./dist'));
 
-let arr;
-let errarr;
-setInterval(function () {
-  arr = [];
-  errarr = [];
-  client.hkeys("hash key", function (err, replies) {
-      // console.log(replies.length + " replies:");
-      replies.forEach(function (reply, i) {
-          console.log("    " + i + ": " + reply);
-          arr.push(reply);
-      });
-      if (arr.length > 0) {
-          arr.push('\n');
-          const data = arr.join('\n');
-          const dir = './originalData/'
-          fs.appendFile(`${dir}${new Date().toLocaleDateString()}data.txt`, data, 'utf8', function (err) {
-              if (err) {
-                  console.log(err);
-              } else {
-                  console.log('info success');
-                  client.del('hash key');
-              }
-          })
-      }
-  });
-  client.hkeys("error key", function (err, replies) {
-      // console.log(replies.length + " replies:");
-      replies.forEach(function (reply, i) {
-          console.log("    " + i + ": " + reply);
-          errarr.push(reply);
-      });
-      const dir = './errorData/'
-      if (errarr.length > 0) {
-          errarr.push('\n');
-          const data = errarr.join('\n');
-          fs.appendFile(`${dir}${new Date().toLocaleDateString()}error.txt`, data, 'utf8', function (err) {
-              if (err) {
-                  console.log(err);
-              } else {
-                  console.log('error success');
-                  client.del('error key');
-              }
-          })
-      } else {
-          const data = 'msg=null&nowTime=' + new Date().getTime()+'\n';
-          fs.appendFile(`${dir}${new Date().toLocaleDateString()}error.txt`, data, 'utf8', function (err) {
-              if (err) {
-                  console.log(err);
-              } else {
-                  console.log('error success');
-                  client.del('error key');
-              }
-          })
-      }
-  });
-}, 1000 * 60);
+

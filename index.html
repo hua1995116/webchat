@@ -42,19 +42,21 @@
 
         window.onload = function () {
             window.logInfo.allloadTime = +new Date() - window.logInfo.openTime;
+            window.logInfo.nowTime = new Date().getTime();
             var timname = {
                 whiteScreenTime: '白屏时间',
                 readyTime: '用户可操作时间',
                 allloadTime: '总下载时间',
-                mobile: '使用设备'
+                mobile: '使用设备',
+                nowTime: '时间',
             };
             var logStr = '';
             for (var i in timname) {
-                console.warn(timname[i] + ':' + window.logInfo[i] + 'ms');
+                console.warn(timname[i] + ':' + window.logInfo[i]);
                 if (i === 'mobile') {
                     logStr += '&' + i + '=' + window.logInfo[i];
                 } else {
-                    logStr += '&' + i + '=' + window.logInfo[i] + 'ms';
+                    logStr += '&' + i + '=' + window.logInfo[i];
                 }
                 
             }
@@ -66,6 +68,7 @@
             url:'',  //错误所在的url
             line:'', //错误所在的行
             col:'',  //错误所在的列
+            nowTime: '',// 时间
         };
         window.onerror = function(msg,url,line,col,error) {
             col = col || (window.event && window.event.errorCharacter) || 0;
@@ -73,6 +76,7 @@
             defaults.url = url;
             defaults.line = line;
             defaults.col =  col;
+            defaults.nowTime = new Date().getTime();
 
             if (error && error.stack){
                 // 如果浏览器有堆栈信息，直接使用

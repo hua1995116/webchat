@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+<link rel="icon" href="https://static.jianshukeji.com/highcharts/images/favicon.ico">
+<meta name="viewport" content="width=device-width, initial-scale=1">	<script src="https://img.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/modules/data.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/modules/series-label.js"></script>
+	<script src="https://img.hcharts.cn/highcharts/modules/oldie.js"></script>
+	<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/themes/dark-unica.js"></script>
+    <style>
+    html,body{
+        margin: 0;
+        padding: 0;
+        background: #000;
+    }
+    .contain div{
+        margin-top: 40px;
+    }
+    .highcharts-selection-marker {
+        background: #fff;
+    }
+    .header-list-info {
+        display: flex;
+        padding: 10px;
+    }
+    header h1 {
+        text-align: center;
+        color: #fff;
+    }
+    .header-item {
+        display: flex;
+        flex-direction: column ;
+        justify-content: center;
+        align-items: center;
+        width: 200px;
+        height: 150px;
+        margin: 5px 10px;
+        padding: 5px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: 700;
+        text-align: center;
+    }
+    .item-row {
+        width: 100px;
+        height: 50px;
+        line-height: 50px;
+    }
+    .bottom {
+        border-bottom: 1px solid #ddd;
+    }
+    </style>
+</head>
+<body>
+<header>
+    <h1>前端监控平台</h1>
+    <div class="header-list-info">
+        <div class="header-item">
+            <div class="item-row bottom">PV</div>
+            <div class="item-row">4123</div>
+        </div>
+    </div>
+</header>
+<div class="contain">
+    <div id="container" style="min-width:400px;height:400px"></div>
+    <div id="error-container" style="min-width:400px;height:400px"></div>
+    <div id="pipecontainer" style="width:400px;height:400px;margin:20px auto 0"></div>
+</div>
+
+<div class="message"></div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+Highcharts.setOptions({ 
+    global: { useUTC: false }, 
+    chart: {
+        backgroundColor: '#000',
+    },
+});   
+var dir = './csvData/';
+// var date = new Date().toLocaleDateString().replace(/\//g, '-');
+var date = new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
+var timeurl =  dir + date + 'time.csv';
+var mobileurl = dir + date + 'mobile.csv';
+var PVUVurl = dir + date + 'PVUV.csv';
+var errorurl = dir + date + 'error.csv';
+// chartInit(document.getElementById('csv').innerHTML);
+axios.get(timeurl)
+  .then(function (response) {
+    chartInit(response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+axios.get(errorurl)
+  .then(function (response) {
+    chartErrorInit(response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+axios.get(mobileurl)
+  .then(function (response) {
+    pieInit(response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+axios.get(PVUVurl)
+  .then(function (response) {
+    //   console.log(response.data);
+    PVUVInit(response.data);
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+
+function chartErrorInit(csv) {
+    var chart = null;
+    chart = Highcharts.chart('error-container', {
+        data: {
+            csv: csv
+        },
+        title: {
+            text: '每分钟错误量'
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            tickInterval: 24 * 3600 * 1000, // 坐标轴刻度间隔为一星期
+            tickWidth: 0,
+            gridLineWidth: 1,
+            labels: {
+                align: 'left',
+                x: 3,
+                y: -2
+            },
+            // 时间格式化字符
+            // 默认会根据当前的刻度间隔取对应的值，即当刻度间隔为一周时，取 week 值
+            dateTimeLabelFormats: {
+                second: '%H:%M:%S',
+            }
+        },
+        yAxis: [{ // 第一个 Y 轴，放置在左边（默认在坐标）
+            title: {
+                text: null
+            },
+            labels: {
+                align: 'left',
+                x: 3,
+                y: 16,
+                format: '{value}'
+            },
+            showFirstLabel: false
+        }, {    // 第二个坐标轴，放置在右边
+            linkedTo: 0,
+            gridLineWidth: 0,
+            opposite: true,  // 通过此参数设置坐标轴显示在对立面
+            title: {
+                text: null
+            },
+            labels: {
+                align: 'right',
+                x: -3,
+                y: 16,
+                format: '{value}'
+            },
+            showFirstLabel: false
+        }],
+        legend: {
+            align: 'left',
+            verticalAlign: 'top',
+            y: 20,
+            floating: true,
+            borderWidth: 0
+        },
+        tooltip: {
+            shared: true,
+            crosshairs: true,
+            // 时间格式化字符
+            // 默认会根据当前的数据点间隔取对应的值
+            // 当前图表中数据点间隔为 1天，所以配置 day 值即可
+            dateTimeLabelFormats: {
+                second: '%H:%M:%S',
+            },
+            valueSuffix: ' '
+        },
+        plotOptions: {
+            series: {
+                cursor: 'pointer',
+                marker: {
+                    lineWidth: 1
+                }
+            }
+        }
+    });
+}
+
+function chartInit(csv) {
+    var chart = null;
+    chart = Highcharts.chart('container', {
+        data: {
+            csv: csv
+        },
+        title: {
+            text: '首屏进入时间'
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            tickInterval: 24 * 3600 * 1000, // 坐标轴刻度间隔为一星期
+            tickWidth: 0,
+            gridLineWidth: 1,
+            labels: {
+                align: 'left',
+                x: 3,
+                y: -2
+            },
+            // 时间格式化字符
+            // 默认会根据当前的刻度间隔取对应的值，即当刻度间隔为一周时，取 week 值
+            dateTimeLabelFormats: {
+                second: '%H:%M:%S',
+            }
+        },
+        yAxis: [{ // 第一个 Y 轴，放置在左边（默认在坐标）
+            title: {
+                text: null
+            },
+            labels: {
+                align: 'left',
+                x: 3,
+                y: 16,
+                format: '{value}'
+            },
+            showFirstLabel: false
+        }, {    // 第二个坐标轴，放置在右边
+            linkedTo: 0,
+            gridLineWidth: 0,
+            opposite: true,  // 通过此参数设置坐标轴显示在对立面
+            title: {
+                text: null
+            },
+            labels: {
+                align: 'right',
+                x: -3,
+                y: 16,
+                format: '{value}'
+            },
+            showFirstLabel: false
+        }],
+        legend: {
+            align: 'left',
+            verticalAlign: 'top',
+            y: 20,
+            floating: true,
+            borderWidth: 0
+        },
+        tooltip: {
+            shared: true,
+            crosshairs: true,
+            // 时间格式化字符
+            // 默认会根据当前的数据点间隔取对应的值
+            // 当前图表中数据点间隔为 1天，所以配置 day 值即可
+            dateTimeLabelFormats: {
+                second: '%H:%M:%S',
+            },
+            valueSuffix: ' ms'
+        },
+        plotOptions: {
+            series: {
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        // 数据点点击事件
+                        // 其中 e 变量为事件对象，this 为当前数据点对象
+                        // click: function (e) {
+                        //     $('.message').html( Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>  访问量：' +this.y );
+                        // }
+                    }
+                },
+                marker: {
+                    lineWidth: 1
+                }
+            }
+        }
+    });
+}
+
+function pieInit(csv) {
+    var arr = [];
+    csv = csv.split('\n');
+    for(var i = 0; i < csv.length; i++) {
+        var numbers = csv[i].split(',');
+        if(i == 0 && csv[i] !== null) {
+            arr.push({
+                name:  numbers[0],
+                y: parseInt(numbers[1]),
+                sliced: true,
+                selected: true
+            })
+        } else {
+            arr.push([
+                numbers[0],
+                parseInt(numbers[1])
+            ]);
+        }
+    }
+    // console.log(arr);
+    var chart = null;
+    chart = Highcharts.chart('pipecontainer', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: '各浏览器浏览量占比'
+        },
+        tooltip: {
+            headerFormat: '{series.name}<br>',
+            pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                    }
+                }
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: '浏览器访问量占比',
+            data: arr
+        }]
+    })
+}
+    
+function PVUVInit(csv) {
+    var header = document.querySelector('.header-list-info');
+    var data = csv.split(',');
+    var html = '';
+    for(var i = 0 ; i < data.length; i ++) {
+        var info = data[i].split(':');
+        html += '<div class="header-item"><div class="item-row bottom">'+info[0]+'</div><div class="item-row">'+info[1]+'</div></div>';
+    }
+    header.innerHTML = html;
+}
+</script>
+</body>
+</html>
