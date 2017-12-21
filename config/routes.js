@@ -1,22 +1,19 @@
-var User = require('../models/user')
-var Message = require('../models/message')
-var superagent = require('superagent')
-var fs = require('fs')
-var multiparty = require('multiparty');
-var util = require('util')
-module.exports = function (app) {
-  app.use(function (req, res, next) {
-    var _user = req.session.user
+const User = require('../models/user')
+const Message = require('../models/message')
+const superagent = require('superagent')
+const fs = require('fs')
+const multiparty = require('multiparty');
+module.exports =  (app) => {
+  app.use( (req, res, next) => {
+    const _user = req.session.user
 
     app.locals.user = _user
 
     next()
   })
-  app.post('/file/uploadimg', function (req, res, next) {
-    // console.log(util.inspect(req.body, { showHidden: true, depth: null }))
-    // console.log(util.inspect(req.header, { showHidden: true, depth: null }))
+  app.post('/file/uploadimg',  (req, res, next) => {
     // //生成multiparty对象，并配置上传目标路径
-    var form = new multiparty.Form()
+    const form = new multiparty.Form()
     // //设置编辑
     form.encoding = 'utf-8'
     // //设置文件存储路径
@@ -25,29 +22,27 @@ module.exports = function (app) {
     form.maxFilesSize = 2 * 1024 * 1024
     // form.maxFields = 1000;  设置所以文件的大小总和
     // 上传完成后处理
-    form.parse(req, function (err, fields, files) {
-      // console.log(fields)
-      var filesTmp = JSON.stringify(files, null, 2)
-      // console.log(filesTmp)
+    form.parse(req, (err, fields, files) => {
       if (err) {
         global.logger.error('parse error: ' + err)
         res.json({
           errno: 1
         })
       } else {
-        var inputFile = files.file[0];
-        var uploadedPath = inputFile.path
-        var array = inputFile.originalFilename.split('.')
-        var imgtype = array[array.length - 1]
-        var dstPath;
+        const inputFile = files.file[0];
+        const uploadedPath = inputFile.path
+        const array = inputFile.originalFilename.split('.')
+        const imgtype = array[array.length - 1]
+        let dstPath;
+        const time = new Date().getTime();
         if (process.env.NODE_ENV === 'development') {
-          dstPath = './static/files/' + new Date().getTime() + '.' + imgtype
+          dstPath = `./static/files/${time}.${imgtype}`
         } else {
-          dstPath = './dist/static/files/' + new Date().getTime() + '.' + imgtype
+          dstPath = `./dist/static/files/${time}.${imgtype}`
         }
-        var inPath = './static/files/' + new Date().getTime() + '.' + imgtype
+        const inPath = `./static/files/${time}.${imgtype}`
         // 判断是否存在./dist/static/files文件
-        fs.stat('./dist/static/files', function(err, stats) {
+        fs.stat('./dist/static/files', (err, stats) => {
           if (JSON.stringify(stats) === undefined) {
             fs.mkdirSync('./dist', 0777)
             fs.mkdirSync('./dist/static', 0777)
@@ -59,22 +54,22 @@ module.exports = function (app) {
     })
     function storeFiles(uploadedPath, dstPath, fields, inPath) {
       //重命名为真实文件名
-      fs.rename(uploadedPath, dstPath, function (err) {
+      fs.rename(uploadedPath, dstPath,  (err) => {
         if (err) {
-          global.logger.error('rename error: ' + err)
+          global.logger.error(`rename error:${err}`)
           res.json({
             errno: 1
           })
         } else {
-          var mess = {
+          const mess = {
             username: fields.username,
             src: fields.src,
             img: inPath,
             roomid: fields.roomid,
             time: fields.time
           }
-          var message = new Message(mess)
-          message.save(function (err, mess) {
+          const message = new Message(mess)
+          message.save((err, mess) => {
             if (err) {
               global.logger.error(err)
             }
@@ -89,10 +84,10 @@ module.exports = function (app) {
     }
   })
   // 注册
-  app.post('/user/signup', function (req, res) {
-    var _user = req.body
+  app.post('/user/signup',  (req, res) => {
+    const _user = req.body
     // console.log(_user)
-    User.findOne({name: _user.name}, function (err, user) {
+    User.findOne({name: _user.name},  (err, user) => {
       if (err) {
         global.logger.error(err)
       }
@@ -102,8 +97,8 @@ module.exports = function (app) {
           data: '用户名已存在'
         })
       } else {
-        var user = new User(_user)
-        user.save(function (err, user) {
+        user = new User(_user)
+        user.save( (err, user) => {
           if (err) {
             global.logger.error(err)
           }
@@ -116,17 +111,14 @@ module.exports = function (app) {
     })
   }),
   // 登录
-  app.post('/user/signin', function (req, res) {
-    // console.log(req.body)
-    var _user = req.body
-    var name = _user.name
-    var password = _user.password
-    // console.log(password)
-    User.findOne({name: name}, function (err, user) {
+  app.post('/user/signin', (req, res) => {
+    const _user = req.body
+    const name = _user.name
+    const password = _user.password
+    User.findOne({name: name}, (err, user) => {
       if (err) {
         global.logger.error(err);
       }
-      // console.log(user)
       if (!user) {
         res.json({
           errno: 1,
@@ -134,7 +126,7 @@ module.exports = function (app) {
         })
       } else {
         if (!!password) {
-          user.comparePassword(password, function (err, isMatch) {
+          user.comparePassword(password, (err, isMatch) => {
             if (err) {
               global.logger.error(err);
             }
@@ -167,9 +159,9 @@ module.exports = function (app) {
   }),
 
   // 信息
-  app.get('/message', function (req, res) {
-    var id = req.query.roomid
-    Message.find({roomid: id}).sort({"time": -1}).limit(80).exec(function (err, message) {
+  app.get('/message', (req, res) => {
+    const id = req.query.roomid
+    Message.find({roomid: id}).sort({"time": -1}).limit(80).exec((err, message) => {
       if (err) {
         global.logger.error(err)
       } else {
@@ -181,24 +173,24 @@ module.exports = function (app) {
     })
   }),
   // 获取历史记录
-  app.get('/history/message', function (req, res) {
-    var id = req.query.roomid
-    var current = req.query.current
+  app.get('/history/message', (req, res) => {
+    const id = req.query.roomid
+    const current = req.query.current
     if (!id || !current) {
       global.logger.error('roomid | page current can\'t find')
       res.json({
         errno: 1
       });
     }
-    var message = {
+    const message = {
       errno: 0,
       data: {},
       total: 0,
       current: current
     }
-    var task1 = new Promise(function(resolve, reject) {
-      var skip = parseInt((current - 1) * 40)
-      Message.find({roomid: id}).skip(skip).limit(40).exec(function (err, data) {
+    const task1 = new Promise((resolve, reject) => {
+      const skip = parseInt((current - 1) * 40)
+      Message.find({roomid: id}).skip(skip).limit(40).exec((err, data) => {
         if (err) {
           global.logger.error(err)
           return reject()
@@ -208,8 +200,8 @@ module.exports = function (app) {
         }
       })
     })
-    var task2 = new Promise(function(resolve, reject) {
-      Message.find({roomid: id}).count().exec(function (err, data) {
+    const task2 = new Promise((resolve, reject) => {
+      Message.find({roomid: id}).count().exec((err, data) => {
         if (err) {
           global.logger.error(err)
           return reject()
@@ -226,11 +218,11 @@ module.exports = function (app) {
     })
   }),
   // 机器人消息
-  app.get('/robotapi', function (req, res) {
-    var response = res
-    var info = req.query.info
-    var userid = req.query.id
-    var key = 'fde7f8d0b3c9471cbf787ea0fb0ca043'
+  app.get('/robotapi', (req, res) => {
+    const response = res
+    const info = req.query.info
+    const userid = req.query.id
+    const key = 'fde7f8d0b3c9471cbf787ea0fb0ca043'
     superagent.post('http://www.tuling123.com/openapi/api')
       .send({info, userid, key})
       .end((err, res) => {
