@@ -81,8 +81,7 @@ Highcharts.setOptions({
     },
 });   
 var dir = './csvData/';
-// var date = new Date().toLocaleDateString().replace(/\//g, '-');
-var date = new Date().getFullYear()+"-"+(new Date().getMonth()+1)+"-"+new Date().getDate();
+var date = new Date().toLocaleDateString().replace(/\//g, '-');
 var timeurl =  dir + date + 'time.csv';
 var mobileurl = dir + date + 'mobile.csv';
 var PVUVurl = dir + date + 'PVUV.csv';

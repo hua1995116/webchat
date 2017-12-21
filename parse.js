@@ -12,6 +12,9 @@ const config = {
 
 function main() {
     fs.readFile(`${config.originalDir}/${config.date}data.txt`, 'utf8', (err, data) => {
+        if(err) {
+            return;
+        }
         const jsondata = parse(data)
         parseTime(data);
         parseMobile(jsondata);
@@ -109,11 +112,13 @@ function parseTime(data) {
     let readyTime = 0;
     let allloadTime = 0;
     let k = 0;
-    arr.push(config.Timetitle);
     data.forEach((value, index, array) => {  
         if(!!value) {
             const obj = {};
             value = value.split('&');
+            if(value.length <= 1) {
+                return;
+            }
             value.forEach((item, i) => {
                 const name = item.split('=')[0];
                 const val = item.split('=')[1];
@@ -127,20 +132,35 @@ function parseTime(data) {
             allloadTime += parseInt(obj['allloadTime']);
             k++;
         } else {
-            if(whiteScreenTime&&readyTime&&allloadTime) {
+            // if(whiteScreenTime&&readyTime&&allloadTime) {
                 // 以csv方式写入arr数组,并进行清零
-                arr.push(`${time},${parseInt(whiteScreenTime/k)},${parseInt(readyTime/k)},${parseInt(allloadTime/k)}`)
+                // arr.push(`${time},${parseInt(whiteScreenTime/k)},${parseInt(readyTime/k)},${parseInt(allloadTime/k)}`)
+                arr.push({
+                    time: time,
+                    whiteScreenTime: parseInt(whiteScreenTime/k),
+                    readyTime:parseInt(readyTime/k),
+                    allloadTime:parseInt(allloadTime/k),
+                });
                 time = 0;
                 whiteScreenTime = 0;
                 readyTime = 0;
                 allloadTime = 0;
                 k = 0;
-            }     
+            // }     
         } 
         
     })
+    arr.pop();
+    arr.sort(function(a, b) {
+        return a.time - b.time;
+    });
+    const newarr = arr.map((item, index) => {
+        return `${item.time},${item.whiteScreenTime},${item.readyTime},${item.allloadTime}`
+    })
+    newarr.unshift(config.Timetitle);
+    
     // 写入文件
-    fs.writeFile(`./charts${config.csvDir}/${config.date}time.csv`,arr.join('\n'), (err) => {
+    fs.writeFile(`./charts${config.csvDir}/${config.date}time.csv`,newarr.join('\n'), (err) => {
         if (err) {
             console.log(err);
         } else {
@@ -197,5 +217,5 @@ function parsePVUV(data) {
         }
     })
 }
-// main();
+main();
 module.exports = main;

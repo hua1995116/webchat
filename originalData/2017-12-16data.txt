@@ -1,9 +1,16 @@
-user_ip=127.0.0.1action=speedlog&whiteScreenTime=315&readyTime=525&allloadTime=581&mobile=webKit&nowTime=1513435450712
+user_ip=::1&whiteScreenTime=137&readyTime=137&allloadTime=153&mobile=webKit&nowTime=1513427051482
 
-user_ip=127.0.0.1action=speedlog&whiteScreenTime=312&readyTime=472&allloadTime=511&mobile=webKit&nowTime=1513435472690
+user_ip=127.0.0.1&whiteScreenTime=470&readyTime=471&allloadTime=507&mobile=webKit&nowTime=1513427065080
 
-user_ip=127.0.0.1action=speedlog&whiteScreenTime=147&readyTime=247&allloadTime=284&mobile=webKit&nowTime=1513435475722
+user_ip=127.0.0.1&whiteScreenTime=127&readyTime=127&allloadTime=143&mobile=webKit&nowTime=1513427080040
 
-user_ip=127.0.0.1action=speedlog&whiteScreenTime=140&readyTime=247&allloadTime=282&mobile=webKit&nowTime=1513435492330
-user_ip=127.0.0.1action=speedlog&whiteScreenTime=265&readyTime=478&allloadTime=538&mobile=webKit&nowTime=1513435489572
+user_ip=127.0.0.1&whiteScreenTime=274&readyTime=275&allloadTime=323&mobile=ios&nowTime=1513428714345
+
+user_ip=127.0.0.1&whiteScreenTime=282&readyTime=283&allloadTime=332&mobile=ios&nowTime=1513428733583
+user_ip=127.0.0.1&whiteScreenTime=252&readyTime=253&allloadTime=303&mobile=ios&nowTime=1513428727365
+
+user_ip=127.0.0.1&whiteScreenTime=268&readyTime=268&allloadTime=317&mobile=android&nowTime=1513428743167
+
+user_ip=127.0.0.1&whiteScreenTime=253&readyTime=253&allloadTime=309&mobile=android&nowTime=1513428754796
+user_ip=127.0.0.1&whiteScreenTime=299&readyTime=299&allloadTime=347&mobile=android&nowTime=1513428747712
 

@@ -1,4 +1,0 @@
-msg=null&nowTime=1512380564658
-msg=null&nowTime=1512380624652
-msg=null&nowTime=1512380684675
-msg=null&nowTime=1512380744696
