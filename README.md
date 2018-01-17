@@ -1,11 +1,14 @@
 # webchat
-
+[![Build Status](https://www.travis-ci.org/hua1995116/webchat.svg?branch=master)](https://www.travis-ci.org/hua1995116/webchat)
 ## 项目历程
 [vue+websocket+express+mongodb实战项目（实时聊天）（一）](http://blog.csdn.net/blueblueskyhua/article/details/70807847)
 
 [vue+websocket+express+mongodb实战项目（实时聊天）（二）](http://blog.csdn.net/blueblueskyhua/article/details/73250992)
 
 [vue-chat项目之重构与体验优化](http://blog.csdn.net/blueblueskyhua/article/details/78159672)
+## 前端监控数据
+
+http://www.qiufengh.com:8080/
 
 ## releases
 [1.1.0版本] (https://github.com/hua1995116/webchat/tree/v1.0.0)
