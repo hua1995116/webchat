@@ -1,7 +1,8 @@
+var config = require('./config/index');
 var port = process.env.PORT || config.dev.port;
 var env = process.env.NODE_ENV || 'development'
 var express = require('express');
-var config = require('./config/index');
+
 // sesstion 存储
 var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser')
