@@ -55,7 +55,7 @@
           document.form2.reset()
         } else {
           Alert({
-            content: '账号密码不能为空'
+            content: res.data.data
           })
         }
       },
