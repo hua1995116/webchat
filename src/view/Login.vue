@@ -51,11 +51,15 @@
             this.getSvgModal.$root.$options.clear()
             this.$store.commit('setSvgModal', null)
             this.$router.push({path: '/'})
+          } else {
+            Alert({
+              content: res.data.data
+            })
           }
           document.form2.reset()
         } else {
           Alert({
-            content: res.data.data
+            content: '用户名和密码不能为空'
           })
         }
       },

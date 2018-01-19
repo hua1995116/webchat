@@ -38,7 +38,7 @@
         <div class="bottom">
           <div class="chat">
             <div class="input" @keyup.enter="submess">
-              <input type="text" id="message">
+              <input type="text" v-model="chatValue">
             </div>
             <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
           </div>
@@ -69,7 +69,8 @@
         roomid: '',
         useranme: '',
         isLoadingAchieve: false,
-        container: {}
+        container: {},
+        chatValue: ''
       }
     },
     created() {
@@ -168,18 +169,24 @@
       },
       submess() {
         // 判断发送信息是否为空
-        if (document.getElementById('message').value !== '') {
+        if (this.chatValue !== '') {
+          if (this.chatValue.length > 100) {
+            Alert({
+              content: '请输入100字以内'
+            })
+            return
+          }
           const obj = {
             username: getItem('userid'),
             src: getItem('src'),
             img: '',
-            msg: document.getElementById('message').value,
+            msg: this.chatValue,
             room: this.roomid,
             time: new Date()
           }
           // 传递消息信息
           this.getSocket.emit('message', obj)
-          document.getElementById('message').value = ''
+          this.chatValue = ''
           this.$nextTick(() => {
             this.container.scrollTop = 10000
           })
