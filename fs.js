@@ -1,6 +1,9 @@
 let fs = require('fs');
 let join = require('path').join;
-const uploadUrl = 'http://ozt4jt8av.bkt.clouddn.com/';
+const path = require('path'); 
+const upload = require('./upload');
+
+const uploadUrl = 'http://p30e6sugc.bkt.clouddn.com/';
 /**
  * 
  * @param startPath  起始目录文件夹路径
@@ -35,14 +38,22 @@ function readFileSync() {
             data = data.replace(`/static/js/${JSfileNames[i]}`, `${uploadUrl}${JSfileNames[i]}`);
         }
         for(var i in CSSfileNames) {
-            console.log(CSSfileNames[i]);
             const reg = new RegExp(`=\.{0,1}\/static\/css\/${CSSfileNames[i]}`);
             data = data.replace(reg, `=${uploadUrl}${CSSfileNames[i]}`);
         }
-        fs.writeFile('./dist/index.html', data, (err) => {
-            if (err) throw err;
-            console.log('The file has been saved!');
-        });
+        // fs.writeFile('./dist/index.html', data, (err) => {
+        //     if (err) throw err;
+        //     console.log('The file has been saved!');
+        // });
+        const rootJs = path.join(process.cwd(), './dist/static/js');
+        const rootCss = path.join(process.cwd(), './dist/static/css');
+        const exportList = exportUrlList(rootJs, JSfileNames).concat(exportUrlList(rootCss, CSSfileNames));
+        upload(exportList);
     });
 }
+
+function exportUrlList(root, arr) {
+    return arr.map(item => (path.join(root, item)))
+}
+
 readFileSync();
