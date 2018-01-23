@@ -35,8 +35,9 @@ function upload(list) {
 }
 
 function uploadPromise(url) {
+  const name = path.basename(url);
   return new Promise((resolve, reject) => {
-    formUploader.putFile(uploadToken, url, url, putExtra, function(respErr,
+    formUploader.putFile(uploadToken, name, url, putExtra, function(respErr,
       respBody, respInfo) {
       if (respErr) {
         throw respErr;
