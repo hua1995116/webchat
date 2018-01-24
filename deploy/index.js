@@ -24,12 +24,12 @@ function findSync(startPath) {
     finder(startPath);
     return result;
 }
-let JSfileNames = findSync('./dist/static/js');
+let JSfileNames = findSync('../dist/static/js');
 
-let CSSfileNames = findSync('./dist/static/css');
+let CSSfileNames = findSync('../dist/static/css');
 
 function readFileSync() {
-    fs.readFile('./dist/index.html', 'utf8', function(err, data) {
+    fs.readFile('../dist/index.html', 'utf8', function(err, data) {
         if(err) {
             console.log(err);
         }

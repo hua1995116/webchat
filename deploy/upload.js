@@ -1,7 +1,8 @@
-var qiniu = require('qiniu');
-var accessKey = '';
-var secretKey = '';
-var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+const qiniu = require('qiniu');
+const path = require('path');
+const accessKey = '';
+const secretKey = '';
+const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 
 
 var options = {
@@ -22,7 +23,11 @@ var putExtra = new qiniu.form_up.PutExtra();
 
 // 文件上传
 
-
+/**
+ * 
+ * 
+ * @param {Array} list 
+ */
 function upload(list) {
   const promiselist = list.map((item) => {
     return uploadPromise(item);
@@ -33,7 +38,12 @@ function upload(list) {
     console.log(err);
   })
 }
-
+/**
+ * 
+ * 
+ * @param {String} url 
+ * @returns {Promise} 
+ */
 function uploadPromise(url) {
   const name = path.basename(url);
   return new Promise((resolve, reject) => {
