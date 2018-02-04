@@ -11,13 +11,25 @@
 http://www.qiufengh.com:8080/
 
 ## releases
-[1.1.0版本] (https://github.com/hua1995116/webchat/tree/v1.0.0)
+[1.1.0版本](https://github.com/hua1995116/webchat/tree/v1.0.0)
 
-[1.2.0版本] (https://github.com/hua1995116/webchat/tree/v1.2.0)
+完成聊天室，机器人聊天，登录，注册功能。
 
-当前版本为重构后的版本。
+[1.2.0版本](https://github.com/hua1995116/webchat/tree/v1.2.0)
 
-具体改动可以看 [vue-chat项目之重构与体验优化](http://blog.csdn.net/blueblueskyhua/article/details/78159672)
+增加上传图片，首屏优化以及改造
+
+[2.0.0版本](https://github.com/hua1995116/webchat/tree/v2.0.0)
+
+重构项目
+- 增加alert,confirm,toast,loading,svg-modal,localStroage等组件。
+- 增加历史记录功能
+- 增加多个聊天室功能
+- 接入前端监控
+- 优化切页的效果
+
+
+
 
 ```
 npm install -----安装依赖
