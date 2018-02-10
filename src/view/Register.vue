@@ -87,9 +87,6 @@
     line-height: 40px
     text-align : center
     border-radius: 50px
-
-  div.mu-appbar
-    background-color: rgba(0, 0, 0, 0.78)
   .header
     .mu-appbar
       background-color: transparent

@@ -8,6 +8,7 @@ import './styles/default.css'
 // 使用museui组件
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
+import './styles/main.styl'
 // import './styles/default.css'
 Vue.use(MuseUI)
 Vue.config.productionTip = false
