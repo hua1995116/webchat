@@ -1,18 +1,17 @@
 <template>
   <div>
     <div class="container">
-      <div id="container">
-        <div class="title">
-          <mu-appbar title="Title">
-            <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
-            <div class="center">
-              聊天({{Object.keys(getUsers).length}})
-            </div>
-            <mu-icon-button icon="expand_more" slot="right" @click="setLog"/>
-          </mu-appbar>
-        </div>
+      <div class="title">
+        <mu-appbar title="Title">
+          <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
+          <div class="center">
+            聊天({{Object.keys(getUsers).length}})
+          </div>
+          <mu-icon-button icon="expand_more" slot="right" @click="setLog"/>
+        </mu-appbar>
+      </div>
+      <div class="chat-inner">
         <div class="all-chat">
-          <div style="height:70px"></div>
           <div>在线人员</div>
           <div v-for="obj in getUsers" class="online">
             <img :src="obj.src" alt="">
@@ -24,30 +23,29 @@
             <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
                       :img="obj.img" :mytime="obj.time"></othermsg>
             <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                   :img="obj.img" :mytime="obj.time"></mymsg>
+                  :img="obj.img" :mytime="obj.time"></mymsg>
           </div>
           <div v-for="obj in getInfos">
             <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
                       :img="obj.img" :mytime="obj.time"></othermsg>
             <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                   :img="obj.img" :mytime="obj.time"></mymsg>
+                  :img="obj.img" :mytime="obj.time"></mymsg>
           </div>
           <div class="clear"></div>
-          <div style="height:120px"></div>
         </div>
-        <div class="bottom">
-          <div class="chat">
-            <div class="input" @keyup.enter="submess">
-              <input type="text" v-model="chatValue">
-            </div>
-            <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
+      </div>
+      <div class="bottom">
+        <div class="chat">
+          <div class="input" @keyup.enter="submess">
+            <input type="text" v-model="chatValue">
           </div>
-          <div class="functions">
-            <div class="fun-li" @click="imgupload"></div>
-          </div>
-          <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/*;capture=camera"
-                 style="display: none" @change="fileup">
+          <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
         </div>
+        <div class="functions">
+          <div class="fun-li" @click="imgupload"></div>
+        </div>
+        <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/*;capture=camera"
+                style="display: none" @change="fileup">
       </div>
     </div>
   </div>
@@ -219,12 +217,17 @@
   .container
     width: 100%
     height: 100%
-    overflow-y: scroll
+    overflow: hidden
     background: #ffffff
     -webkit-overflow-scrolling: touch
+    .chat-inner 
+      position: absolute
+      width: 100%
+      overflow-y: scroll
+      top: 56px
+      bottom: 80px
     .title
       position: fixed
-      height: 50px
       top: 0
       left: 0
       width: 100%
