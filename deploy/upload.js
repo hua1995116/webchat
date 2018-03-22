@@ -1,25 +1,25 @@
 const qiniu = require('qiniu');
 const path = require('path');
-const accessKey = '';
-const secretKey = '';
+const configStatic = require('./config');
+const accessKey = configStatic.accessKey;
+const secretKey = configStatic.secretKey;
 const mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
 
 
-var options = {
+const options = {
   scope: 'webchat',
 };
 
-var putPolicy = new qiniu.rs.PutPolicy(options);
-var uploadToken = putPolicy.uploadToken(mac);
+const putPolicy = new qiniu.rs.PutPolicy(options);
+const uploadToken = putPolicy.uploadToken(mac);
 
-var config = new qiniu.conf.Config();
+const config = new qiniu.conf.Config();
 // 空间对应的机房
-config.zone = qiniu.zone.Zone_z2;
+config.zone = qiniu.zone[configStatic.zone];
 
 
-var localFile = "fs.js";
-var formUploader = new qiniu.form_up.FormUploader(config);
-var putExtra = new qiniu.form_up.PutExtra();
+const formUploader = new qiniu.form_up.FormUploader(config);
+const putExtra = new qiniu.form_up.PutExtra();
 
 // 文件上传
 
