@@ -35,16 +35,16 @@ function readFileSync() {
         }
         data = data.toString();
         for(var i in JSfileNames) {
-            data = data.replace(`/static/js/${JSfileNames[i]}`, `${uploadUrl}${JSfileNames[i]}`);
+            data = data.replace(`/static/js/${JSfileNames[i]}`, `${uploadUrl}${JSfileNames[i]}?v=${+new Date()}`);
         }
         for(var i in CSSfileNames) {
             const reg = new RegExp(`=\.{0,1}\/static\/css\/${CSSfileNames[i]}`);
-            data = data.replace(reg, `=${uploadUrl}${CSSfileNames[i]}`);
+            data = data.replace(reg, `=${uploadUrl}${CSSfileNames[i]}?v=${+new Date()}`);
         }
-        // fs.writeFile('./dist/index.html', data, (err) => {
-        //     if (err) throw err;
-        //     console.log('The file has been saved!');
-        // });
+        fs.writeFile('../dist/index.html', data, (err) => {
+            if (err) throw err;
+            console.log('The file has been saved!');
+        });
         const rootJs = path.join(process.cwd(), '../dist/static/js');
         const rootCss = path.join(process.cwd(), '../dist/static/css');
         const exportList = exportUrlList(rootJs, JSfileNames).concat(exportUrlList(rootCss, CSSfileNames));
