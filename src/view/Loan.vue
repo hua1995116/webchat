@@ -32,12 +32,14 @@
   import {mapGetters} from 'vuex'
   import io from 'socket.io-client'
   import Confirm from '../components/Confirm'
+  import {queryString} from '../utils/queryString'
   import { getItem } from '../utils/localStorage.js'
 
   export default {
     created() {
       if (!this.getSocket) {
-        if (process.env.NODE_ENV === 'development') {
+        const isLocal = queryString(window.location.href, 'local') || false
+        if (process.env.NODE_ENV === 'development' || isLocal) {
           this.$store.commit('setGetSocket', io.connect('localhost:9090/'))
         } else {
           this.$store.commit('setGetSocket', io.connect('http://www.qiufengh.com:9090/'))

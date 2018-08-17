@@ -28,13 +28,15 @@ const putExtra = new qiniu.form_up.PutExtra();
  * 
  * @param {Array} list 
  */
-function upload(list) {
+function upload(list, callback) {
   const promiselist = list.map((item) => {
     return uploadPromise(item);
   })
   Promise.all(promiselist).then((res) => {
     console.log(res);
+    callback()
   }).catch(err => {
+    console.log('处理失败');
     console.log(err);
   })
 }
@@ -55,9 +57,12 @@ function uploadPromise(url) {
       if (respInfo.statusCode == 200) {
         resolve('success');
         // console.log(respBody);
+      } else if(respInfo.statusCode == 614) {
+        resolve('re_success');
       } else {
-        // console.log(respInfo.statusCode);
-        // console.log(respBody);
+        console.log(respInfo.statusCode);
+        console.log(respBody);
+        console.log('出错啦~');
         reject(respInfo.statusCode);
       }
     });

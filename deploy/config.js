@@ -5,8 +5,8 @@ const config = {
     // 华南	qiniu.zone.Zone_z2
     // 北美	qiniu.zone.Zone_na0
     zone: 'Zone_z2',
-    accessKey: '',
-    secretKey: '',
+    accessKey: '6sTWDx0D4EyNRTHXy3yornOz9LmQC-nm6-DKoZg5',
+    secretKey: 'FCymW7OS9YfQcfTPBuBuNKmXW3fp0O802Vvly51S',
 }
 
 module.exports = config;
