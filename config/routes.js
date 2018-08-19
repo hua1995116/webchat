@@ -1,9 +1,71 @@
 const User = require('../models/user')
 const Message = require('../models/message')
 const superagent = require('superagent')
+const path = require('path')
 const fs = require('fs')
-const multiparty = require('multiparty');
-module.exports =  (app) => {
+const multer = require('multer');
+
+const mkdirsSync = function(dirname) {
+  if (fs.existsSync(dirname)) {
+      return true;
+  }
+  if (mkdirsSync(path.dirname(dirname))) {
+      fs.mkdirSync(dirname);
+      return true;
+  }
+}
+
+// 创建文件夹
+const createFolder = function (folder) {
+  try {
+      // 测试 path 指定的文件或目录的用户权限,我们用来检测文件是否存在
+      // 如果文件路径不存在将会抛出错误"no such file or directory"
+      fs.accessSync(folder);
+  } catch (e) {
+      // 文件夹不存在，以同步的方式创建文件目录。
+      mkdirsSync(folder);
+  }
+};
+
+let uploadFolder = '/home/webchat/dist/static/files';
+const urlPath = './static/files/';
+
+if (process.env.NODE_ENV === 'development') { 
+  uploadFolder = './static/files/';
+}
+
+createFolder(uploadFolder);
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      // 接收到文件后输出的保存路径（若不存在则需要创建）
+      cb(null, uploadFolder);
+  },
+  filename: function (req, file, cb) {
+      // 将保存文件名设置为 时间戳 + 文件原始名，比如 151342376785-123.jpg
+      cb(null, Date.now() + "-" + file.originalname);
+  }
+});
+const fileFilter = (req, file, cb) => {
+  const fileType = file.mimetype.toLowerCase();
+  if(fileType === 'image/png' || fileType === 'image/jpg' || fileType === 'image/jpeg' || fileType === 'image/webp') {
+      cb(null, true)
+  } else {
+      cb(null, false)
+  }
+}
+// 创建 multer 对象
+const upload = multer({
+  storage: storage,
+  limits: {
+      fields: 10,
+      files: 10,
+      fileSize: 5 * 1024 * 1024
+  },
+  fileFilter,
+});
+
+module.exports = (app) => {
   app.use( (req, res, next) => {
     const _user = req.session.user
 
@@ -11,78 +73,52 @@ module.exports =  (app) => {
 
     next()
   })
-  app.post('/file/uploadimg',  (req, res, next) => {
-    // //生成multiparty对象，并配置上传目标路径
-    const form = new multiparty.Form()
-    // //设置编辑
-    form.encoding = 'utf-8'
-    // //设置文件存储路径
-    form.uploadDir = "./static/files/"
-    // //设置单文件大小限制
-    form.maxFilesSize = 2 * 1024 * 1024
-    // form.maxFields = 1000;  设置所以文件的大小总和
-    // 上传完成后处理
-    form.parse(req, (err, fields, files) => {
-      if (err) {
-        global.logger.error('parse error: ' + err)
+
+  /* POST upload listing. */
+  app.post('/file/uploadimg', upload.single('file'),  async (req, res, next) => {
+    // console.log(req);
+    const file = req.file;
+    if(file) {
+        // console.log(process.cwd());
+        const {mimetype, filename, size, path: localPath} = file;
+        
+        const {username, roomid, time, src} = req.body;
+        // const data = await qiniuUpload(uploadUrl);
+        const mess = {
+          username,
+          src,
+          img: path.join(urlPath, filename),
+          roomid,
+          time,
+        }
+        const message = new Message(mess)
+        message.save((err, mess) => {
+          if (err) {
+            global.logger.error(err);
+            res.json({
+              errno: 500,
+              msg: '保存异常!'
+            });
+            return;
+            
+          }
+          global.logger.info(mess);
+          res.json({
+            errno: 500,
+            msg: '保存异常!'
+          });
+        })
+        return; 
+    } else {
         res.json({
-          errno: 1
-        })
-      } else {
-        const inputFile = files.file[0];
-        const uploadedPath = inputFile.path
-        const array = inputFile.originalFilename.split('.')
-        const imgtype = array[array.length - 1]
-        let dstPath;
-        const time = new Date().getTime();
-        if (process.env.NODE_ENV === 'development') {
-          dstPath = `./static/files/${time}.${imgtype}`
-        } else {
-          dstPath = `./dist/static/files/${time}.${imgtype}`
-        }
-        const inPath = `./static/files/${time}.${imgtype}`
-        // 判断是否存在./dist/static/files文件
-        fs.stat('./dist/static/files', (err, stats) => {
-          if (JSON.stringify(stats) === undefined) {
-            fs.mkdirSync('./dist', 0777)
-            fs.mkdirSync('./dist/static', 0777)
-            fs.mkdirSync('./dist/static/files', 0777)
-          }
-          storeFiles(uploadedPath, dstPath, fields, inPath)
-        })
-      }
-    })
-    function storeFiles(uploadedPath, dstPath, fields, inPath) {
-      //重命名为真实文件名
-      fs.rename(uploadedPath, dstPath,  (err) => {
-        if (err) {
-          global.logger.error(`rename error:${err}`)
-          res.json({
-            errno: 1
-          })
-        } else {
-          const mess = {
-            username: fields.username,
-            src: fields.src,
-            img: inPath,
-            roomid: fields.roomid,
-            time: fields.time
-          }
-          const message = new Message(mess)
-          message.save((err, mess) => {
-            if (err) {
-              global.logger.error(err)
-            }
-            global.logger.info(mess)
-          })
-          global.logger.info('rename ok')
-          res.json({
-            errno: 0
-          })
-        }
-      })
+            errno: 500,
+            msg: '保存异常!'
+        });
     }
-  })
+    
+  });
+
+
   // 注册
   app.post('/user/signup',  (req, res) => {
     const _user = req.body

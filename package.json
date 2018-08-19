@@ -5,7 +5,7 @@
   "author": "hua1995116",
   "private": true,
   "scripts": {
-    "dev": "node build/dev-server.js NODE_ENV=development",
+    "dev": "node build/dev-server.js",
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
     "deploy": "node deploy/index.js",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "log4js": "^2.3.12",
+    "multer": "^1.3.1",
     "vivus": "^0.4.1",
     "vue": "^2.2.2",
     "vue-router": "^2.3.0"

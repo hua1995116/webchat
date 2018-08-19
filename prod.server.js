@@ -37,7 +37,7 @@ app.use(session({
   saveUninitialized: true
 }))
 
-require('./config/routes-build.js')(app)
+require('./config/routes.js')(app)
 
 if ('development' === app.get('env')) {
   app.set('showStackError', true)
