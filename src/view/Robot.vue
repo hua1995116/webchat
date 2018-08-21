@@ -1,11 +1,13 @@
 <template>
-  <div>
-    <div v-for="obj in getRobotMsg">
-      <othermsg v-if="obj.user!=username" :name="obj.user" head="./static/img/robot.jpg"
-                :msg="obj.message"></othermsg>
-      <mymsg v-if="obj.user==username" :name="username" :head="src" :msg="obj.message"></mymsg>
+  <div class="container">
+    <div class="chat-inner">
+      <div v-for="(obj, index) in getRobotMsg" :key="index" class="">
+        <othermsg v-if="obj.user!=username" :name="obj.user" head="./static/img/robot.jpg"
+                  :msg="obj.message"></othermsg>
+        <mymsg v-if="obj.user==username" :name="username" :head="src" :msg="obj.message"></mymsg>
+      </div>
     </div>
-    <div style="height:250px"></div>
+    <!-- <div style="height:250px"></div> -->
     <div class="con-input">
       <div class="input" @keyup.enter="sendmessage">
         <input type="text" id="msg">
@@ -48,7 +50,9 @@
         })
         this.$store.dispatch('getRobatMess', data)
         document.getElementById('msg').value = ''
-        window.scrollTo(0, 900000)
+        setTimeout(() => {
+          document.querySelector('.chat-inner').scrollTop = 10000
+        })
       }
     },
     computed: {
@@ -64,6 +68,20 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
+.container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #fff;
+  .chat-inner {
+    position: absolute;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    top: 0;
+    bottom: 100px;
+  }
+}
   .con-input
     width: 100%
     position: fixed
