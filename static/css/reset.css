@@ -100,3 +100,5 @@ input{outline:none}
     display: block;
     clear: both;
 }
+
+::-webkit-scrollbar{width:0px}

@@ -84,7 +84,7 @@
       this.useranme = getItem('userid')
     },
     mounted() {
-      this.container = document.querySelector('.container')
+      this.container = document.querySelector('.chat-inner')
       // socket内部，this指针指向问题
       const that = this
       this.$store.commit('setRoomDetailInfos')
@@ -97,7 +97,9 @@
       // 连接websocket地址
       this.getSocket.on('message', function (obj) {
         that.$store.commit('addRoomDetailInfos', obj)
-        window.scroll(0, 10000)
+        setTimeout(() => {
+          that.container.scrollTop = 10000
+        }, 0)
       })
       this.getSocket.on('login', function (obj) {
         that.$store.commit('setUsers', obj)
@@ -185,9 +187,6 @@
           // 传递消息信息
           this.getSocket.emit('message', obj)
           this.chatValue = ''
-          this.$nextTick(() => {
-            this.container.scrollTop = 10000
-          })
         } else {
           Alert({
             content: '内容不能为空'
@@ -224,6 +223,7 @@
       position: absolute
       width: 100%
       overflow-y: scroll
+      overflow-x: hidden
       top: 56px
       bottom: 80px
     .title
