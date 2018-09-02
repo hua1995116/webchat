@@ -5,7 +5,9 @@ function websocket(server) {
     
     io.on('connection', function (socket) {
       //监听用户发布聊天内容
+      console.log('socket connect!');      
       socket.on('message', function (obj) {
+        console.log('socket message!'); 
         //向所有客户端广播发布的消息
         var mess = {
           username: obj.username,
@@ -31,6 +33,7 @@ function websocket(server) {
         }
       })
       socket.on('login',function (obj) {
+        console.log('socket login!'); 
         socket.name = obj.name
         socket.room = obj.roomid
         if (!users[obj.roomid]) {
@@ -43,6 +46,7 @@ function websocket(server) {
       })
       socket.on('logout',function (obj) {
         try{
+          console.log('socket loginout!');
           const is = Object.hasOwnProperty.call(users[obj.roomid], obj.name)
           if (is) {
             delete users[obj.roomid][obj.name]
@@ -55,7 +59,9 @@ function websocket(server) {
         }
       })
     
-      socket.on('disconnect', function () {
+      socket.on('disconnect', function (e) {
+        console.log(e);
+        console.log('socket disconnect!');
         console.log(socket.room, socket.name);
         if (users[socket.room] && users[socket.room].hasOwnProperty(socket.name)) {
           delete users[socket.room][socket.name]

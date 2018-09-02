@@ -12,6 +12,7 @@ const store = new Vuex.Store({
   state: {
     // 存放用户
     socket: '',
+    socketRoom: false,
     // 存放历史记录
     messhistory: {
       infos: [],
@@ -34,6 +35,7 @@ const store = new Vuex.Store({
     istab: false
   },
   getters: {
+    getSocketRoom: state => state.socketRoom,
     getSocket: state => state.socket,
     getUsers: state => state.roomdetail.users,
     getInfos: state => state.roomdetail.infos,
@@ -50,6 +52,9 @@ const store = new Vuex.Store({
     },
     setGetSocket (state, data) {
       state.socket = data
+    },
+    setSocketRoom (state, data) {
+      state.socketRoom = data
     },
     addRoomDetailInfos(state, data) {
       state.roomdetail.infos.push(data)

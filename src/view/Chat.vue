@@ -94,19 +94,22 @@
         roomid: this.roomid
       }
       this.getSocket.emit('login', obj)
-      // 连接websocket地址
-      this.getSocket.on('message', function (obj) {
-        that.$store.commit('addRoomDetailInfos', obj)
-        setTimeout(() => {
-          that.container.scrollTop = 10000
-        }, 0)
-      })
-      this.getSocket.on('login', function (obj) {
-        that.$store.commit('setUsers', obj)
-      })
-      this.getSocket.on('logout', function (obj) {
-        that.$store.commit('setUsers', obj)
-      })
+      if (!this.getSocketRoom) {
+        // 连接websocket地址
+        this.getSocket.on('message', function (obj) {
+          that.$store.commit('addRoomDetailInfos', obj)
+          setTimeout(() => {
+            that.container.scrollTop = 10000
+          }, 0)
+        })
+        this.getSocket.on('login', function (obj) {
+          that.$store.commit('setUsers', obj)
+        })
+        this.getSocket.on('logout', function (obj) {
+          that.$store.commit('setUsers', obj)
+        })
+        this.$store.commit('setSocketRoom', true)
+      }
       loading.show()
       setTimeout(async () => {
         await this.$store.dispatch('getMessHistory', {roomid: this.roomid})
@@ -125,7 +128,7 @@
         }
         this.getSocket.emit('logout', obj)
         // 防止事件重复监听,断开连接
-        this.$store.commit('setGetSocket', null)
+        // this.$store.commit('setGetSocket', null)
         this.$router.goBack()
         this.$store.commit('setTab', true)
       },
@@ -196,6 +199,7 @@
     },
     computed: {
       ...mapGetters([
+        'getSocketRoom',
         'getSocket',
         'getInfos',
         'getUsers',
