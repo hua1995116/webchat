@@ -59,6 +59,7 @@
   import { getItem } from '../utils/localStorage'
   import loading from '../components/loading/loading'
   import Alert from '../components/Alert'
+  import io from 'socket.io-client'
 
   // import io from 'socket.io-client'
   export default{
@@ -72,6 +73,14 @@
       }
     },
     created() {
+      if (!this.getSocket) {
+        const isLocal = queryString(window.location.href, 'local') || false
+        if (process.env.NODE_ENV === 'development' || isLocal) {
+          this.$store.commit('setGetSocket', io.connect('http://192.168.1.14:9090/'))
+        } else {
+          this.$store.commit('setGetSocket', io.connect('http://www.qiufengh.com:9090/'))
+        }
+      }
       const roomId = queryString(window.location.href, 'roomId')
       this.roomid = roomId
       if (!roomId) {
