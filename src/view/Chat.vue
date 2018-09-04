@@ -93,7 +93,6 @@
       this.useranme = getItem('userid')
     },
     mounted() {
-      debugger
       this.container = document.querySelector('.chat-inner')
       // socket内部，this指针指向问题
       const that = this
