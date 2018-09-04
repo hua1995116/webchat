@@ -17,7 +17,7 @@
 <!-- built files will be auto injected -->
 <script src="http://wechatfe.github.io/vconsole/lib/vconsole.min.js?v=3.2.0"></script>
 <script>
-    var debug = location.search.match(/debug=(\w+)/);
+    var debug = location.href.match(/debug=(\w+)/);
     if(debug && debug[1]) {
         var vConsole = new VConsole();
     }

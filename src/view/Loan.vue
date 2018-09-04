@@ -40,7 +40,7 @@
       if (!this.getSocket) {
         const isLocal = queryString(window.location.href, 'local') || false
         if (process.env.NODE_ENV === 'development' || isLocal) {
-          this.$store.commit('setGetSocket', io.connect('http://192.168.1.14:9090/'))
+          this.$store.commit('setGetSocket', io.connect('http://127.0.0.1:9090/'))
         } else {
           this.$store.commit('setGetSocket', io.connect('http://www.qiufengh.com:9090/'))
         }
