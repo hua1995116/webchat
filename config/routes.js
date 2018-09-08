@@ -27,11 +27,15 @@ const createFolder = function (folder) {
   }
 };
 
-let uploadFolder = '/home/webchat/dist/static/files';
+let uploadFolder = './dist/static/files';
 const urlPath = './static/files/';
 
 if (process.env.NODE_ENV === 'development') { 
   uploadFolder = './static/files/';
+}
+
+if (process.env.NODE_ENV === 'server') {
+  uploadFolder = '/home/webchat/dist/static/files';
 }
 
 createFolder(uploadFolder);

@@ -5,14 +5,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import url from '../api/server.js'
 
-// import qs from 'qs'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    // 存放用户
-    socket: '',
-    socketRoom: false,
     // 存放历史记录
     messhistory: {
       infos: [],
@@ -26,8 +22,9 @@ const store = new Vuex.Store({
     },
     // 存放机器人开场白
     robotmsg: [{
-      message: 'Hi~有什么想知道的可以问我',
-      user: 'robot'
+      msg: 'Hi~有什么想知道的可以问我',
+      username: 'robot',
+      src: './static/img/robot.jpg'
     }],
     // svg
     svgmodal: null,
@@ -35,8 +32,6 @@ const store = new Vuex.Store({
     istab: false
   },
   getters: {
-    getSocketRoom: state => state.socketRoom,
-    getSocket: state => state.socket,
     getUsers: state => state.roomdetail.users,
     getInfos: state => state.roomdetail.infos,
     getMessHistoryInfos: state => state.messhistory.infos,
@@ -50,14 +45,8 @@ const store = new Vuex.Store({
     setSvgModal(state, data) {
       state.svgmodal = data
     },
-    setGetSocket (state, data) {
-      state.socket = data
-    },
-    setSocketRoom (state, data) {
-      state.socketRoom = data
-    },
     addRoomDetailInfos(state, data) {
-      state.roomdetail.infos.push(data)
+      state.roomdetail.infos.push(...data)
     },
     setRoomDetailInfos(state) {
       state.roomdetail.infos = []
@@ -113,7 +102,8 @@ const store = new Vuex.Store({
     async getMessHistory({commit}, data) {
       const res = await url.RoomHistory(data)
       if (res) {
-        commit('setMessHistoryInfos', res.data.data)
+        const his = res.data.data;
+        commit('addRoomDetailInfos', his);
       }
     },
     async getAllMessHistory({commit}, data) {
@@ -128,19 +118,21 @@ const store = new Vuex.Store({
     },
     async getRobatMess({commit}, data) {
       let robotdata = ''
+      const username = 'robot';
+      const src = './static/img/robot.jpg';
       const res = await url.getRobotMessage(data)
       if (res) {
         robotdata = JSON.parse(res.data.data)
         // 分类信息
         if (robotdata.code === 100000) {
-          commit('setRobotMsg', {message: robotdata.text, user: 'robot'})
+          commit('setRobotMsg', {msg: robotdata.text, username, src})
         } else if (robotdata.code === 200000) {
           let data = robotdata.text + robotdata.url
-          commit('setRobotMsg', {message: data, user: 'robot'})
+          commit('setRobotMsg', {msg: data, username, src})
         } else if (robotdata.code === 302000) {
-          commit('setRobotMsg', {message: '暂不支持此类对话', user: 'robot'})
+          commit('setRobotMsg', {msg: '暂不支持此类对话', username, src})
         } else {
-          commit('setRobotMsg', {message: '暂不支持此类对话', user: 'robot'})
+          commit('setRobotMsg', {msg: '暂不支持此类对话', username, src})
         }
       }
     }

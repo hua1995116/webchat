@@ -13,23 +13,21 @@
       <div class="chat-inner">
         <div class="all-chat">
           <div>在线人员</div>
-          <div v-for="obj in getUsers" class="online">
+          <div v-for="(obj,index) in getUsers" class="online" :key="index">
             <img :src="obj.src" alt="">
           </div>
         </div>
         <div class="chat" v-if="isLoadingAchieve">
           <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-          <div v-for="obj in getMessHistoryInfos">
-            <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                      :img="obj.img" :mytime="obj.time"></othermsg>
-            <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                  :img="obj.img" :mytime="obj.time"></mymsg>
-          </div>
-          <div v-for="obj in getInfos">
-            <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                      :img="obj.img" :mytime="obj.time"></othermsg>
-            <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                  :img="obj.img" :mytime="obj.time"></mymsg>
+          <div v-for="(obj,index) in getInfos" :key="index">
+            <Message 
+              :is-self="obj.username === useranme" 
+              :name="obj.username" 
+              :head="obj.src" 
+              :msg="obj.msg"
+              :img="obj.img" 
+              :mytime="obj.time"
+              ></Message>
           </div>
           <div class="clear"></div>
         </div>
@@ -52,16 +50,14 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-  import Mymsg from '../components/Mymsg.vue'
-  import Othermsg from '../components/Othermsg.vue'
+  import Message from '../components/Message'
   import {mapGetters, mapState} from 'vuex'
   import {queryString} from '../utils/queryString'
   import { getItem } from '../utils/localStorage'
   import loading from '../components/loading/loading'
   import Alert from '../components/Alert'
-  import io from 'socket.io-client'
+  import socket from '../socket';
 
-  // import io from 'socket.io-client'
   export default{
     data() {
       return {
@@ -73,14 +69,6 @@
       }
     },
     created() {
-      if (!this.getSocket) {
-        const isLocal = queryString(window.location.href, 'local') || false
-        if (process.env.NODE_ENV === 'development' || isLocal) {
-          this.$store.commit('setGetSocket', io.connect('http://127.0.0.1:9090/'))
-        } else {
-          this.$store.commit('setGetSocket', io.connect('http://www.qiufengh.com:9090/'))
-        }
-      }
       const roomId = queryString(window.location.href, 'roomId')
       this.roomid = roomId
       if (!roomId) {
@@ -102,23 +90,13 @@
         src: getItem('src'),
         roomid: this.roomid
       }
-      this.getSocket.emit('login', obj)
-      if (!this.getSocketRoom) {
-        // 连接websocket地址
-        this.getSocket.on('message', function (obj) {
-          that.$store.commit('addRoomDetailInfos', obj)
-          setTimeout(() => {
-            that.container.scrollTop = 10000
-          }, 0)
-        })
-        this.getSocket.on('login', function (obj) {
-          that.$store.commit('setUsers', obj)
-        })
-        this.getSocket.on('logout', function (obj) {
-          that.$store.commit('setUsers', obj)
-        })
-        this.$store.commit('setSocketRoom', true)
-      }
+      socket.emit('login', obj)
+      socket.on('login', function (obj) {
+        that.$store.commit('setUsers', obj)
+      })
+      socket.on('logout', function (obj) {
+        that.$store.commit('setUsers', obj)
+      })
       loading.show()
       setTimeout(async () => {
         await this.$store.dispatch('getMessHistory', {roomid: this.roomid})
@@ -135,9 +113,7 @@
           name: getItem('userid'),
           roomid: this.roomid
         }
-        this.getSocket.emit('logout', obj)
-        // 防止事件重复监听,断开连接
-        // this.$store.commit('setGetSocket', null)
+        socket.emit('logout', obj)
         this.$router.goBack()
         this.$store.commit('setTab', true)
       },
@@ -165,7 +141,7 @@
               room: that.roomid,
               time: new Date()
             }
-            that.getSocket.emit('message', obj)
+            socket.emit('message', obj)
           }
           fr.readAsDataURL(file1)
           this.$nextTick(() => {
@@ -197,7 +173,7 @@
             time: new Date()
           }
           // 传递消息信息
-          this.getSocket.emit('message', obj)
+          socket.emit('message', obj)
           this.chatValue = ''
         } else {
           Alert({
@@ -208,8 +184,6 @@
     },
     computed: {
       ...mapGetters([
-        'getSocketRoom',
-        'getSocket',
         'getInfos',
         'getUsers',
         'getMessHistoryInfos'
@@ -219,8 +193,7 @@
       ])
     },
     components: {
-      Mymsg,
-      Othermsg
+      Message
     }
   }
 </script>
