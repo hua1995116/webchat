@@ -30,7 +30,7 @@
 
 <script>
   import Confirm from '../components/Confirm';
-  import Toast from '../components/toast';
+  import Toast from '../components/Toast';
   import { getItem, setItem } from '../utils/localStorage.js';
 
   export default {
