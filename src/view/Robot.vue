@@ -2,9 +2,14 @@
   <div class="container">
     <div class="chat-inner">
       <div v-for="(obj, index) in getRobotMsg" :key="index" class="">
-        <othermsg v-if="obj.user!=username" :name="obj.user" head="./static/img/robot.jpg"
-                  :msg="obj.message"></othermsg>
-        <mymsg v-if="obj.user==username" :name="username" :head="src" :msg="obj.message"></mymsg>
+        <Message
+              :is-self="obj.username === username" 
+              :name="obj.username" 
+              :head="obj.src" 
+              :msg="obj.msg"
+              :img="obj.img" 
+              :mytime="obj.time"
+            ></Message>
       </div>
     </div>
     <!-- <div style="height:250px"></div> -->
@@ -19,8 +24,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Mymsg from '../components/Mymsg.vue'
-  import Othermsg from '../components/Othermsg.vue'
+  import Message from '../components/Message'
   import {mapGetters} from 'vuex'
   import { getItem } from '../utils/localStorage'
 
@@ -31,13 +35,15 @@
         src: ''
       }
     },
+    created() {
+      this.username = getItem('userid')
+      this.src = getItem('src')
+    },
     methods: {
       sendmessage() {
         if (!getItem('userid')) {
           this.$router.push({path: '/login'})
         }
-        this.username = getItem('userid')
-        this.src = getItem('src')
         const info = document.getElementById('msg').value
         const id = this.username
         const data = {
@@ -45,14 +51,12 @@
           'id': id
         }
         this.$store.commit('setRobotMsg', {
-          message: info,
-          user: this.username
+          msg: info,
+          username: this.username,
+          src: this.src
         })
         this.$store.dispatch('getRobatMess', data)
         document.getElementById('msg').value = ''
-        setTimeout(() => {
-          document.querySelector('.chat-inner').scrollTop = 10000
-        })
       }
     },
     computed: {
@@ -61,8 +65,7 @@
       ])
     },
     components: {
-      Mymsg,
-      Othermsg
+      Message
     }
   }
 </script>

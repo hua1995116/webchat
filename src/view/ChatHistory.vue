@@ -14,11 +14,15 @@
         <div style="height:70px"></div>
         <div class="chat">
           <div v-if="messageData.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-          <div v-for="obj in messageData">
-            <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                      :img="obj.img" :mytime="obj.time"></othermsg>
-            <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                   :img="obj.img" :mytime="obj.time"></mymsg>
+          <div v-for="(obj,index) in messageData" :key="index">
+            <Message
+              :is-self="obj.username === useranme" 
+              :name="obj.username" 
+              :head="obj.src" 
+              :msg="obj.msg"
+              :img="obj.img" 
+              :mytime="obj.time"
+            ></Message>
           </div>
           <template>
             <mu-pagination v-show="messageData.length > 10" :total="pages.total" :current="pages.current" :defaultPageSize="pages.defaultPageSize" @pageChange="handleClick">
@@ -32,13 +36,11 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-  import Mymsg from '../components/Mymsg.vue'
+  import Message from '../components/Message'
   import { getItem } from '../utils/localStorage'
   import {queryString} from '../utils/queryString'
-  import Othermsg from '../components/Othermsg.vue'
   import {mapGetters} from 'vuex'
   import loading from '../components/loading/loading'
-  // import io from 'socket.io-client'
   export default{
     data() {
       return {
@@ -96,8 +98,7 @@
       ])
     },
     components: {
-      Mymsg,
-      Othermsg
+      Message
     }
   }
 </script>

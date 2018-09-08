@@ -1,15 +1,17 @@
 <template>
-    <div class="item">
-        <div class="name">
-            <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
+    <div class="clear" :class="">
+        <div class="item">
+            <div class="name">
+                <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
+            </div>
+            <img :src="head" alt="" class="head">
+            <div v-if="img">
+                <img :src="img" alt="" class="img">
+            </div>
+            <span v-if="msg">
+                {{msg}}
+            </span>
         </div>
-        <img :src="head" alt="" class="head">
-        <div v-if="img">
-            <img :src="img" alt="" class="img">
-        </div>
-        <span v-if="msg">
-            {{msg}}
-        </span>
     </div>
 </template>
 
@@ -21,10 +23,10 @@
             getdate() {
                 return dateFormat(new Date(this.mytime), 'yyyy-MM-dd HH:mm:ss')
             }
-        },
-        mounted() {
-            // this.$ref.item.scrollIntoView()
         }
+        // mounted() {
+        //     // this.$ref.item.scrollIntoView()
+        // }
 
     }
 </script>
@@ -40,8 +42,6 @@
             border-radius: 10px
             background-color: rgba(25, 147, 147, 0.2)
             animation: show-chat-odd 0.25s 1 ease-in
-            -moz-animation: show-chat-odd 0.25s 1 ease-in
-            -webkit-animation: show-chat-odd 0.25s 1 ease-in
             float: right
             margin-right: 80px
             color: #0AD5C1
@@ -85,26 +85,6 @@
                 right: -15px
 
     @keyframes show-chat-odd {
-        0% {
-            margin-right: -480px;
-        }
-
-        100% {
-            margin-right: 0;
-        }
-    }
-
-    @-moz-keyframes show-chat-odd {
-        0% {
-            margin-right: -480px;
-        }
-
-        100% {
-            margin-right: 0;
-        }
-    }
-
-    @-webkit-keyframes show-chat-odd {
         0% {
             margin-right: -480px;
         }

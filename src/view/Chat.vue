@@ -20,10 +20,14 @@
         <div class="chat" v-if="isLoadingAchieve">
           <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
           <div v-for="(obj,index) in getInfos" :key="index">
-            <othermsg v-if="obj.username!=useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                      :img="obj.img" :mytime="obj.time"></othermsg>
-            <mymsg v-if="obj.username==useranme" :name="obj.username" :head="obj.src" :msg="obj.msg"
-                  :img="obj.img" :mytime="obj.time"></mymsg>
+            <Message 
+              :is-self="obj.username === useranme" 
+              :name="obj.username" 
+              :head="obj.src" 
+              :msg="obj.msg"
+              :img="obj.img" 
+              :mytime="obj.time"
+              ></Message>
           </div>
           <div class="clear"></div>
         </div>
@@ -46,17 +50,14 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-  import Mymsg from '../components/Mymsg.vue'
-  import Othermsg from '../components/Othermsg.vue'
+  import Message from '../components/Message'
   import {mapGetters, mapState} from 'vuex'
   import {queryString} from '../utils/queryString'
   import { getItem } from '../utils/localStorage'
   import loading from '../components/loading/loading'
   import Alert from '../components/Alert'
-  // import io from 'socket.io-client'
   import socket from '../socket';
 
-  // import io from 'socket.io-client'
   export default{
     data() {
       return {
@@ -192,8 +193,7 @@
       ])
     },
     components: {
-      Mymsg,
-      Othermsg
+      Message
     }
   }
 </script>
