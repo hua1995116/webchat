@@ -22,7 +22,7 @@
         <mu-list-item title="我的动态">
           <mu-icon slot="left" value="send"/>
         </mu-list-item>
-        <mu-list-item title="设置">
+        <mu-list-item title="清除缓存" @click="rmLocalData">
           <mu-icon slot="left" value="drafts"/>
         </mu-list-item>
       </mu-list>
@@ -36,7 +36,8 @@
 </template>
 
 <script>
-  import {clear, getItem} from '../utils/localStorage'
+  import Confirm from '../components/Confirm';
+  import {clear, getItem, removeItem} from '../utils/localStorage'
   export default{
     data() {
       return {
@@ -52,10 +53,19 @@
       this.src = getItem('src')
     },
     methods: {
-      logout() {
-        clear()
-        this.$router.push('/login')
-        this.$store.commit('setTab', false)
+      rmLocalData() {
+        removeItem('update-20180908');
+      },
+      async logout() {
+        const data = await Confirm({
+          title: '提示',
+          content: '你忍心离开吗？'
+        })
+        if (data === 'success') {
+          clear()
+          this.$router.push('/login')
+          this.$store.commit('setTab', false)
+        }
       }
     }
   }

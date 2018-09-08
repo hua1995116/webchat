@@ -1,9 +1,6 @@
 <template>
   <div class="register">
     <div class="header">
-      <mu-appbar title="Title">
-        <mu-flat-button label="注册" slot="default"/>
-      </mu-appbar>
     </div>
     <div class="content">
       <form action="" name="form1">
@@ -88,8 +85,7 @@
     text-align : center
     border-radius: 50px
   .header
-    .mu-appbar
-      background-color: transparent
+    height: 50px;
   .content
     .mu-text-field-input
       color: #fff

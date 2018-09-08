@@ -12,7 +12,6 @@
             ></Message>
       </div>
     </div>
-    <!-- <div style="height:250px"></div> -->
     <div class="con-input">
       <div class="input" @keyup.enter="sendmessage">
         <input type="text" id="msg">
@@ -107,5 +106,4 @@
         width: 100%
     .demo-raised-button
       height: 50px
-      background: #ddd
 </style>

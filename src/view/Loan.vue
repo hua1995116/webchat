@@ -30,7 +30,8 @@
 
 <script>
   import Confirm from '../components/Confirm';
-  import { getItem } from '../utils/localStorage.js';
+  import Toast from '../components/toast';
+  import { getItem, setItem } from '../utils/localStorage.js';
 
   export default {
     async mounted() {
@@ -43,9 +44,20 @@
         this.$router.push({ path: 'login' });
       } else {
         this.$store.commit('setTab', true);
+        this.setUpdateLog();
       }
     },
     methods: {
+      setUpdateLog() {
+        const update = getItem('update-20180908');
+        if (!update) {
+          setItem('update-20180908', true);
+          Toast({
+            content: '修复消息滚至底部效果,重构部分组件~',
+            timeout: 3000
+          });
+        }
+      },
       chatHistory(roomID) {
         this.$store.commit('setTab', false);
         this.$router.push({path: '/chat-history', query: {roomId: roomID}});

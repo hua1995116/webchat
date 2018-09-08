@@ -1,9 +1,6 @@
 <template>
   <div class="login">
     <div class="header">
-      <mu-appbar title="Title">
-        <mu-flat-button label="登录" slot="default"/>
-      </mu-appbar>
     </div>
     <div class="content">
       <form action="" name="form2">
@@ -19,7 +16,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-//  import {mapGetters} from 'vuex'
   import SvgModal from '../components/svg-modal'
   import Alert from '../components/Alert'
   import { setItem } from '../utils/localStorage.js'
