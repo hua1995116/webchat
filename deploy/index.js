@@ -1,10 +1,13 @@
 let fs = require('fs');
 let join = require('path').join;
 const path = require('path'); 
-const upload = require('./tx-upload');
+const upload = require('./qiniu');
 
-// const uploadUrl = 'http://pdlu3e6ll.bkt.clouddn.com/';
-const uploadUrl = 'http://webchat-1251965041.file.myqcloud.com/'; 
+const url  = 'http://pdlu3e6ll.bkt.clouddn.com/';
+const bucket = 'webchat/'
+const uploadUrl = url + bucket;
+
+// const uploadUrl = 'http://webchat-1251965041.file.myqcloud.com/'; 
 /**
  * 
  * @param startPath  起始目录文件夹路径
