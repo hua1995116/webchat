@@ -53,15 +53,21 @@
       this.src = getItem('src')
     },
     methods: {
-      rmLocalData() {
-        removeItem('update-20180908');
+      async rmLocalData() {
+        const data = await Confirm({
+          title: '提示',
+          content: '清除缓存会导致更新历史再再次提醒，确定清除？'
+        })
+        if (data === 'submit') {
+          removeItem('update-20180908');
+        }
       },
       async logout() {
         const data = await Confirm({
           title: '提示',
           content: '你忍心离开吗？'
         })
-        if (data === 'success') {
+        if (data === 'submit') {
           clear()
           this.$router.push('/login')
           this.$store.commit('setTab', false)
