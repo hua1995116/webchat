@@ -30,11 +30,11 @@ const createFolder = function (folder) {
 let uploadFolder = './dist/static/files';
 const urlPath = './static/files/';
 
-if (process.env.NODE_ENV === 'development') { 
+if (process.env.NODE_ENV === 'server') { 
   uploadFolder = './static/files/';
 }
 
-if (process.env.NODE_ENV === 'server') {
+if (process.env.NODE_ENV === 'development') {
   uploadFolder = '/home/webchat/dist/static/files';
 }
 

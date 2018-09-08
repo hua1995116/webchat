@@ -10,8 +10,8 @@
     "build": "node build/build.js",
     "deploy": "node deploy/index.js",
     "lint": "eslint --ext .js,.vue src",
-    "server": "cross-env NODE_ENV=production node prod.server.js",
-    "server-linux": "cross-env NODE_ENV=server node prod.server.js"
+    "server": "cross-env NODE_ENV=server node prod.server.js",
+    "server-linux": "cross-env NODE_ENV=production node prod.server.js"
   },
   "dependencies": {
     "log4js": "^2.3.12",
