@@ -5,14 +5,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import url from '../api/server.js'
 
-// import qs from 'qs'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    // 存放用户
-    socket: '',
-    socketRoom: false,
     // 存放历史记录
     messhistory: {
       infos: [],
@@ -35,8 +31,6 @@ const store = new Vuex.Store({
     istab: false
   },
   getters: {
-    getSocketRoom: state => state.socketRoom,
-    getSocket: state => state.socket,
     getUsers: state => state.roomdetail.users,
     getInfos: state => state.roomdetail.infos,
     getMessHistoryInfos: state => state.messhistory.infos,
@@ -50,14 +44,8 @@ const store = new Vuex.Store({
     setSvgModal(state, data) {
       state.svgmodal = data
     },
-    setGetSocket (state, data) {
-      state.socket = data
-    },
-    setSocketRoom (state, data) {
-      state.socketRoom = data
-    },
     addRoomDetailInfos(state, data) {
-      state.roomdetail.infos.push(data)
+      state.roomdetail.infos.push(...data)
     },
     setRoomDetailInfos(state) {
       state.roomdetail.infos = []
@@ -113,7 +101,8 @@ const store = new Vuex.Store({
     async getMessHistory({commit}, data) {
       const res = await url.RoomHistory(data)
       if (res) {
-        commit('setMessHistoryInfos', res.data.data)
+        const his = res.data.data;
+        commit('addRoomDetailInfos', his);
       }
     },
     async getAllMessHistory({commit}, data) {

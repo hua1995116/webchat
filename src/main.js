@@ -9,9 +9,22 @@ import './styles/default.css'
 import MuseUI from 'muse-ui'
 import 'muse-ui/dist/muse-ui.css'
 import './styles/main.styl'
-// import './styles/default.css'
+import socket from './socket'
 Vue.use(MuseUI)
 Vue.config.productionTip = false
+
+socket.on('connect', () => {
+  console.log('connect')
+})
+
+socket.on('disconnect', () => {
+  console.log('disconnect');
+})
+
+socket.on('message', function (obj) {
+  console.log(obj);
+  store.commit('addRoomDetailInfos', [obj])
+})
 
 /* eslint-disable no-new */
 new Vue({

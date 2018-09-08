@@ -29,48 +29,30 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
-  import io from 'socket.io-client'
-  import Confirm from '../components/Confirm'
-  import {queryString} from '../utils/queryString'
-  import { getItem } from '../utils/localStorage.js'
+  import Confirm from '../components/Confirm';
+  import { getItem } from '../utils/localStorage.js';
 
   export default {
-    created() {
-      if (!this.getSocket) {
-        const isLocal = queryString(window.location.href, 'local') || false
-        if (process.env.NODE_ENV === 'development' || isLocal) {
-          this.$store.commit('setGetSocket', io.connect('http://127.0.0.1:9090/'))
-        } else {
-          this.$store.commit('setGetSocket', io.connect('http://www.qiufengh.com:9090/'))
-        }
-      }
-    },
     async mounted() {
-      const uerId = getItem('userid')
+      const uerId = getItem('userid');
       if (!uerId) {
         await Confirm({
           title: '提示',
           content: '请先登录'
         })
-        this.$router.push({ path: 'login' })
+        this.$router.push({ path: 'login' });
       } else {
-        this.$store.commit('setTab', true)
+        this.$store.commit('setTab', true);
       }
-    },
-    computed: {
-      ...mapGetters([
-        'getSocket'
-      ])
     },
     methods: {
       chatHistory(roomID) {
-        this.$store.commit('setTab', false)
-        this.$router.push({path: '/chat-history', query: {roomId: roomID}})
+        this.$store.commit('setTab', false);
+        this.$router.push({path: '/chat-history', query: {roomId: roomID}});
       },
       chatwindow(roomID) {
-        this.$store.commit('setTab', false)
-        this.$router.push({path: '/chat', query: {roomId: roomID}})
+        this.$store.commit('setTab', false);
+        this.$router.push({path: '/chat', query: {roomId: roomID}});
       }
     }
   }

@@ -21,6 +21,9 @@
             getdate() {
                 return dateFormat(new Date(this.mytime), 'yyyy-MM-dd HH:mm:ss')
             }
+        },
+        mounted() {
+            // this.$ref.item.scrollIntoView()
         }
 
     }
