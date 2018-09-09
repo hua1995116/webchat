@@ -29,16 +29,22 @@ const store = new Vuex.Store({
     // svg
     svgmodal: null,
     // 是否启动tab
-    istab: false
+    istab: false,
+
+    emojiShow: false
   },
   getters: {
     getUsers: state => state.roomdetail.users,
     getInfos: state => state.roomdetail.infos,
     getMessHistoryInfos: state => state.messhistory.infos,
     getMessHistoryAll: state => state.messhistory.allmessage,
-    getRobotMsg: state => state.robotmsg
+    getRobotMsg: state => state.robotmsg,
+    getEmoji: state => state.emojiShow
   },
   mutations: {
+    setEmoji(state, data) {
+      state.emojiShow = data;
+    },
     setTab(state, data) {
       state.istab = data
     },
