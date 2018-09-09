@@ -25,6 +25,14 @@ socket.on('message', function (obj) {
   store.commit('addRoomDetailInfos', [obj])
 })
 
+document.addEventListener('touchstart', (e) => {
+  if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
+    store.commit('setEmoji', true);
+  } else {
+    store.commit('setEmoji', false);
+  }
+})
+
 document.addEventListener('click', (e) => {
   if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
     store.commit('setEmoji', true);

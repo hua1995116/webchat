@@ -141,7 +141,8 @@
         if (!!target && target.tagName.toLowerCase() === 'span') {
           that.chatValue = that.chatValue + target.innerHTML;
         }
-    })
+        e.stopPropagation();
+      })
     },
     methods: {
       goback () {
