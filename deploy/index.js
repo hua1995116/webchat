@@ -3,11 +3,10 @@ let join = require('path').join;
 const path = require('path'); 
 const upload = require('./qiniu');
 
-const url  = 'http://pdlu3e6ll.bkt.clouddn.com/';
+const url  = 'http://s3.qiufengh.com/';
 const bucket = 'webchat/'
 const uploadUrl = url + bucket;
 
-// const uploadUrl = 'http://webchat-1251965041.file.myqcloud.com/'; 
 /**
  * 
  * @param startPath  起始目录文件夹路径
@@ -20,7 +19,6 @@ function findSync(startPath) {
         files.forEach((val, index) => {
             let fPath = join(path, val);
             let stats = fs.statSync(fPath);
-            // if(stats.isDirectory()) finder(fPath);
             if(stats.isFile()&&val.indexOf('.map') === -1) result.push(val);
         });
 
