@@ -33,14 +33,41 @@
         </div>
       </div>
       <div class="bottom">
+        <div class="functions">
+          <div class="fun-li" @click="imgupload"></div> 
+          <div class="fun-li emoji">
+            <div class="emoji-content" v-show="getEmoji">
+              <div class="emoji-tabs">
+                <div class="emoji-container" ref="emoji">
+                  <div class="emoji-block" :style="{width: Math.ceil(emoji.people.length / 5) * 48 + 'px'}">
+                    <span v-for="(item, index) in emoji.people" :key="index">{{item}}</span>
+                  </div>
+                  <div class="emoji-block" :style="{width: Math.ceil(emoji.nature.length / 5) * 48 + 'px'}">
+                    <span v-for="(item, index) in emoji.nature" :key="index">{{item}}</span>
+                  </div>
+                  <div class="emoji-block" :style="{width: Math.ceil(emoji.items.length / 5) * 48 + 'px'}">
+                    <span v-for="(item, index) in emoji.items" :key="index">{{item}}</span>
+                  </div>
+                  <div class="emoji-block" :style="{width: Math.ceil(emoji.place.length / 5) * 48 + 'px'}">
+                    <span v-for="(item, index) in emoji.place" :key="index">{{item}}</span>
+                  </div>
+                  <div class="emoji-block" :style="{width: Math.ceil(emoji.single.length / 5) * 48 + 'px'}">
+                    <span v-for="(item, index) in emoji.single" :key="index">{{item}}</span>
+                  </div>
+                </div>
+                <div class="tab">
+                  <!-- <a href="#hot"><span>热门</span></a>
+                  <a href="#people"><span>人物</span></a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="chat">
           <div class="input" @keyup.enter="submess">
             <input type="text" v-model="chatValue">
           </div>
           <mu-raised-button label="发送" class="demo-raised-button" primary @click="submess"/>
-        </div>
-        <div class="functions">
-          <div class="fun-li" @click="imgupload"></div>
         </div>
         <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/*;capture=camera"
                 style="display: none" @change="fileup">
@@ -57,6 +84,7 @@
   import loading from '../components/loading/loading'
   import Alert from '../components/Alert'
   import socket from '../socket';
+  import emoji from '../utils/emoji';
 
   export default{
     data() {
@@ -65,7 +93,8 @@
         useranme: '',
         isLoadingAchieve: false,
         container: {},
-        chatValue: ''
+        chatValue: '',
+        emoji: emoji
       }
     },
     created() {
@@ -105,7 +134,14 @@
         this.$nextTick(() => {
           this.container.scrollTop = 10000
         })
-      }, 1000)
+      }, 1000);
+
+      this.$refs.emoji.addEventListener('click', function(e) {
+        var target = e.target || e.srcElement;
+        if (!!target && target.tagName.toLowerCase() === 'span') {
+          that.chatValue = that.chatValue + target.innerHTML;
+        }
+    })
     },
     methods: {
       goback () {
@@ -184,6 +220,7 @@
     },
     computed: {
       ...mapGetters([
+        'getEmoji',
         'getInfos',
         'getUsers',
         'getMessHistoryInfos'
@@ -284,10 +321,42 @@
           width: 40px
           height: 30px
           display: inline-block
+          position: relative
         .fun-li:nth-child(1)
-          background-image: url(../assets/images.png)
+          background-image: url('http://pdlu3e6ll.bkt.clouddn.com/camera.png')
           background-repeat: no-repeat
           background-size: 25px 25px
           background-position: center center
+        .fun-li:nth-child(2)
+          background-image: url('http://pdlu3e6ll.bkt.clouddn.com/emoji.png')
+          background-repeat: no-repeat
+          background-size: 25px 25px
+          background-position: center center
+        .emoji-content 
+          position: absolute;
+          bottom: 30px;
+          left: -42px;
+          width: 375px;
+          height: 210px;
+          border-top: 1px solid #f3f3f3;
+          overflow: hidden;
+          background-color: #fff;
+          .emoji-container 
+            width: 10000px;
+          .emoji-tabs 
+            overflow: auto;
+            .emoji-block
+              width: 1170px;
+              height: 200px;
+              float: left;
+              span 
+                display: inline-block;
+                cursor: pointer;
+                font-size: 26px;
+                min-width: 48px;
+                line-height 39px;
+                text-align: center;
+                list-style: none;
+          
 
 </style>

@@ -22,8 +22,15 @@ socket.on('disconnect', () => {
 })
 
 socket.on('message', function (obj) {
-  console.log(obj);
   store.commit('addRoomDetailInfos', [obj])
+})
+
+document.addEventListener('click', (e) => {
+  if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
+    store.commit('setEmoji', true);
+  } else {
+    store.commit('setEmoji', false);
+  }
 })
 
 /* eslint-disable no-new */

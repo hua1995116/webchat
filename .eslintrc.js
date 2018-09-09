@@ -22,6 +22,7 @@ module.exports = {
 		'indent': 0,
 		'space-before-function-paren': 0,
     "no-multiple-empty-lines": [1, {"max": 2}],
-    "new-cap": [2, { "newIsCap": false, "capIsNew": false }],
+		"new-cap": [2, { "newIsCap": false, "capIsNew": false }],
+		"quotes": [0]
   }
 }
