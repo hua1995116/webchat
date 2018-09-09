@@ -41,13 +41,13 @@ http://qiufengh.com:9090改成自己的项目地址。
 
 ## 效果
 
-<img src="http://s3.qiufengh.com/screenshot/5.png"/>
+<img src="http://s3.qiufengh.com/screenshot/1.png"/>
 
-<img src="http://s3.qiufengh.com/screenshot/6.png"/>
+<img src="http://s3.qiufengh.com/screenshot/2.png"/>
 
-<img src="http://s3.qiufengh.com/screenshot/7.png"/>
+<img src="http://s3.qiufengh.com/screenshot/3.png"/>
 
-<img src="http://s3.qiufengh.com/screenshot/8.png"/>
+<img src="http://s3.qiufengh.com/screenshot/4.png"/>
 
 ## 版本更新
 
