@@ -15,7 +15,11 @@ view/Loan.vue下的io.connect('http://qiufengh.com/')
 http://qiufengh.com:9090改成自己的项目地址。
 ```
 在线观看
+
 [http://www.qiufengh.com/](http://www.qiufengh.com/)
+
+<img src="http://s3.qiufengh.com/images/1536588077.png" width="400" />
+
 
 ## 功能
 - [x] 聊天功能 -- 完成
