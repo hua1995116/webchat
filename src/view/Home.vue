@@ -46,6 +46,7 @@
       }
     },
     mounted() {
+      this.$store.commit('setTab', true);
       if (!getItem('userid')) {
         this.$router.push('/login')
       }
@@ -82,6 +83,7 @@
     position: relative
     width: 100%
     height: 200px
+    display: inline-block
     .head
       width: 80px
       margin: 20px auto 0

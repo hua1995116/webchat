@@ -38,6 +38,9 @@
       this.username = getItem('userid')
       this.src = getItem('src')
     },
+    mounted() {
+      this.$store.commit('setTab', true);
+    },
     methods: {
       sendmessage() {
         if (!getItem('userid')) {
