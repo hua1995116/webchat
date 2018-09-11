@@ -24,6 +24,13 @@
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
       </mu-list>
+      <mu-list>
+        <mu-sub-header>和小白聊天</mu-sub-header>
+        <mu-list-item title="聊天室1" @click="chatRobot()">
+          <mu-avatar src="./static/img/robot.jpg" slot="leftAvatar"/>
+          <mu-icon value="chat_bubble" slot="right"/>
+        </mu-list-item>
+      </mu-list>
     </div>
   </div>
 </template>
@@ -65,6 +72,10 @@
       chatwindow(roomID) {
         this.$store.commit('setTab', false);
         this.$router.push({path: '/chat', query: {roomId: roomID}});
+      },
+      chatRobot() {
+        this.$store.commit('setTab', false);
+        this.$router.push({path: '/robot'});
       }
     }
   }

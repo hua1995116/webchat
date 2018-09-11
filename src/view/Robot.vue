@@ -1,5 +1,13 @@
 <template>
   <div class="container">
+    <div class="title">
+      <mu-appbar title="Title">
+        <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
+        <div class="center">
+        </div>
+        <mu-icon-button icon="expand_more" slot="right"/>
+      </mu-appbar>
+    </div>
     <div class="chat-inner">
       <div v-for="(obj, index) in getRobotMsg" :key="index" class="">
         <Message
@@ -39,9 +47,13 @@
       this.src = getItem('src')
     },
     mounted() {
-      this.$store.commit('setTab', true);
+      // this.$store.commit('setTab', true);
     },
     methods: {
+      goback () {
+        this.$router.goBack()
+        this.$store.commit('setTab', true)
+      },
       sendmessage() {
         if (!getItem('userid')) {
           this.$router.push({path: '/login'})
@@ -73,25 +85,44 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-.container {
+.container 
   width: 100%;
   height: 100%;
   overflow: hidden;
   background: #fff;
-  .chat-inner {
-    position: absolute;
-    width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    top: 0;
-    bottom: 100px;
-  }
-}
+  .title
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    z-index: 1
+    .center
+      -webkit-box-flex: 1
+      -webkit-flex: 1
+      -ms-flex: 1
+      flex: 1
+      padding-left: 8px
+      padding-right: 8px
+      white-space: nowrap
+      text-overflow: ellipsis
+      overflow: hidden
+      font-size: 20px
+      font-weight: 400
+      line-height: 56px
+      text-align: center
+  .chat-inner 
+    position: absolute
+    width: 100%
+    overflow-y: scroll
+    overflow-x: hidden
+    top: 56px
+    bottom: 80px
+
   .con-input
     width: 100%
     position: fixed
     height: 50px
-    bottom: 55px
+    bottom: 0px
     display: flex
     .input
       flex: 1
