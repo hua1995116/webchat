@@ -6,7 +6,7 @@
       <mu-paper>
         <mu-bottom-nav :value="bottomNav" @change="handleChange">
           <mu-bottom-nav-item value="recents" title="主页" icon="restore" to="/"/>
-          <mu-bottom-nav-item value="favorites" title="机器人" icon="favorite" to="/robot"/>
+          <!-- <mu-bottom-nav-item value="favorites" title="机器人" icon="favorite" to="/robot"/> -->
           <mu-bottom-nav-item value="nearby" title="我的" icon="location_on" to="/home"/>
         </mu-bottom-nav>
       </mu-paper>

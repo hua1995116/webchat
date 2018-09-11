@@ -21,6 +21,7 @@
   import SvgModal from '../components/svg-modal'
   import { mapState } from 'vuex'
   import Alert from '../components/Alert'
+  import { setItem } from '../utils/localStorage.js'
   export default {
     methods: {
       async submit() {
@@ -30,7 +31,7 @@
         if (name === 'hua1995116') {
           src = './static/img/hua1995116.jpg'
         }
-        src = './static/img/' + Math.ceil(Math.random() * 10) + '.jpg'
+        src = `http://s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 273)}.jpeg`
         if (name !== '' && password !== '') {
           const data = {
             name: name,
@@ -42,7 +43,11 @@
             await Alert({
               content: res.data.data
             })
-            this.$router.push({path: '/login'})
+            setItem('userid', data.name)
+            setItem('src', data.src)
+            this.getSvgModal.$root.$options.clear()
+            this.$store.commit('setSvgModal', null)
+            this.$router.push({path: '/'})
           } else {
             await Alert({
               content: res.data.data
@@ -67,7 +72,10 @@
     computed: {
       ...mapState([
         'svgmodal'
-      ])
+      ]),
+      getSvgModal() {
+        return this.$store.state.svgmodal
+      }
     }
   }
 </script>

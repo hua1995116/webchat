@@ -37,13 +37,13 @@ const router = new Router({
           path: '/chat-history',
           name: 'chat-history',
           component: ChatHistory
+        },
+        {
+          path: '/robot',
+          name: 'Robot',
+          component: Robot
         }
       ]
-    },
-    {
-      path: '/robot',
-      name: 'Robot',
-      component: Robot
     },
     {
       path: '/home',
