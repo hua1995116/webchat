@@ -31,7 +31,7 @@
         if (name === 'hua1995116') {
           src = './static/img/hua1995116.jpg'
         }
-        src = `http://s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 273)}.jpeg`
+        src = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 273)}.jpeg`
         if (name !== '' && password !== '') {
           const data = {
             name: name,
@@ -116,7 +116,7 @@
     right: 0
     top: 0
     bottom: 0
-    background-image: url("http://ozt4jt8av.bkt.clouddn.com/bg.jpg")
+    background-image: url("//s3.qiufengh.com/webchat/bg.jpg")
     background-size: 100% 100%
     background-position : center center
     .mu-appbar

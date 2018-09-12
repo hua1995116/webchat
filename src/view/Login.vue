@@ -85,7 +85,7 @@
     right: 0
     top: 0
     bottom: 0
-    background-image: url("http://ozt4jt8av.bkt.clouddn.com/bg.jpg")
+    background-image: url("//s3.qiufengh.com/webchat/bg.jpg")
     background-size: 100% 100%
     background-position: center center
     .mu-appbar
