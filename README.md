@@ -13,7 +13,7 @@ npm run server ----- 打包后运行
 ```
 在线观看
 
-[http://www.qiufengh.com/](http://www.qiufengh.com/)
+[https://www.qiufengh.com/](https://www.qiufengh.com/)
 
 <img src="http://s3.qiufengh.com/images/1536588077.png" width="400" />
 
