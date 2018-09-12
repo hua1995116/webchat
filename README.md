@@ -9,10 +9,7 @@ MongoDB/Node v7+
 npm install -----安装依赖
 npm run dev -----运行
 npm run build -----打包
-node prod.server.js -----打包后运行
-//记得替换
-view/Loan.vue下的io.connect('http://qiufengh.com/')
-http://qiufengh.com:9090改成自己的项目地址。
+npm run server ----- 打包后运行
 ```
 在线观看
 
