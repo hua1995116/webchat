@@ -5,7 +5,7 @@ const qiniu = new qiniuNode({
     zone: 'Zone_z2', 
     bucket: 'chat',   // bucket name
     dir: 'webchat/',     // 
-    url: 'http://pdlu3e6ll.bkt.clouddn.com/',
+    url: '//s3.qiufengh.com/',
 })
 
 module.exports = function(fileList, callback) {

@@ -3,7 +3,7 @@ let join = require('path').join;
 const path = require('path'); 
 const upload = require('./qiniu');
 
-const url  = 'http://s3.qiufengh.com/';
+const url  = '//s3.qiufengh.com/';
 const bucket = 'webchat/'
 const uploadUrl = url + bucket;
 

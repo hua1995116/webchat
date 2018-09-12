@@ -4,11 +4,11 @@
       <mu-list>
         <mu-sub-header>最近聊天记录</mu-sub-header>
         <mu-list-item title="聊天室1" @click="chatwindow('room1')">
-          <mu-avatar src="http://s3.qiufengh.com/images/house.png" slot="leftAvatar"/>
+          <mu-avatar src="//s3.qiufengh.com/images/house.png" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
         <mu-list-item title="聊天室2" @click="chatwindow('room2')">
-          <mu-avatar src="http://s3.qiufengh.com/images/house2.png" slot="leftAvatar"/>
+          <mu-avatar src="//s3.qiufengh.com/images/house2.png" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -16,11 +16,11 @@
       <mu-list>
         <mu-sub-header>历史聊天记录</mu-sub-header>
         <mu-list-item title="聊天室1" @click="chatHistory('room1')">
-          <mu-avatar src="http://s3.qiufengh.com/images/house.png" slot="leftAvatar"/>
+          <mu-avatar src="//s3.qiufengh.com/images/house.png" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
         <mu-list-item title="聊天室2" @click="chatHistory('room2')">
-          <mu-avatar src="http://s3.qiufengh.com/images/house2.png" slot="leftAvatar"/>
+          <mu-avatar src="//s3.qiufengh.com/images/house2.png" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
       </mu-list>

@@ -324,12 +324,12 @@
           display: inline-block
           position: relative
         .fun-li:nth-child(1)
-          background-image: url('http://pdlu3e6ll.bkt.clouddn.com/camera.png')
+          background-image: url('//pdlu3e6ll.bkt.clouddn.com/camera.png')
           background-repeat: no-repeat
           background-size: 25px 25px
           background-position: center center
         .fun-li:nth-child(2)
-          background-image: url('http://pdlu3e6ll.bkt.clouddn.com/emoji.png')
+          background-image: url('//pdlu3e6ll.bkt.clouddn.com/emoji.png')
           background-repeat: no-repeat
           background-size: 25px 25px
           background-position: center center
