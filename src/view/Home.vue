@@ -5,7 +5,7 @@
         <img :src="src" alt="">
       </div>
       <div class="name">
-        {{username}}
+        {{userid}}
       </div>
       <div class="background">
         <img :src="src" alt="">
@@ -37,21 +37,18 @@
 
 <script>
   import Confirm from '../components/Confirm';
-  import {clear, getItem, removeItem} from '../utils/localStorage'
+  import {clear, removeItem} from '../utils/localStorage';
+  import {mapState} from 'vuex';
   export default{
     data() {
       return {
-        username: '',
-        src: ''
       }
     },
     mounted() {
       this.$store.commit('setTab', true);
-      if (!getItem('userid')) {
+      if (!this.userid) {
         this.$router.push('/login')
       }
-      this.username = getItem('userid')
-      this.src = getItem('src')
     },
     methods: {
       async rmLocalData() {
@@ -74,6 +71,12 @@
           this.$store.commit('setTab', false)
         }
       }
+    },
+    computed: {
+      ...mapState({
+        userid: state => state.userInfo.userid,
+        src: state => state.userInfo.src
+      })
     }
   }
 </script>

@@ -39,10 +39,12 @@
   import Confirm from '../components/Confirm';
   import Toast from '../components/Toast';
   import { getItem, setItem } from '../utils/localStorage.js';
+  import {mapState} from 'vuex';
 
   export default {
     async mounted() {
-      const uerId = getItem('userid');
+      console.log(this.userid);
+      const uerId = this.userid;
       if (!uerId) {
         await Confirm({
           title: '提示',
@@ -77,6 +79,12 @@
         this.$store.commit('setTab', false);
         this.$router.push({path: '/robot'});
       }
+    },
+    computed: {
+      ...mapState({
+        userid: state => state.userInfo.userid,
+        src: state => state.userInfo.src
+      })
     }
   }
 </script>

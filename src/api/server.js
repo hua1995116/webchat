@@ -18,6 +18,10 @@ const Service = {
   // 上传图片
   postUploadFile: data => Axios.post('/file/uploadimg', data, {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  }),
+
+  postUploadAvatar: data => Axios.post('/file/avatar', data, {
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
   })
 }
 

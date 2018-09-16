@@ -16,9 +16,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import SvgModal from '../components/svg-modal'
-  import Alert from '../components/Alert'
-  import { setItem } from '../utils/localStorage.js'
+  import SvgModal from '../components/svg-modal';
+  import Alert from '../components/Alert';
 //  import Loading from '../components/loading/loading'
 
   export default{
@@ -39,8 +38,8 @@
           // this.loading = 'loading'
           const res = await this.$store.dispatch('loginSubmit', data)
           if (res.status === 'success') {
-            setItem('userid', res.data.name)
-            setItem('src', res.data.src)
+            this.$store.commit('setUserInfo', 'userid', res.data.name);
+            this.$store.commit('setUserInfo', 'src', res.data.src);
             await Alert({
               content: res.data.data
             })

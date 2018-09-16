@@ -82,10 +82,10 @@ module.exports = (app) => {
 
   /* POST upload listing. */
   app.post('/file/uploadimg', upload.single('file'),  async (req, res, next) => {
-    // console.log(req);
+
     const file = req.file;
     if(file) {
-        // console.log(process.cwd());
+        
         const {mimetype, filename, size, path: localPath} = file;
         
         const {username, roomid, time, src} = req.body;
@@ -110,8 +110,8 @@ module.exports = (app) => {
           }
           global.logger.info(mess);
           res.json({
-            errno: 500,
-            msg: '保存异常!'
+            errno: 200,
+            msg: '保存成功!'
           });
         })
         return; 
@@ -124,6 +124,41 @@ module.exports = (app) => {
     
   });
 
+  app.post('/file/avatar', upload.single('file'),  async (req, res, next) => {
+    const file = req.file;
+    if(file) {
+        const {mimetype, filename, size, path: localPath} = file;
+        const {username} = req.body;
+
+        const pathUrl = path.join(urlPath, filename);
+
+        User.update({name: username}, {src: pathUrl}, (err, data) => {
+          if (err) {
+            global.logger.error(err);
+            res.json({
+              errno: 500,
+              msg: '保存异常!'
+            });
+            return;
+            
+          }
+          res.json({
+            errno: 0,
+            data: {
+              url: pathUrl
+            },
+            msg: '保存成功!'
+          });
+        })
+
+    } else {
+        res.json({
+            errno: 500,
+            msg: '保存异常!'
+        });
+    }
+    
+  });
 
   // 注册
   app.post('/user/signup',  (req, res) => {

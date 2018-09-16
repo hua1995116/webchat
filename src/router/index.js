@@ -1,14 +1,15 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Index from '../view/Loan.vue'
-import Robot from '../view/Robot'
-import Home from '../view/Home'
-import Register from '../view/Register'
-import Login from '../view/Login'
-import Chat from '../view/Chat.vue'
-import ChatHistory from '../view/ChatHistory.vue'
-import BaseTransition from '../BaseTransition.vue'
-import loading from '../components/loading/loading'
+import Vue from 'vue';
+import Router from 'vue-router';
+import Index from '../view/Loan.vue';
+import Robot from '../view/Robot';
+import Home from '../view/Home';
+import Register from '../view/Register';
+import Login from '../view/Login';
+import Chat from '../view/Chat.vue';
+import ChatHistory from '../view/ChatHistory.vue';
+import Avatar from '../view/Avatar';
+import BaseTransition from '../BaseTransition.vue';
+import loading from '../components/loading/loading';
 
 Router.prototype.goBack = function () {
   this.isBack = true
@@ -49,6 +50,11 @@ const router = new Router({
       path: '/home',
       name: 'Home',
       component: Home
+    },
+    {
+      path: '/avatar',
+      name: 'avatar',
+      component: Avatar
     },
     {
       path: '/register',

@@ -4,11 +4,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import url from '../api/server.js'
+import {setItem, getItem} from '../utils/localStorage';
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    userInfo: {
+      src: getItem('src'),
+      userid: getItem('userid')
+    },
     // 存放历史记录
     messhistory: {
       infos: [],
@@ -42,6 +47,10 @@ const store = new Vuex.Store({
     getEmoji: state => state.emojiShow
   },
   mutations: {
+    setUserInfo(state, type, value) {
+      setItem(type, value);
+      state.userInfo[type] = value;
+    },
     setEmoji(state, data) {
       state.emojiShow = data;
     },
@@ -71,6 +80,10 @@ const store = new Vuex.Store({
     }
   },
   actions: {
+    async uploadAvatar({commit}, data) {
+      const res = await url.postUploadAvatar(data);
+      return res.data;
+    },
     async uploadImg({commit}, data) {
       const res = await url.postUploadFile(data)
       if (res) {

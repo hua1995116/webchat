@@ -21,7 +21,6 @@
   import SvgModal from '../components/svg-modal'
   import { mapState } from 'vuex'
   import Alert from '../components/Alert'
-  import { setItem } from '../utils/localStorage.js'
   export default {
     methods: {
       async submit() {
@@ -43,8 +42,8 @@
             await Alert({
               content: res.data.data
             })
-            setItem('userid', data.name)
-            setItem('src', data.src)
+            this.$store.commit('setUserInfo', 'userid', res.data.name);
+            this.$store.commit('setUserInfo', 'src', res.data.src);
             this.getSvgModal.$root.$options.clear()
             this.$store.commit('setSvgModal', null)
             this.$router.push({path: '/'})
