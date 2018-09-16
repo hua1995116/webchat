@@ -16,7 +16,7 @@
           <div v-if="messageData.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
           <div v-for="(obj,index) in messageData" :key="index">
             <Message
-              :is-self="obj.username === useranme" 
+              :is-self="obj.username === userid" 
               :name="obj.username" 
               :head="obj.src" 
               :msg="obj.msg"
@@ -36,16 +36,16 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-  import Message from '../components/Message'
-  import { getItem } from '../utils/localStorage'
-  import {queryString} from '../utils/queryString'
-  import {mapGetters} from 'vuex'
-  import loading from '../components/loading/loading'
+  import Message from '../components/Message';
+  // import { getItem } from '../utils/localStorage';
+  import {queryString} from '../utils/queryString';
+  import {mapGetters, mapState} from 'vuex';
+  import loading from '../components/loading/loading';
+
   export default{
     data() {
       return {
         roomid: '',
-        useranme: '',
         messageData: [],
         isLoadingAchieve: false,
         pages: {
@@ -61,15 +61,13 @@
       if (!roomId) {
         this.$router.push({path: '/'})
       }
-      if (!getItem('userid')) {
+      if (!this.userid) {
         // 防止未登录
         this.$router.push({path: '/login'})
       }
-      this.useranme = getItem('userid')
     },
     mounted() {
       this.handleClick()
-//      window.scroll(0, 10000)
     },
     methods: {
       async handleClick(newIndex) {
@@ -95,7 +93,11 @@
     computed: {
       ...mapGetters([
         'getMessHistoryAll'
-      ])
+      ]),
+      ...mapState({
+        userid: state => state.userInfo.userid,
+        src: state => state.userInfo.src
+      })
     },
     components: {
       Message

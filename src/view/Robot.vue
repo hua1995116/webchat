@@ -11,7 +11,7 @@
     <div class="chat-inner">
       <div v-for="(obj, index) in getRobotMsg" :key="index" class="">
         <Message
-              :is-self="obj.username === username" 
+              :is-self="obj.username === userid" 
               :name="obj.username" 
               :head="obj.src" 
               :msg="obj.msg"
@@ -31,20 +31,14 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Message from '../components/Message'
-  import {mapGetters} from 'vuex'
-  import { getItem } from '../utils/localStorage'
+  import Message from '../components/Message';
+  import {mapGetters, mapState} from 'vuex';
+  import { getItem } from '../utils/localStorage';
 
   export default{
     data() {
       return {
-        username: '',
-        src: ''
       }
-    },
-    created() {
-      this.username = getItem('userid')
-      this.src = getItem('src')
     },
     mounted() {
       // this.$store.commit('setTab', true);
@@ -59,14 +53,14 @@
           this.$router.push({path: '/login'})
         }
         const info = document.getElementById('msg').value
-        const id = this.username
+        const id = this.userid
         const data = {
           'info': info,
           'id': id
         }
         this.$store.commit('setRobotMsg', {
           msg: info,
-          username: this.username,
+          username: this.userid,
           src: this.src
         })
         this.$store.dispatch('getRobatMess', data)
@@ -76,7 +70,11 @@
     computed: {
       ...mapGetters([
         'getRobotMsg'
-      ])
+      ]),
+      ...mapState({
+        userid: state => state.userInfo.userid,
+        src: state => state.userInfo.src
+      })
     },
     components: {
       Message

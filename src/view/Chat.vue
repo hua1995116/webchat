@@ -21,7 +21,7 @@
           <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
           <div v-for="(obj,index) in getInfos" :key="index">
             <Message 
-              :is-self="obj.username === useranme" 
+              :is-self="obj.username === userid" 
               :name="obj.username" 
               :head="obj.src" 
               :msg="obj.msg"
@@ -80,7 +80,6 @@
   import Message from '../components/Message'
   import {mapGetters, mapState} from 'vuex'
   import {queryString} from '../utils/queryString'
-  import { getItem } from '../utils/localStorage'
   import loading from '../components/loading/loading'
   import Alert from '../components/Alert'
   import socket from '../socket';
@@ -90,7 +89,6 @@
     data() {
       return {
         roomid: '',
-        useranme: '',
         isLoadingAchieve: false,
         container: {},
         chatValue: '',
@@ -103,11 +101,10 @@
       if (!roomId) {
         this.$router.push({path: '/'})
       }
-      if (!getItem('userid')) {
+      if (!this.userid) {
         // 防止未登录
         this.$router.push({path: '/login'})
       }
-      this.useranme = getItem('userid')
     },
     mounted() {
       this.container = document.querySelector('.chat-inner')
@@ -115,8 +112,8 @@
       const that = this
       this.$store.commit('setRoomDetailInfos')
       const obj = {
-        name: getItem('userid'),
-        src: getItem('src'),
+        name: this.userid,
+        src: this.src,
         roomid: this.roomid
       }
       socket.emit('login', obj)
@@ -147,7 +144,7 @@
     methods: {
       goback () {
         const obj = {
-          name: getItem('userid'),
+          name: this.userid,
           roomid: this.roomid
         }
         socket.emit('logout', obj)
@@ -163,16 +160,16 @@
         if (file1) {
           const formdata = new window.FormData()
           formdata.append('file', file1)
-          formdata.append('username', getItem('userid'))
-          formdata.append('src', getItem('src'))
+          formdata.append('username', this.userid)
+          formdata.append('src', this.src)
           formdata.append('roomid', that.roomid)
           formdata.append('time', new Date())
           this.$store.dispatch('uploadImg', formdata)
           const fr = new window.FileReader()
           fr.onload = function () {
             const obj = {
-              username: getItem('userid'),
-              src: getItem('src'),
+              username: that.userid,
+              src: that.src,
               img: fr.result,
               msg: '',
               room: that.roomid,
@@ -202,8 +199,8 @@
             return
           }
           const obj = {
-            username: getItem('userid'),
-            src: getItem('src'),
+            username: this.userid,
+            src: this.src,
             img: '',
             msg: this.chatValue,
             room: this.roomid,
@@ -228,7 +225,11 @@
       ]),
       ...mapState([
         'isbind'
-      ])
+      ]),
+      ...mapState({
+        userid: state => state.userInfo.userid,
+        src: state => state.userInfo.src
+      })
     },
     components: {
       Message

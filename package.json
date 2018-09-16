@@ -19,6 +19,7 @@
     "qiniu-node": "^0.0.1",
     "vivus": "^0.4.1",
     "vue": "^2.2.2",
+    "vue-cropper": "^0.4.0",
     "vue-router": "^2.3.0"
   },
   "devDependencies": {
