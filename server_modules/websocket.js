@@ -33,7 +33,10 @@ function websocket(server) {
         }
       })
       socket.on('login',function (obj) {
-        console.log('socket login!'); 
+        console.log('socket login!');
+        if (!obj.name) {
+          return;
+        }
         socket.name = obj.name
         socket.room = obj.roomid
         if (!users[obj.roomid]) {
