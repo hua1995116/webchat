@@ -38,8 +38,14 @@
           // this.loading = 'loading'
           const res = await this.$store.dispatch('loginSubmit', data)
           if (res.status === 'success') {
-            this.$store.commit('setUserInfo', 'userid', res.data.name);
-            this.$store.commit('setUserInfo', 'src', res.data.src);
+            this.$store.commit('setUserInfo', {
+              type: 'userid',
+              value: res.data.name
+            });
+            this.$store.commit('setUserInfo', {
+              type: 'src',
+              value: res.data.src
+            });
             await Alert({
               content: res.data.data
             })

@@ -58,9 +58,9 @@
     },
     methods: {
       setUpdateLog() {
-        const update = getItem('update-20180908');
+        const update = getItem('update-20180916');
         if (!update) {
-          setItem('update-20180908', true);
+          setItem('update-20180916', true);
           Toast({
             content: '修复消息滚至底部效果,重构部分组件~',
             timeout: 3000

@@ -42,8 +42,14 @@
             await Alert({
               content: res.data.data
             })
-            this.$store.commit('setUserInfo', 'userid', res.data.name);
-            this.$store.commit('setUserInfo', 'src', res.data.src);
+            this.$store.commit('setUserInfo', {
+              type: 'userid',
+              value: res.data.name
+            });
+            this.$store.commit('setUserInfo', {
+              type: 'src',
+              value: res.data.src
+            });
             this.getSvgModal.$root.$options.clear()
             this.$store.commit('setSvgModal', null)
             this.$router.push({path: '/'})

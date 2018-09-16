@@ -13,14 +13,14 @@
     </div>
     <div class="content">
       <mu-list>
-        <mu-list-item title="个人中心">
+        <mu-list-item title="修改头像" @click="changeAvatar">
+          <mu-icon slot="left" value="send"/>
+        </mu-list-item>
+        <mu-list-item title="赞助一下" @click="handleTips">
           <mu-icon slot="left" value="inbox"/>
         </mu-list-item>
-        <mu-list-item title="我的好友">
+        <mu-list-item title="github地址" @click="handleGithub">
           <mu-icon slot="left" value="grade"/>
-        </mu-list-item>
-        <mu-list-item title="我的动态">
-          <mu-icon slot="left" value="send"/>
         </mu-list-item>
         <mu-list-item title="清除缓存" @click="rmLocalData">
           <mu-icon slot="left" value="drafts"/>
@@ -38,6 +38,7 @@
 <script>
   import Confirm from '../components/Confirm';
   import {clear, removeItem} from '../utils/localStorage';
+  import Alert from '../components/Alert';
   import {mapState} from 'vuex';
   export default{
     data() {
@@ -47,17 +48,21 @@
     mounted() {
       this.$store.commit('setTab', true);
       if (!this.userid) {
-        this.$router.push('/login')
+        this.$router.push('/login');
       }
     },
     methods: {
+      changeAvatar() {
+        this.$router.push('/avatar');
+        this.$store.commit('setTab', false);
+      },
       async rmLocalData() {
         const data = await Confirm({
           title: '提示',
           content: '清除缓存会导致更新历史再再次提醒，确定清除？'
         })
         if (data === 'submit') {
-          removeItem('update-20180908');
+          removeItem('update-20180916');
         }
       },
       async logout() {
@@ -70,6 +75,17 @@
           this.$router.push('/login')
           this.$store.commit('setTab', false)
         }
+      },
+      handleGithub() {
+        Alert({
+          content: 'https://github.com/hua1995116/webchat'
+        })
+      },
+      handleTips() {
+        Alert({
+          title: '请我喝杯奶茶',
+          html: '<div><img style="width: 200px" src="//s3.qiufengh.com/money/WechatIMG64.jpeg" /></div>'
+        })
       }
     },
     computed: {

@@ -47,7 +47,8 @@ const store = new Vuex.Store({
     getEmoji: state => state.emojiShow
   },
   mutations: {
-    setUserInfo(state, type, value) {
+    setUserInfo(state, data) {
+      const {type, value} = data;
       setItem(type, value);
       state.userInfo[type] = value;
     },

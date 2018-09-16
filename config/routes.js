@@ -52,6 +52,18 @@ const storage = multer.diskStorage({
       cb(null, Date.now() + "-" + file.originalname);
   }
 });
+
+const storageAvatar = multer.diskStorage({
+  destination: function (req, file, cb) {
+      // 接收到文件后输出的保存路径（若不存在则需要创建）
+      cb(null, uploadFolder);
+  },
+  filename: function (req, file, cb) {
+      // 将保存文件名设置为 时间戳 + 文件原始名，比如 151342376785-123.jpg
+      cb(null, ~~(Math.random() * 999999) +  "avatar-" + file.originalname);
+  }
+});
+
 const fileFilter = (req, file, cb) => {
   const fileType = file.mimetype.toLowerCase();
   if(fileType === 'image/png' || fileType === 'image/jpg' || fileType === 'image/jpeg' || fileType === 'image/webp') {
@@ -67,6 +79,16 @@ const upload = multer({
       fields: 10,
       files: 10,
       fileSize: 5 * 1024 * 1024
+  },
+  fileFilter,
+});
+
+const uploadAvatar = multer({
+  storage: storageAvatar,
+  limits: {
+      fields: 10,
+      files: 10,
+      fileSize: 4 * 1024 * 1024
   },
   fileFilter,
 });
@@ -124,7 +146,7 @@ module.exports = (app) => {
     
   });
 
-  app.post('/file/avatar', upload.single('file'),  async (req, res, next) => {
+  app.post('/file/avatar', uploadAvatar.single('file'),  async (req, res, next) => {
     const file = req.file;
     if(file) {
         const {mimetype, filename, size, path: localPath} = file;
