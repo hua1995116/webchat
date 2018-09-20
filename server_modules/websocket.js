@@ -1,3 +1,4 @@
+const xssFilters = require('xss-filters');
 function websocket(server) {
     var io = require('socket.io')(server);
     var Message = require('../models/message')
@@ -13,21 +14,18 @@ function websocket(server) {
           username: obj.username,
           src:obj.src,
           msg: obj.msg,
-          img: obj.img,
+          img: xssFilters.inHTMLData(obj.img), // 防止xss
           roomid: obj.room,
           time: obj.time
         }
         io.to(mess.roomid).emit('message', mess)
         global.logger.info(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
-        // console.log(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
         if (obj.img === '') {
           var message = new Message(mess)
           message.save(function (err, mess) {
             if (err) {
-              // console.log(err)
               global.logger.error(err)
             }
-            // console.log(mess)
             global.logger.info(mess)
           })
         }

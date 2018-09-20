@@ -26,6 +26,7 @@
                 return dateFormat(new Date(this.mytime), 'yyyy-MM-dd HH:mm:ss')
             },
             linkMsg() {
+                // 防止xss
                 const filterValue = inHTMLData(this.msg);
                 return filterValue.replace(/(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g, function($0, $1) {
                     const url = $0;

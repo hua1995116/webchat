@@ -84,6 +84,7 @@
   import Alert from '../components/Alert'
   import socket from '../socket';
   import emoji from '../utils/emoji';
+  import {inHTMLData} from 'xss-filters-es6';
 
   export default{
     data() {
@@ -192,17 +193,19 @@
       submess() {
         // 判断发送信息是否为空
         if (this.chatValue !== '') {
-          if (this.chatValue.length > 100) {
+          if (this.chatValue.length > 200) {
             Alert({
               content: '请输入100字以内'
             })
             return
           }
+          const msg = inHTMLData(this.chatValue); // 防止xss
+
           const obj = {
             username: this.userid,
             src: this.src,
             img: '',
-            msg: this.chatValue,
+            msg,
             room: this.roomid,
             time: new Date()
           }
