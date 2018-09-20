@@ -1,8 +1,8 @@
 const xssFilters = require('xss-filters');
 function websocket(server) {
-    var io = require('socket.io')(server);
-    var Message = require('../models/message')
-    var users = {}
+    const io = require('socket.io')(server);
+    const Message = require('../models/message')
+    const users = {}
     
     io.on('connection', function (socket) {
       //监听用户发布聊天内容
@@ -10,18 +10,23 @@ function websocket(server) {
       socket.on('message', function (obj) {
         console.log('socket message!'); 
         //向所有客户端广播发布的消息
-        var mess = {
+        if(!obj.msg) {
+          return;
+        }
+        // 后端限制字符长度
+        const msgLimit = obj.msg.slice(0, 200); 
+        const mess = {
           username: obj.username,
-          src:obj.src,
-          msg: obj.msg,
-          img: xssFilters.inHTMLData(obj.img), // 防止xss
+          src: obj.src,
+          msg: xssFilters.inHTMLData(msgLimit),
+          img: obj.img, // 防止xss
           roomid: obj.room,
           time: obj.time
         }
         io.to(mess.roomid).emit('message', mess)
         global.logger.info(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
         if (obj.img === '') {
-          var message = new Message(mess)
+          const message = new Message(mess)
           message.save(function (err, mess) {
             if (err) {
               global.logger.error(err)
@@ -61,7 +66,7 @@ function websocket(server) {
       })
     
       socket.on('disconnect', function (e) {
-        console.log(e);
+        // console.log(e);
         console.log('socket disconnect!');
         console.log(socket.room, socket.name);
         if (users[socket.room] && users[socket.room].hasOwnProperty(socket.name)) {
