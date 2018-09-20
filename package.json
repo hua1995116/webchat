@@ -20,7 +20,9 @@
     "vivus": "^0.4.1",
     "vue": "^2.2.2",
     "vue-cropper": "^0.4.0",
-    "vue-router": "^2.3.0"
+    "vue-router": "^2.3.0",
+    "xss-filters": "^1.2.7",
+    "xss-filters-es6": "^1.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

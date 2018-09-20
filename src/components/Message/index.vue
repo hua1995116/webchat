@@ -9,7 +9,8 @@
                 <img :src="img" alt="" class="img">
             </div>
             <span v-if="msg">
-                {{msg}}
+                <span v-html="linkMsg" class="msg"></span>
+                <!-- {{msg | link}} -->
             </span>
         </div>
     </div>
@@ -17,20 +18,27 @@
 
 <script type="text/ecmascript-6">
     import dateFormat from '../../utils/date'
+    import {inHTMLData, uriInUnQuotedAttr} from 'xss-filters-es6';
     export default{
         props: ['name', 'img', 'msg', 'head', 'mytime', 'is-self'],
         computed: {
             getdate() {
                 return dateFormat(new Date(this.mytime), 'yyyy-MM-dd HH:mm:ss')
+            },
+            linkMsg() {
+                // 防止xss
+                const filterValue = inHTMLData(this.msg);
+                return filterValue.replace(/(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g, function($0, $1) {
+                    const url = $0;
+                    return `<a style="color: #b374ff" href="${uriInUnQuotedAttr(url)}" target="_blank">${uriInUnQuotedAttr(url)}</a>`;
+                });
             }
         },
         mounted() {
             this.$refs.msg.scrollIntoView()
         }
-
     }
 </script>
-
 <style lang="stylus" rel="stylesheet/stylus" scoped>
     .clear
         margin-top: 10px
@@ -53,8 +61,9 @@
                 -ms-text-overflow: ellipsis
                 text-overflow: ellipsis
                 white-space: nowrap
-            span
+            .msg 
                 word-break: break-all
+
             .time
                 position: absolute
                 top: -40px
