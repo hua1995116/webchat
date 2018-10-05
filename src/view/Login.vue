@@ -16,8 +16,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import SvgModal from '../components/svg-modal';
-  import Alert from '../components/Alert';
+  import SvgModal from '@components/svg-modal';
+  import Alert from '@components/Alert';
 //  import Loading from '../components/loading/loading'
 
   export default{

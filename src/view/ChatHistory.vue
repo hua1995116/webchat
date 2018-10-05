@@ -36,11 +36,10 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-  import Message from '../components/Message';
-  // import { getItem } from '../utils/localStorage';
-  import {queryString} from '../utils/queryString';
   import {mapGetters, mapState} from 'vuex';
-  import loading from '../components/loading/loading';
+  import {queryString} from '@utils/queryString';
+  import Message from '@components/Message';
+  import loading from '@components/loading/loading';
 
   export default{
     data() {

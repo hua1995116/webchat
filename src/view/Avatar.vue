@@ -23,10 +23,10 @@
 <script>
   import {mapState} from 'vuex'
   import VueCropper from 'vue-cropper';
-  import Alert from '../components/Alert';
-  import { getItem } from '../utils/localStorage';
-  import Header from '../components/Header';
-  import Confirm from '../components/Confirm';
+  import { getItem } from '@utils/localStorage';
+  import Alert from '@components/Alert';
+  import Header from '@components/Header';
+  import Confirm from '@components/Confirm';
   export default {
 
     components: {
