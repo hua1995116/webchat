@@ -31,9 +31,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Message from '../components/Message';
   import {mapGetters, mapState} from 'vuex';
-  import { getItem } from '../utils/localStorage';
+  import { getItem } from '@utils/localStorage';
+  import Message from '@components/Message';
 
   export default{
     data() {

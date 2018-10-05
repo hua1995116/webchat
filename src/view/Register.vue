@@ -18,9 +18,9 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-  import SvgModal from '../components/svg-modal'
   import { mapState } from 'vuex'
-  import Alert from '../components/Alert'
+  import SvgModal from '@components/svg-modal'
+  import Alert from '@components/Alert'
   export default {
     methods: {
       async submit() {

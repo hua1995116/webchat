@@ -36,10 +36,10 @@
 </template>
 
 <script>
-  import Confirm from '../components/Confirm';
-  import Toast from '../components/Toast';
-  import { getItem, setItem } from '../utils/localStorage.js';
+  import Confirm from '@components/Confirm';
   import {mapState} from 'vuex';
+  import { getItem, setItem } from '@utils/localStorage';
+  import Toast from '@components/Toast';
 
   export default {
     async mounted() {

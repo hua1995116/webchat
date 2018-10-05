@@ -77,14 +77,14 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-  import Message from '../components/Message'
   import {mapGetters, mapState} from 'vuex'
-  import {queryString} from '../utils/queryString'
-  import loading from '../components/loading/loading'
-  import Alert from '../components/Alert'
-  import socket from '../socket';
-  import emoji from '../utils/emoji';
   import {inHTMLData} from 'xss-filters-es6';
+  import socket from '../socket';
+  import emoji from '@utils/emoji';
+  import {queryString} from '@utils/queryString'
+  import Message from '@components/Message'
+  import loading from '@components/loading/loading'
+  import Alert from '@components/Alert'
 
   export default{
     data() {

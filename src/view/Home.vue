@@ -36,10 +36,10 @@
 </template>
 
 <script>
-  import Confirm from '../components/Confirm';
-  import {clear, removeItem} from '../utils/localStorage';
-  import Alert from '../components/Alert';
   import {mapState} from 'vuex';
+  import {clear, removeItem} from '@utils/localStorage';
+  import Confirm from '@components/Confirm';
+  import Alert from '@components/Alert';
   export default{
     data() {
       return {
