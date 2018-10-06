@@ -10,7 +10,7 @@ function websocket(server) {
       socket.on('message', function (obj) {
         console.log('socket message!'); 
         //向所有客户端广播发布的消息
-        if(!obj.msg) {
+        if(!obj.msg && !obj.img) {
           return;
         }
         // 后端限制字符长度
