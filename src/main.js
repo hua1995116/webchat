@@ -10,6 +10,10 @@ import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
 import './styles/main.styl';
 import socket from './socket';
+
+import vuePicturePreview from 'vue-picture-preview';
+Vue.use(vuePicturePreview);
+
 Vue.use(MuseUI);
 Vue.config.productionTip = false;
 

@@ -6,7 +6,13 @@
             </div>
             <img :src="head" alt="" class="head">
             <div v-if="img">
-                <img :src="img" alt="" class="img">
+                <img 
+                    :src="img" 
+                    alt="" 
+                    v-preview="img"
+                    class="img"
+                    preview-title-enable="true"
+                    preview-nav-enable="true">
             </div>
             <span v-if="msg">
                 <span v-html="linkMsg" class="msg"></span>
