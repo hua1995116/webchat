@@ -34,8 +34,11 @@
       </div>
       <div class="bottom">
         <div class="functions">
-          <div class="fun-li" @click="imgupload"></div> 
+          <div class="fun-li" @click="imgupload">
+            <i class="icon iconfont icon-camera"></i>
+          </div> 
           <div class="fun-li emoji">
+            <i class="icon iconfont icon-emoji"></i>
             <div class="emoji-content" v-show="getEmoji">
               <div class="emoji-tabs">
                 <div class="emoji-container" ref="emoji">
@@ -61,6 +64,12 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="fun-li" @click="handleTips">
+            <i class="icon iconfont icon-zanshang"></i>
+          </div>
+          <div class="fun-li" @click="handleGithub">
+            <i class="icon iconfont icon-wenti"></i>
           </div>
         </div>
         <div class="chat">
@@ -143,6 +152,17 @@
       })
     },
     methods: {
+      handleGithub() {
+        Alert({
+          content: 'https://github.com/hua1995116/webchat'
+        })
+      },
+      handleTips() {
+        Alert({
+          title: '请我喝杯奶茶',
+          html: '<div><img style="width: 200px" src="//s3.qiufengh.com/money/WechatIMG64.jpeg" /></div>'
+        })
+      },
       goback () {
         const obj = {
           name: this.userid,
@@ -296,7 +316,7 @@
       bottom: 0
       left: 0
       z-index: 1
-      background: #eeeff3
+      background: #f7f6fb
       .chat
         width: 100%
         display: flex
@@ -327,16 +347,10 @@
           height: 30px
           display: inline-block
           position: relative
-        .fun-li:nth-child(1)
-          background-image: url('//s3.qiufengh.com/camera.png')
-          background-repeat: no-repeat
-          background-size: 25px 25px
-          background-position: center center
-        .fun-li:nth-child(2)
-          background-image: url('//s3.qiufengh.com/emoji.png')
-          background-repeat: no-repeat
-          background-size: 25px 25px
-          background-position: center center
+          color: #828187
+          text-align: center
+          .iconfont
+            font-size: 20px
         .emoji-content 
           position: absolute;
           bottom: 30px;
