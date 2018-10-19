@@ -11,7 +11,7 @@ import 'muse-ui/dist/muse-ui.css';
 import './styles/main.styl';
 import socket from './socket';
 
-import vuePicturePreview from 'vue-picture-preview';
+import vuePicturePreview from './components/photo-viewer';
 Vue.use(vuePicturePreview);
 
 Vue.use(MuseUI);
