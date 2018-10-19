@@ -4,7 +4,9 @@
             <div class="name">
                 <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
             </div>
-            <img :src="head" alt="" class="head">
+            <span class="head-place">
+                <img :src="head" alt="" class="head">
+            </span>
             <div v-if="img">
                 <img 
                     :src="img" 
@@ -49,6 +51,7 @@
     .clear
         margin-top: 10px
         .item
+            max-width: 100%
             position: relative
             clear: both
             display: inline-block
@@ -76,9 +79,16 @@
                 width: 200px
                 height: 20px
                 right: -70px
-            .head
+            .head-place 
+                display: block
+                width: 50px
+                height: 50px
                 position: absolute
                 top: 0
+                background: #ddd
+                border-radius: 50px
+                overflow: hidden
+            .head
                 width: 50px
                 height: 50px
                 border-radius: 50px
@@ -104,7 +114,7 @@
             left: -70px;
         .time
             text-align: left
-        .head
+        .head-place
             left: -70px;
 
     .right 
@@ -122,7 +132,7 @@
             right: -70px;
         .time
             text-align: right 
-        .head
+        .head-place
             right: -70px;
 
         @keyframes show-chat-odd {
