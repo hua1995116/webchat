@@ -51,7 +51,7 @@ app.use(session({
 }))
 
 /*引入*/
-require('../config/routes')(app)
+require('../router/routes')(app)
 
 if ('development' === app.get('env')) {
   app.set('showStackError', true)
