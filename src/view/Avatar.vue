@@ -52,8 +52,8 @@
     methods: {
       postAvatar() {
         this.$refs.cropper.getCropBlob(async (data) => {
-          let files = new window.File([data], this.name, {type: this.type})
-          const formdata = new window.FormData()
+          let files = new window.File([data], this.name, {type: this.type});
+          const formdata = new window.FormData();
           formdata.append('file', files);
           formdata.append('username', getItem('userid'));
           const res = await this.$store.dispatch('uploadAvatar', formdata);

@@ -1,15 +1,7 @@
 const qiniuNode= require('qiniu-node');
-const qiniu = new qiniuNode({
-    accessKey: '',  
-    secretKey: '',  // key
-    zone: 'Zone_z2', 
-    bucket: 'chat',   // bucket name
-    dir: 'webchat/',     // 
-    url: '//s3.qiufengh.com/',
-})
+const config = require('./config');
+const qiniu = new qiniuNode(config);
 
-module.exports = function(fileList, callback) {
-    qiniu.upload(fileList).then((res) => {
-        callback()
-    }); // fileList is a list of local url
+module.exports = function(fileList) {
+    return qiniu.upload(fileList);
 }

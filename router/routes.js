@@ -4,6 +4,10 @@ const superagent = require('superagent')
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
+const sharkPic = require('../shark_pic/index');
+const qnUpload = require('../deploy/qiniu');
+const {cmder, rmDirFiles} = require('../utils/cmd');
+const fileTool = require('fs-extra');
 
 const mkdirsSync = function(dirname) {
   if (fs.existsSync(dirname)) {
@@ -27,16 +31,8 @@ const createFolder = function (folder) {
   }
 };
 
-let uploadFolder = './static/files';
-const urlPath = './static/files/';
-
-if (process.env.NODE_ENV === 'server') { 
-  uploadFolder = './dist/static/files/';
-}
-
-if (process.env.NODE_ENV === 'production') {
-  uploadFolder = '/home/webchat/dist/static/files';
-}
+const uploadFolder = './cache_temp';
+const urlPath = './static/files';
 
 console.log(uploadFolder);
 
@@ -104,22 +100,41 @@ module.exports = (app) => {
 
   /* POST upload listing. */
   app.post('/file/uploadimg', upload.single('file'),  async (req, res, next) => {
-
     const file = req.file;
     if(file) {
         
         const {mimetype, filename, size, path: localPath} = file;
         
         const {username, roomid, time, src} = req.body;
-        // const data = await qiniuUpload(uploadUrl);
+
+        const staticUrl = path.join('./static_temp', filename);
+        await sharkPic([{
+          cacheUrl: localPath,
+          staticUrl
+        }]);
+        let img = '';
+        if(process.env.NODE_ENV === 'production') {
+          await qnUpload([staticUrl]);
+          // 因为是服务器运行可以直接写脚本
+          await cmder(`rm -rf ./cache_temp/* && rm -rf ./static_temp/* `);
+          img =`//s3.qiufengh.com/webchat/` + filename;
+        } else {
+          // 兼容windows
+          fileTool.copySync('./static_temp', './static/files');
+          rmDirFiles('./cache_temp');
+          rmDirFiles('./static_temp');
+          img = path.join(urlPath, filename);
+        }
+        
         const mess = {
           username,
           src,
-          img: path.join(urlPath, filename),
+          img,
           roomid,
           time,
         }
-        const message = new Message(mess)
+        
+        const message = new Message(mess);
         message.save((err, mess) => {
           if (err) {
             global.logger.error(err);
@@ -128,7 +143,6 @@ module.exports = (app) => {
               msg: '保存异常!'
             });
             return;
-            
           }
           global.logger.info(mess);
           res.json({
@@ -148,13 +162,33 @@ module.exports = (app) => {
 
   app.post('/file/avatar', uploadAvatar.single('file'),  async (req, res, next) => {
     const file = req.file;
+    console.log(req.body);
+    console.log(file);
     if(file) {
         const {mimetype, filename, size, path: localPath} = file;
         const {username} = req.body;
 
-        const pathUrl = path.join(urlPath, filename);
+        const staticUrl = path.join('./static_temp', filename);
+        await sharkPic([{
+          cacheUrl: localPath,
+          staticUrl
+        }]);
+        let img = '';
+        if(process.env.NODE_ENV === 'production') {
+          await qnUpload([staticUrl]);
+          // 因为是服务器运行可以直接写脚本
+          await cmder(`rm -rf ./cache_temp/* && rm -rf ./static_temp/* `);
+          img =`//s3.qiufengh.com/webchat/` + filename;
+        } else {
+          // 兼容windows
+          fileTool.copySync('./static_temp', './static/files');
+          rmDirFiles('./cache_temp');
+          rmDirFiles('./static_temp');
+          img = path.join(urlPath, filename);
+        }
+        console.log(img);
 
-        User.update({name: username}, {src: pathUrl}, (err, data) => {
+        User.update({name: username}, {src: img}, (err, data) => {
           if (err) {
             global.logger.error(err);
             res.json({
@@ -167,7 +201,7 @@ module.exports = (app) => {
           res.json({
             errno: 0,
             data: {
-              url: pathUrl
+              url: img
             },
             msg: '保存成功!'
           });

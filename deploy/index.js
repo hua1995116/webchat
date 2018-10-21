@@ -47,7 +47,7 @@ function readFileSync() {
         const rootJs = path.join(process.cwd(), '../dist/static/js');
         const rootCss = path.join(process.cwd(), '../dist/static/css');
         const exportList = exportUrlList(rootJs, JSfileNames).concat(exportUrlList(rootCss, CSSfileNames));
-        upload(exportList, () =>{
+        upload(exportList).then(() =>{
             fs.writeFile('../dist/index.html', data, (err) => {
                 if (err) throw err;
                 console.log('The file has been saved!');
