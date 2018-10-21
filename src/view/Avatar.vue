@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <Header></Header>
-    <vueCropper 
+    <vue-cropper 
       ref="cropper" 
       :fixed="option.fixed" 
       :img="option.img" 
@@ -10,7 +10,7 @@
       :info="option.info"
       :canMoveBox="option.canMoveBox"
       :autoCrop="option.autoCrop">
-    </vueCropper>
+    </vue-cropper>
     <div class="tools">
       <label class="btn" for="uploads">上传头像</label>
       <input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg"
