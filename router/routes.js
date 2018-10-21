@@ -4,10 +4,12 @@ const superagent = require('superagent')
 const path = require('path')
 const fs = require('fs')
 const multer = require('multer');
-const sharkPic = require('../shark_pic/index');
 const qnUpload = require('../deploy/qiniu');
 const {cmder, rmDirFiles} = require('../utils/cmd');
 const fileTool = require('fs-extra');
+const imagemin = require('imagemin');
+const imageminMozjpeg = require('imagemin-mozjpeg');
+const imageminPngquant = require('imagemin-pngquant');
 
 const mkdirsSync = function(dirname) {
   if (fs.existsSync(dirname)) {
@@ -108,10 +110,12 @@ module.exports = (app) => {
         const {username, roomid, time, src} = req.body;
 
         const staticUrl = path.join('./static_temp', filename);
-        await sharkPic([{
-          cacheUrl: localPath,
-          staticUrl
-        }]);
+        const shrinkFiles = await imagemin(['cache_temp/*.png', 'cache_temp/*.jpg', 'cache_temp/*.jpeg'], 'static_temp', {
+          use: [
+              imageminMozjpeg({quality: '65'}),
+              imageminPngquant({quality: '65'})
+          ]
+        });
         let img = '';
         if(process.env.NODE_ENV === 'production') {
           await qnUpload([staticUrl]);
@@ -169,10 +173,13 @@ module.exports = (app) => {
         const {username} = req.body;
 
         const staticUrl = path.join('./static_temp', filename);
-        await sharkPic([{
-          cacheUrl: localPath,
-          staticUrl
-        }]);
+
+        const shrinkFiles = await imagemin(['cache_temp/*.png', 'cache_temp/*.jpg', 'cache_temp/*.jpeg'], 'static_temp', {
+          use: [
+              imageminMozjpeg({quality: '65'}),
+              imageminPngquant({quality: '65'})
+          ]
+        });
         let img = '';
         if(process.env.NODE_ENV === 'production') {
           await qnUpload([staticUrl]);
