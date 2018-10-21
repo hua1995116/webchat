@@ -27,6 +27,7 @@
   import Alert from '@components/Alert';
   import Header from '@components/Header';
   import Confirm from '@components/Confirm';
+  import loading from '@components/loading/loading';
   export default {
 
     components: {
@@ -51,12 +52,14 @@
 
     methods: {
       postAvatar() {
+        loading.show();
         this.$refs.cropper.getCropBlob(async (data) => {
           let files = new window.File([data], this.name, {type: this.type});
           const formdata = new window.FormData();
           formdata.append('file', files);
           formdata.append('username', getItem('userid'));
           const res = await this.$store.dispatch('uploadAvatar', formdata);
+          loading.hide();
           if (res.errno === 0) {
             console.log(res);
             console.log(res.data.url);

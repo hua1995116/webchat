@@ -176,8 +176,8 @@ module.exports = (app) => {
 
         const shrinkFiles = await imagemin(['cache_temp/*.png', 'cache_temp/*.jpg', 'cache_temp/*.jpeg'], 'static_temp', {
           use: [
-              imageminMozjpeg({quality: '65'}),
-              imageminPngquant({quality: '65'})
+              imageminMozjpeg({quality: '30'}),
+              imageminPngquant({quality: '30'})
           ]
         });
         let img = '';

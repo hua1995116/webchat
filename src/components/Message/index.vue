@@ -85,7 +85,7 @@
                 height: 50px
                 position: absolute
                 top: 0
-                background: #ddd
+                background: #fff
                 border-radius: 50px
                 overflow: hidden
             .head
