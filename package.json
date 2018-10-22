@@ -11,7 +11,7 @@
     "deploy": "node deploy/index.js",
     "lint": "eslint --ext .js,.vue src",
     "server": "cross-env NODE_ENV=server node prod.server.js",
-    "server-linux": "cross-env NODE_ENV=production node prod.server.js"
+    "pm2-prod": "pm2 start pm2.json --env production"
   },
   "dependencies": {
     "fs-extra": "^7.0.0",

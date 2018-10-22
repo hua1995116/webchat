@@ -1,0 +1,13 @@
+{
+    "apps" : [{
+      "name": "webchat",
+      "script": "./prod.server.js",
+      "env": {
+        "NODE_ENV": ""
+      },
+      "env_production": {
+        "NODE_ENV": "production"
+      }
+    }]
+  }	
+  
