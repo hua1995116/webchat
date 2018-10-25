@@ -38,8 +38,6 @@
 <script>
   import Confirm from '@components/Confirm';
   import {mapState} from 'vuex';
-  import { getItem, setItem } from '@utils/localStorage';
-  import Toast from '@components/Toast';
 
   export default {
     async mounted() {
@@ -53,20 +51,9 @@
         this.$router.push({ path: 'login' });
       } else {
         this.$store.commit('setTab', true);
-        this.setUpdateLog();
       }
     },
     methods: {
-      setUpdateLog() {
-        const update = getItem('update-20180916');
-        if (!update) {
-          setItem('update-20180916', true);
-          Toast({
-            content: '修复消息滚至底部效果,重构部分组件~',
-            timeout: 3000
-          });
-        }
-      },
       chatHistory(roomID) {
         this.$store.commit('setTab', false);
         this.$router.push({path: '/chat-history', query: {roomId: roomID}});

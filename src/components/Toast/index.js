@@ -18,6 +18,7 @@ export default function Toast(config) {
       content: config.content || '',
       timeout: config.timeout || 1500,
       background: config.background || 'rgba(0, 0, 0, 0.7)',
+      color: config.color || '#fff',
       toast: false
     },
     methods: {
@@ -35,8 +36,8 @@ export default function Toast(config) {
       }, this.timeout + 1000)
     },
     template: `
-      <div class="wind-toast" :class="{'opacity0': toast}" :style="{'background-color': background}">
-        <div class="wind-toast-content">
+      <div class="wind-toast" :class="{'opacity0': toast}">
+        <div class="wind-toast-content" :style="{'background-color': background, 'color': color}">
           {{content}}
         </div>
       </div>

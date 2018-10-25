@@ -18,19 +18,17 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-  import { mapState } from 'vuex'
-  import SvgModal from '@components/svg-modal'
-  import Alert from '@components/Alert'
+  import { mapState } from 'vuex';
+  import SvgModal from '@components/svg-modal';
+  import Alert from '@components/Alert';
+  import Toast from '@components/Toast';
+
   export default {
     methods: {
       async submit() {
         const name = document.form1.username.value.trim()
         const password = document.form1.password.value.trim()
-        let src
-        if (name === 'hua1995116') {
-          src = './static/img/hua1995116.jpg'
-        }
-        src = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 273)}.jpeg`
+        const src = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 273)}.jpeg`
         if (name !== '' && password !== '') {
           const data = {
             name: name,
@@ -39,16 +37,18 @@
           }
           const res = await this.$store.dispatch('registerSubmit', data)
           if (res.status === 'success') {
-            await Alert({
-              content: res.data.data
-            })
+            Toast({
+              content: res.data.data,
+              timeout: 1000,
+              background: '#2196f3'
+            });
             this.$store.commit('setUserInfo', {
               type: 'userid',
-              value: res.data.name
+              value: data.name
             });
             this.$store.commit('setUserInfo', {
               type: 'src',
-              value: res.data.src
+              value: data.src
             });
             this.getSvgModal.$root.$options.clear()
             this.$store.commit('setSvgModal', null)

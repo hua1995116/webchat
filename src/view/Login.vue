@@ -18,6 +18,7 @@
 <script type="text/ecmascript-6">
   import SvgModal from '@components/svg-modal';
   import Alert from '@components/Alert';
+  import Toast from '@components/Toast';
 //  import Loading from '../components/loading/loading'
 
   export default{
@@ -35,9 +36,13 @@
             name: name,
             password: password
           }
-          // this.loading = 'loading'
           const res = await this.$store.dispatch('loginSubmit', data)
           if (res.status === 'success') {
+            Toast({
+              content: res.data.data,
+              timeout: 1000,
+              background: '#2196f3'
+            });
             this.$store.commit('setUserInfo', {
               type: 'userid',
               value: res.data.name
@@ -46,9 +51,6 @@
               type: 'src',
               value: res.data.src
             });
-            await Alert({
-              content: res.data.data
-            })
             this.getSvgModal.$root.$options.clear()
             this.$store.commit('setSvgModal', null)
             this.$router.push({path: '/'})
