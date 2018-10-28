@@ -5,6 +5,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import url from '../api/server.js'
 import {setItem, getItem} from '../utils/localStorage';
+const robotImg = '//s3.qiufengh.com/avatar/robots.jpg';
+const robotName = 'robot';
 
 Vue.use(Vuex)
 
@@ -28,8 +30,8 @@ const store = new Vuex.Store({
     // 存放机器人开场白
     robotmsg: [{
       msg: 'Hi~有什么想知道的可以问我',
-      username: 'robot',
-      src: './static/img/robot.jpg'
+      username: robotName,
+      src: robotImg
     }],
     // svg
     svgmodal: null,
@@ -138,8 +140,8 @@ const store = new Vuex.Store({
     },
     async getRobatMess({commit}, data) {
       let robotdata = ''
-      const username = 'robot';
-      const src = './static/img/robot.jpg';
+      const username = robotName;
+      const src = robotImg;
       const res = await url.getRobotMessage(data)
       if (res) {
         robotdata = JSON.parse(res.data.data)

@@ -60,10 +60,6 @@
       if (!roomId) {
         this.$router.push({path: '/'})
       }
-      if (!this.userid) {
-        // 防止未登录
-        this.$router.push({path: '/login'})
-      }
     },
     mounted() {
       this.handleClick()

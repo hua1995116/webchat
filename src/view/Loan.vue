@@ -27,7 +27,7 @@
       <mu-list>
         <mu-sub-header>和小白聊天</mu-sub-header>
         <mu-list-item title="聊天室1" @click="chatRobot()">
-          <mu-avatar src="//s3.qiufengh.com/avatar/robot.jpg" slot="leftAvatar"/>
+          <mu-avatar src="//s3.qiufengh.com/avatar/robots.jpg" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -41,24 +41,26 @@
 
   export default {
     async mounted() {
-      console.log(this.userid);
-      const uerId = this.userid;
-      if (!uerId) {
-        await Confirm({
-          title: '提示',
-          content: '请先登录'
-        })
-        this.$router.push({ path: 'login' });
-      } else {
-        this.$store.commit('setTab', true);
-      }
+      this.$store.commit('setTab', true);
     },
     methods: {
       chatHistory(roomID) {
         this.$store.commit('setTab', false);
         this.$router.push({path: '/chat-history', query: {roomId: roomID}});
       },
-      chatwindow(roomID) {
+      async chatwindow(roomID) {
+        const uerId = this.userid;
+        if (!uerId) {
+          const res = await Confirm({
+            title: '提示',
+            content: '聊天请先登录，但是你可以查看聊天记录哦~'
+          });
+          console.log(res);
+          if (res === 'submit') {
+            this.$router.push({ path: 'login' });
+          }
+          return;
+        }
         this.$store.commit('setTab', false);
         this.$router.push({path: '/chat', query: {roomId: roomID}});
       },

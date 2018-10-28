@@ -45,10 +45,20 @@
       return {
       }
     },
-    mounted() {
+    async mounted() {
       this.$store.commit('setTab', true);
       if (!this.userid) {
-        this.$router.push('/login');
+        const data = await Confirm({
+          title: '提示',
+          content: '需要登录后才能查看哦~',
+          ok: '去登录',
+          cancel: '返回首页'
+        });
+        if (data === 'submit') {
+          this.$router.push('/login');
+          return;
+        }
+        this.$router.push('/');
       }
     },
     methods: {
@@ -72,7 +82,15 @@
         })
         if (data === 'submit') {
           clear()
-          this.$router.push('/login')
+          this.$store.commit('setUserInfo', {
+            type: 'userid',
+            value: ''
+          });
+          this.$store.commit('setUserInfo', {
+            type: 'src',
+            value: ''
+          });
+          this.$router.push('/')
           this.$store.commit('setTab', false)
         }
       },
