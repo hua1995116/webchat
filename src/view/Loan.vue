@@ -27,7 +27,7 @@
       <mu-list>
         <mu-sub-header>和小白聊天</mu-sub-header>
         <mu-list-item title="聊天室1" @click="chatRobot()">
-          <mu-avatar src="//s3.qiufengh.com/avatar/robot.jpg" slot="leftAvatar"/>
+          <mu-avatar src="//s3.qiufengh.com/avatar/robots.jpg" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
       </mu-list>
