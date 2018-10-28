@@ -41,24 +41,26 @@
 
   export default {
     async mounted() {
-      console.log(this.userid);
-      const uerId = this.userid;
-      if (!uerId) {
-        await Confirm({
-          title: '提示',
-          content: '请先登录'
-        })
-        this.$router.push({ path: 'login' });
-      } else {
-        this.$store.commit('setTab', true);
-      }
+      this.$store.commit('setTab', true);
     },
     methods: {
       chatHistory(roomID) {
         this.$store.commit('setTab', false);
         this.$router.push({path: '/chat-history', query: {roomId: roomID}});
       },
-      chatwindow(roomID) {
+      async chatwindow(roomID) {
+        const uerId = this.userid;
+        if (!uerId) {
+          const res = await Confirm({
+            title: '提示',
+            content: '聊天请先登录，但是你可以查看聊天记录哦~'
+          });
+          console.log(res);
+          if (res === 'submit') {
+            this.$router.push({ path: 'login' });
+          }
+          return;
+        }
         this.$store.commit('setTab', false);
         this.$router.push({path: '/chat', query: {roomId: roomID}});
       },

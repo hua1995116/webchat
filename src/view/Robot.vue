@@ -11,7 +11,7 @@
     <div class="chat-inner">
       <div v-for="(obj, index) in getRobotMsg" :key="index" class="">
         <Message
-              :is-self="obj.username === userid" 
+              :is-self="obj.username === hoster" 
               :name="obj.username" 
               :head="obj.src" 
               :msg="obj.msg"
@@ -32,12 +32,13 @@
 
 <script type="text/ecmascript-6">
   import {mapGetters, mapState} from 'vuex';
-  import { getItem } from '@utils/localStorage';
   import Message from '@components/Message';
 
   export default{
     data() {
       return {
+        hoster: '主人',
+        hosterImg: '//s3.qiufengh.com/avatar/hoster.jpg'
       }
     },
     mounted() {
@@ -49,19 +50,16 @@
         this.$store.commit('setTab', true)
       },
       sendmessage() {
-        if (!getItem('userid')) {
-          this.$router.push({path: '/login'})
-        }
         const info = document.getElementById('msg').value
         const id = this.userid
         const data = {
-          'info': info,
-          'id': id
+          info,
+          id
         }
         this.$store.commit('setRobotMsg', {
           msg: info,
-          username: this.userid,
-          src: this.src
+          username: this.hoster,
+          src: this.hosterImg
         })
         this.$store.dispatch('getRobatMess', data)
         document.getElementById('msg').value = ''

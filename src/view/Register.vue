@@ -69,6 +69,7 @@
       }
     },
     mounted() {
+      this.$store.commit('setTab', false);
       if (!this.svgmodal) {
         const svg = SvgModal()
         this.$store.commit('setSvgModal', svg)

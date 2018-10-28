@@ -22,7 +22,9 @@ export default function Alert(config) {
     el: div,
     data: {
       title: config.title || '',
-      content: config.content || ''
+      content: config.content || '',
+      ok: config.ok || '确定',
+      cancel: config.cancel || '取消'
     },
     methods: {
       submit() {
@@ -41,8 +43,8 @@ export default function Alert(config) {
           <div class="wind-alert-title">{{title}}</div>
           <div class="wind-alert-content">{{content}}</div>
           <div class="wind-confirm-btns" >
-            <div class="wind-confirm-btn" @click="submit">确定</div>
-            <div class="wind-confirm-btn" @click="close">取消</div>
+            <div class="wind-confirm-btn" @click="submit">{{ok}}</div>
+            <div class="wind-confirm-btn" @click="close">{{cancel}}</div>
           </div>
         </div>
       </div>
