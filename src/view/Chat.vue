@@ -17,7 +17,7 @@
             <img :src="obj.src" alt="">
           </div>
         </div>
-        <div class="chat" v-if="isLoadingAchieve">
+        <div class="chat-container" v-if="isLoadingAchieve">
           <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
           <!-- <div v-for="(obj,index) in getInfos" :key="index"> -->
             <Message 
@@ -139,7 +139,6 @@
       })
       loading.show()
       setTimeout(async () => {
-        // await this.$store.dispatch('getMessHistory', {roomid: this.roomid})
         const data = {
           current: +this.current,
           roomid: this.roomid
@@ -160,7 +159,13 @@
             current: +this.current,
             roomid: this.roomid
           }
-          await this.$store.dispatch('getAllMessHistory', data)
+          await this.$store.dispatch('getAllMessHistory', data);
+          const length = this.getInfos.length;
+          const curIndex = length - (this.current - 1) * 20;
+          const curDom = document.querySelectorAll('.chat-container .clear')[curIndex];
+          if (curDom) {
+            curDom.scrollIntoView();
+          }
         }
       }, 100))
 
@@ -315,7 +320,7 @@
         font-weight: 400
         line-height: 56px
         text-align: center
-    .chat
+    .chat-container
       overflow: hidden
       .chat-no-people
         width: 100%

@@ -66,7 +66,8 @@ const store = new Vuex.Store({
       state.roomdetail.infos.push(...data);
     },
     addRoomDefatilInfosHis(state, data) {
-      state.roomdetail.infos.unshift(...data);
+      const list = state.roomdetail.infos;
+      state.roomdetail.infos = data.concat(list);
     },
     setRoomDetailInfos(state) {
       state.roomdetail.infos = []
@@ -121,13 +122,6 @@ const store = new Vuex.Store({
       return {
         status: 'fail',
         data: res.data
-      }
-    },
-    async getMessHistory({commit}, data) {
-      const res = await url.RoomHistory(data)
-      if (res) {
-        const his = res.data.data;
-        commit('addRoomDetailInfos', his);
       }
     },
     async getAllMessHistory({commit}, data) {

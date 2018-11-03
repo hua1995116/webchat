@@ -297,21 +297,6 @@ module.exports = (app) => {
 
     })
   }),
-
-  // 信息
-  app.get('/message', (req, res) => {
-    const id = req.query.roomid
-    Message.find({roomid: id}).sort({"time": -1}).limit(80).exec((err, message) => {
-      if (err) {
-        global.logger.error(err)
-      } else {
-        res.json({
-          errno: 0,
-          data: message.reverse()
-        })
-      }
-    })
-  }),
   // 获取历史记录
   app.get('/history/message', (req, res) => {
     const id = req.query.roomid

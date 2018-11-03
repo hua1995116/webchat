@@ -14,17 +14,6 @@
       </mu-list>
       <mu-divider/>
       <mu-list>
-        <mu-sub-header>历史聊天记录</mu-sub-header>
-        <mu-list-item title="聊天室1" @click="chatHistory('room1')">
-          <mu-avatar :src="house1" slot="leftAvatar"/>
-          <mu-icon value="chat_bubble" slot="right"/>
-        </mu-list-item>
-        <mu-list-item title="聊天室2" @click="chatHistory('room2')">
-          <mu-avatar :src="house2" slot="leftAvatar"/>
-          <mu-icon value="chat_bubble" slot="right"/>
-        </mu-list-item>
-      </mu-list>
-      <mu-list>
         <mu-sub-header>和小白聊天</mu-sub-header>
         <mu-list-item title="聊天室1" @click="chatRobot()">
           <mu-avatar :src="robot" slot="leftAvatar"/>
@@ -52,10 +41,6 @@
       this.$store.commit('setTab', true);
     },
     methods: {
-      chatHistory(roomID) {
-        this.$store.commit('setTab', false);
-        this.$router.push({path: '/chat-history', query: {roomId: roomID}});
-      },
       async chatwindow(roomID) {
         const uerId = this.userid;
         if (!uerId) {

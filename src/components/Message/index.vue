@@ -43,13 +43,7 @@
             }
         },
         mounted() {
-            console.log(this.container.scrollHeight, this.container.clientHeight, this.container.scrollTop);
-            // const shouldScroll = this.container.scrollHeight === this.container.clientHeight || this.container.scrollTop === 0 || this.container.scrollTop > this.container.scrollHeight - this.container.clientHeight * 3;
-            // console.log(shouldScroll);
-            console.log(this.$refs.msg);
-            // if (shouldScroll) {
-                this.$refs.msg.scrollIntoView();
-            // }
+            this.$refs.msg.scrollIntoView();
         }
     }
 </script>
