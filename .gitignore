@@ -53,3 +53,4 @@ application.log
 static/files/*
 cache_temp/*
 static_temp/*
+.vscode

@@ -7,30 +7,33 @@
           <div class="center">
             聊天({{Object.keys(getUsers).length}})
           </div>
-          <mu-icon-button icon="expand_more" slot="right" @click="setLog"/>
+          <mu-icon-button icon="people" slot="right" @click="openSimpleDialog"/>
         </mu-appbar>
       </div>
-      <div class="chat-inner">
+      <mu-dialog width="360" :open.sync="openSimple">
         <div class="all-chat">
-          <div>在线人员</div>
+          <div slot="title">在线人员</div>
           <div v-for="(obj,index) in getUsers" class="online" :key="index">
             <img :src="obj.src" alt="">
           </div>
         </div>
+        <mu-button slot="actions" flat color="primary" @click="closeSimpleDialog">关闭</mu-button>
+      </mu-dialog>
+      <div class="chat-inner">
+        
         <div class="chat-container" v-if="isLoadingAchieve">
           <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-          <!-- <div v-for="(obj,index) in getInfos" :key="index"> -->
-            <Message 
-              v-for="(obj,index) in getInfos" :key="index"
-              :is-self="obj.username === userid" 
-              :name="obj.username" 
-              :head="obj.src" 
-              :msg="obj.msg"
-              :img="obj.img" 
-              :mytime="obj.time"
-              :container="container"
-              ></Message>
-          <!-- </div> -->
+          <div v-if="getInfos.length > 0" class="chat-top">到顶啦~</div>
+          <Message 
+            v-for="(obj,index) in getInfos" :key="index"
+            :is-self="obj.username === userid" 
+            :name="obj.username" 
+            :head="obj.src" 
+            :msg="obj.msg"
+            :img="obj.img" 
+            :mytime="obj.time"
+            :container="container"
+            ></Message>
           <div class="clear"></div>
         </div>
       </div>
@@ -106,7 +109,8 @@
         container: {},
         chatValue: '',
         emoji: emoji,
-        current: 1
+        current: 1,
+        openSimple: false
       }
     },
     created() {
@@ -152,7 +156,7 @@
       }, 500);
 
       this.container.addEventListener('scroll', debounce(async (e) => {
-        console.log(e.target.scrollTop, e.target.scrollHeight);
+        // console.log(e.target.scrollTop, e.target.scrollHeight);
         if (e.target.scrollTop === 0) {
           this.current++
           const data = {
@@ -178,6 +182,12 @@
       })
     },
     methods: {
+      openSimpleDialog () {
+        this.openSimple = true;
+      },
+      closeSimpleDialog () {
+        this.openSimple = false;
+      },
       handleGithub() {
         Alert({
           content: 'https://github.com/hua1995116/webchat'
@@ -322,20 +332,16 @@
         text-align: center
     .chat-container
       overflow: hidden
+      .chat-top
+        text-align: center
+        margin: 5px 0 5px
+        color: #D1CFD2
       .chat-no-people
         width: 100%
         height: 300px;
         line-height: 300px;
         text-align: center
         color: #D1CFD2
-    .all-chat
-      .online
-        display: inline-block
-        margin: 5px
-        img
-          width: 40px
-          height: 40px
-          border-radius: 100%
     .bottom
       position: fixed
       width: 100%
@@ -343,27 +349,29 @@
       bottom: 0
       left: 0
       z-index: 1
+      border-top: 1px solid #ddd;
       background: #f7f6fb
       .chat
         width: 100%
         display: flex
         .input
           flex: 1
-          background: #eeeff3
-          padding: 4px
+          padding: 0 4px 4px 4px
           input
             width: 100%
             height: 42px
             box-sizing: border-box
-            border: 1px solid #8c8c96
+            border: 1px solid #e8e7ea
+            border-radius: 3px
             color: #333333
-            font-size: 18px
+            font-size: 19px
             padding-left: 5px
           .mu-text-field
             width: 100%
         .demo-raised-button
-          flex-basis: 88px
-          margin-top: 4px
+          margin-right: 8px
+          min-width: 80px
+          width: 80px
           height: 40px
           background: #eeeff3
           color: #8c8c96
@@ -403,6 +411,14 @@
                 line-height 39px;
                 text-align: center;
                 list-style: none;
-          
+
+.all-chat
+  .online
+    display: inline-block
+    margin: 5px
+    img
+      width: 40px
+      height: 40px
+      border-radius: 100%   
 
 </style>
