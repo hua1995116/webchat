@@ -4,11 +4,11 @@
       <mu-list>
         <mu-sub-header>最近聊天记录</mu-sub-header>
         <mu-list-item title="聊天室1" @click="chatwindow('room1')">
-          <mu-avatar src="//s3.qiufengh.com/images/house.png" slot="leftAvatar"/>
+          <mu-avatar :src="house1" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
         <mu-list-item title="聊天室2" @click="chatwindow('room2')">
-          <mu-avatar src="//s3.qiufengh.com/images/house2.png" slot="leftAvatar"/>
+          <mu-avatar :src="house2" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -16,18 +16,18 @@
       <mu-list>
         <mu-sub-header>历史聊天记录</mu-sub-header>
         <mu-list-item title="聊天室1" @click="chatHistory('room1')">
-          <mu-avatar src="//s3.qiufengh.com/images/house.png" slot="leftAvatar"/>
+          <mu-avatar :src="house1" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
         <mu-list-item title="聊天室2" @click="chatHistory('room2')">
-          <mu-avatar src="//s3.qiufengh.com/images/house2.png" slot="leftAvatar"/>
+          <mu-avatar :src="house2" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
       </mu-list>
       <mu-list>
         <mu-sub-header>和小白聊天</mu-sub-header>
         <mu-list-item title="聊天室1" @click="chatRobot()">
-          <mu-avatar src="//s3.qiufengh.com/avatar/robots.jpg" slot="leftAvatar"/>
+          <mu-avatar :src="robot" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -38,8 +38,16 @@
 <script>
   import Confirm from '@components/Confirm';
   import {mapState} from 'vuex';
+  import {ROBOT_URL, HOST_URL1, HOST_URL2} from '@const/index';
 
   export default {
+    data() {
+      return {
+        house1: HOST_URL1,
+        house2: HOST_URL2,
+        robot: ROBOT_URL
+      }
+    },
     async mounted() {
       this.$store.commit('setTab', true);
     },

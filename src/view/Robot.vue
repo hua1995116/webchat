@@ -33,12 +33,13 @@
 <script type="text/ecmascript-6">
   import {mapGetters, mapState} from 'vuex';
   import Message from '@components/Message';
+  import {HOSTER_URL, HOSTER_NAME} from '@const/index'
 
   export default{
     data() {
       return {
-        hoster: '主人',
-        hosterImg: '//s3.qiufengh.com/avatar/hoster.jpg'
+        hoster: HOSTER_NAME,
+        hosterImg: HOSTER_URL
       }
     },
     mounted() {
