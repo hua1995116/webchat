@@ -297,21 +297,6 @@ module.exports = (app) => {
 
     })
   }),
-
-  // 信息
-  app.get('/message', (req, res) => {
-    const id = req.query.roomid
-    Message.find({roomid: id}).sort({"time": -1}).limit(80).exec((err, message) => {
-      if (err) {
-        global.logger.error(err)
-      } else {
-        res.json({
-          errno: 0,
-          data: message.reverse()
-        })
-      }
-    })
-  }),
   // 获取历史记录
   app.get('/history/message', (req, res) => {
     const id = req.query.roomid
@@ -329,13 +314,13 @@ module.exports = (app) => {
       current: current
     }
     const task1 = new Promise((resolve, reject) => {
-      const skip = parseInt((current - 1) * 40)
-      Message.find({roomid: id}).skip(skip).limit(40).exec((err, data) => {
+      const skip = parseInt((current - 1) * 20)
+      Message.find({roomid: id}).skip(skip).sort({"time": -1}).limit(20).exec((err, data) => {
         if (err) {
           global.logger.error(err)
           return reject()
         } else {
-          message.data = data
+          message.data = data.reverse();
           return resolve()
         }
       })

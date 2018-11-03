@@ -101,4 +101,4 @@ input{outline:none}
     clear: both;
 }
 
-::-webkit-scrollbar{width:0px}
+/* ::-webkit-scrollbar{width:0px} */

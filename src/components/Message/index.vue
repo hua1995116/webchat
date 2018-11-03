@@ -5,11 +5,11 @@
                 <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
             </div>
             <span class="head-place">
-                <img :src="head" alt="" class="head">
+                <img :src="head+ '?imageView2/2/w/120/h/120'" alt="" class="head">
             </span>
             <div v-if="img">
                 <img 
-                    :src="img" 
+                    :src="img + '?imageView2/2/w/360'"
                     alt="" 
                     v-preview="img"
                     class="img"
@@ -28,7 +28,7 @@
     import dateFormat from '../../utils/date'
     import {inHTMLData, uriInUnQuotedAttr} from 'xss-filters-es6';
     export default{
-        props: ['name', 'img', 'msg', 'head', 'mytime', 'is-self'],
+        props: ['name', 'img', 'msg', 'head', 'mytime', 'is-self', 'container'],
         computed: {
             getdate() {
                 return dateFormat(new Date(this.mytime), 'yyyy-MM-dd HH:mm:ss')
@@ -43,7 +43,7 @@
             }
         },
         mounted() {
-            this.$refs.msg.scrollIntoView()
+            this.$refs.msg.scrollIntoView();
         }
     }
 </script>
@@ -101,7 +101,7 @@
                 
     .left
         .item
-            animation: show-chat-even 0.25s 1 ease-in
+            // animation: show-chat-even 0.25s 1 ease-in
             float: left
             margin-left: 80px
             color: #0EC879
@@ -119,7 +119,7 @@
 
     .right 
         .item 
-            animation: show-chat-odd 0.25s 1 ease-in
+            // animation: show-chat-odd 0.25s 1 ease-in
             float: right
             margin-right: 80px
             color: #0AD5C1

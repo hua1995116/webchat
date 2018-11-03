@@ -1,14 +1,13 @@
 /**
  * Created by Administrator on 2017/4/17.
  */
-import Vue from 'vue'
-import Vuex from 'vuex'
-import url from '../api/server.js'
-import {setItem, getItem} from '../utils/localStorage';
-const robotImg = '//s3.qiufengh.com/avatar/robots.jpg';
-const robotName = 'robot';
+import Vue from 'vue';
+import Vuex from 'vuex';
+import url from '../api/server.js';
+import {setItem, getItem} from '@utils/localStorage';
+import {ROBOT_NAME, ROBOT_URL} from '@const/index';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
@@ -30,8 +29,8 @@ const store = new Vuex.Store({
     // 存放机器人开场白
     robotmsg: [{
       msg: 'Hi~有什么想知道的可以问我',
-      username: robotName,
-      src: robotImg
+      username: ROBOT_NAME,
+      src: ROBOT_URL
     }],
     // svg
     svgmodal: null,
@@ -64,7 +63,11 @@ const store = new Vuex.Store({
       state.svgmodal = data
     },
     addRoomDetailInfos(state, data) {
-      state.roomdetail.infos.push(...data)
+      state.roomdetail.infos.push(...data);
+    },
+    addRoomDefatilInfosHis(state, data) {
+      const list = state.roomdetail.infos;
+      state.roomdetail.infos = data.concat(list);
     },
     setRoomDetailInfos(state) {
       state.roomdetail.infos = []
@@ -121,41 +124,28 @@ const store = new Vuex.Store({
         data: res.data
       }
     },
-    async getMessHistory({commit}, data) {
-      const res = await url.RoomHistory(data)
-      if (res) {
-        const his = res.data.data;
-        commit('addRoomDetailInfos', his);
-      }
-    },
     async getAllMessHistory({commit}, data) {
       const res = await url.RoomHistoryAll(data)
       if (res.data.data.errno === 0) {
-        return {
-          data: res.data.data.data,
-          total: res.data.data.total
-        }
-        // commit('setAllMessHistory', res.data.data.data)
+        commit('addRoomDefatilInfosHis', res.data.data.data);
       }
     },
     async getRobatMess({commit}, data) {
-      let robotdata = ''
-      const username = robotName;
-      const src = robotImg;
+      const username = ROBOT_NAME;
+      const src = ROBOT_URL;
       const res = await url.getRobotMessage(data)
       if (res) {
-        robotdata = JSON.parse(res.data.data)
+        const robotdata = JSON.parse(res.data.data);
+        let msg = '';
         // 分类信息
         if (robotdata.code === 100000) {
-          commit('setRobotMsg', {msg: robotdata.text, username, src})
+          msg = robotdata.text;
         } else if (robotdata.code === 200000) {
-          let data = robotdata.text + robotdata.url
-          commit('setRobotMsg', {msg: data, username, src})
-        } else if (robotdata.code === 302000) {
-          commit('setRobotMsg', {msg: '暂不支持此类对话', username, src})
+          msg = robotdata.text + robotdata.url
         } else {
-          commit('setRobotMsg', {msg: '暂不支持此类对话', username, src})
+          msg = '暂不支持此类对话'
         }
+        commit('setRobotMsg', {msg, username, src});
       }
     }
   }

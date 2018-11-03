@@ -26,6 +26,7 @@ module.exports = {
       '@utils': resolve('src/utils'),
       '@components': resolve('src/components'),
       '@view': resolve('src/view'),
+      '@const': resolve('src/const')
     }
   },
   module: {
