@@ -329,13 +329,13 @@ module.exports = (app) => {
       current: current
     }
     const task1 = new Promise((resolve, reject) => {
-      const skip = parseInt((current - 1) * 40)
-      Message.find({roomid: id}).skip(skip).limit(40).exec((err, data) => {
+      const skip = parseInt((current - 1) * 20)
+      Message.find({roomid: id}).skip(skip).sort({"time": -1}).limit(20).exec((err, data) => {
         if (err) {
           global.logger.error(err)
           return reject()
         } else {
-          message.data = data
+          message.data = data.reverse();
           return resolve()
         }
       })

@@ -19,16 +19,18 @@
         </div>
         <div class="chat" v-if="isLoadingAchieve">
           <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-          <div v-for="(obj,index) in getInfos" :key="index">
+          <!-- <div v-for="(obj,index) in getInfos" :key="index"> -->
             <Message 
+              v-for="(obj,index) in getInfos" :key="index"
               :is-self="obj.username === userid" 
               :name="obj.username" 
               :head="obj.src" 
               :msg="obj.msg"
               :img="obj.img" 
               :mytime="obj.time"
+              :container="container"
               ></Message>
-          </div>
+          <!-- </div> -->
           <div class="clear"></div>
         </div>
       </div>
@@ -90,10 +92,11 @@
   import {inHTMLData} from 'xss-filters-es6';
   import socket from '../socket';
   import emoji from '@utils/emoji';
-  import {queryString} from '@utils/queryString'
-  import Message from '@components/Message'
-  import loading from '@components/loading/loading'
-  import Alert from '@components/Alert'
+  import {queryString} from '@utils/queryString';
+  import Message from '@components/Message';
+  import loading from '@components/loading/loading';
+  import Alert from '@components/Alert';
+  import debounce from 'lodash/debounce';
 
   export default{
     data() {
@@ -102,7 +105,8 @@
         isLoadingAchieve: false,
         container: {},
         chatValue: '',
-        emoji: emoji
+        emoji: emoji,
+        current: 1
       }
     },
     created() {
@@ -135,13 +139,30 @@
       })
       loading.show()
       setTimeout(async () => {
-        await this.$store.dispatch('getMessHistory', {roomid: this.roomid})
+        // await this.$store.dispatch('getMessHistory', {roomid: this.roomid})
+        const data = {
+          current: +this.current,
+          roomid: this.roomid
+        }
+        await this.$store.dispatch('getAllMessHistory', data)
         loading.hide()
         this.isLoadingAchieve = true
         this.$nextTick(() => {
           this.container.scrollTop = 10000
         })
-      }, 1000);
+      }, 500);
+
+      this.container.addEventListener('scroll', debounce(async (e) => {
+        console.log(e.target.scrollTop, e.target.scrollHeight);
+        if (e.target.scrollTop === 0) {
+          this.current++
+          const data = {
+            current: +this.current,
+            roomid: this.roomid
+          }
+          await this.$store.dispatch('getAllMessHistory', data)
+        }
+      }, 100))
 
       this.$refs.emoji.addEventListener('click', function(e) {
         var target = e.target || e.srcElement;
@@ -295,6 +316,7 @@
         line-height: 56px
         text-align: center
     .chat
+      overflow: hidden
       .chat-no-people
         width: 100%
         height: 300px;

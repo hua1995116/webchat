@@ -28,7 +28,7 @@
     import dateFormat from '../../utils/date'
     import {inHTMLData, uriInUnQuotedAttr} from 'xss-filters-es6';
     export default{
-        props: ['name', 'img', 'msg', 'head', 'mytime', 'is-self'],
+        props: ['name', 'img', 'msg', 'head', 'mytime', 'is-self', 'container'],
         computed: {
             getdate() {
                 return dateFormat(new Date(this.mytime), 'yyyy-MM-dd HH:mm:ss')
@@ -43,7 +43,13 @@
             }
         },
         mounted() {
-            this.$refs.msg.scrollIntoView()
+            console.log(this.container.scrollHeight, this.container.clientHeight, this.container.scrollTop);
+            // const shouldScroll = this.container.scrollHeight === this.container.clientHeight || this.container.scrollTop === 0 || this.container.scrollTop > this.container.scrollHeight - this.container.clientHeight * 3;
+            // console.log(shouldScroll);
+            console.log(this.$refs.msg);
+            // if (shouldScroll) {
+                this.$refs.msg.scrollIntoView();
+            // }
         }
     }
 </script>
@@ -101,7 +107,7 @@
                 
     .left
         .item
-            animation: show-chat-even 0.25s 1 ease-in
+            // animation: show-chat-even 0.25s 1 ease-in
             float: left
             margin-left: 80px
             color: #0EC879
@@ -119,7 +125,7 @@
 
     .right 
         .item 
-            animation: show-chat-odd 0.25s 1 ease-in
+            // animation: show-chat-odd 0.25s 1 ease-in
             float: right
             margin-right: 80px
             color: #0AD5C1

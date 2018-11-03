@@ -63,7 +63,10 @@ const store = new Vuex.Store({
       state.svgmodal = data
     },
     addRoomDetailInfos(state, data) {
-      state.roomdetail.infos.push(...data)
+      state.roomdetail.infos.push(...data);
+    },
+    addRoomDefatilInfosHis(state, data) {
+      state.roomdetail.infos.unshift(...data);
     },
     setRoomDetailInfos(state) {
       state.roomdetail.infos = []
@@ -130,11 +133,7 @@ const store = new Vuex.Store({
     async getAllMessHistory({commit}, data) {
       const res = await url.RoomHistoryAll(data)
       if (res.data.data.errno === 0) {
-        return {
-          data: res.data.data.data,
-          total: res.data.data.total
-        }
-        // commit('setAllMessHistory', res.data.data.data)
+        commit('addRoomDefatilInfosHis', res.data.data.data);
       }
     },
     async getRobatMess({commit}, data) {
