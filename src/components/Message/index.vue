@@ -5,7 +5,7 @@
                 <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
             </div>
             <span class="head-place">
-                <img :src="head+ '?imageView2/2/w/120/h/120'" alt="" class="head">
+                <img :src="avatar+ '?imageView2/2/w/120/h/120'" alt="" class="head">
             </span>
             <div v-if="img">
                 <img 
@@ -40,6 +40,14 @@
                     const url = $0;
                     return `<a style="color: #b374ff" href="${uriInUnQuotedAttr(url)}" target="_blank">${uriInUnQuotedAttr(url)}</a>`;
                 });
+            },
+            avatar() {
+                const reg = /\.\/static\/img\/(\d+)\.jpg/;
+                const matches = this.head.match(reg);
+                if (matches) {
+                    return `//s3.qiufengh.com/avatar/${matches[1]}.jpeg`;
+                }
+                return this.head;
             }
         },
         mounted() {
