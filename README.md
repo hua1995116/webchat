@@ -42,6 +42,10 @@ npm run server
 
 <img src="http://s3.qiufengh.com/images/1536588077.png" width="400" />
 
+## 技术交流
+
+<img src="https://s3.qiufengh.com/pic/WechatIMG112.jpeg" width="400" />
+
 ## 技术栈
 
  - 前端 vue，vue-router ,vuex
