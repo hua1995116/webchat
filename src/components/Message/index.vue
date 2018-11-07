@@ -9,7 +9,7 @@
             </span>
             <div v-if="img">
                 <img 
-                    :src="img + '?imageView2/2/w/360'"
+                    :src="avatar + '?imageView2/2/w/360'"
                     alt="" 
                     v-preview="img"
                     class="img"
@@ -40,6 +40,14 @@
                     const url = $0;
                     return `<a style="color: #b374ff" href="${uriInUnQuotedAttr(url)}" target="_blank">${uriInUnQuotedAttr(url)}</a>`;
                 });
+            },
+            avatar() {
+                const reg = /\.\/static\/img\/(\d+)\.jpg/;
+                const matches = this.head.match(reg);
+                if (matches) {
+                    return `https://s3.qiufengh.com/avatar/${matches[1]}.jpeg`;
+                }
+                return this.head;
             }
         },
         mounted() {
