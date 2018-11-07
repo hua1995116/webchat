@@ -45,7 +45,7 @@
                 const reg = /\.\/static\/img\/(\d+)\.jpg/;
                 const matches = this.head.match(reg);
                 if (matches) {
-                    return `https://s3.qiufengh.com/avatar/${matches[1]}.jpeg`;
+                    return `//s3.qiufengh.com/avatar/${matches[1]}.jpeg`;
                 }
                 return this.head;
             }
