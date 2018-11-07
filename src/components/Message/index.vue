@@ -5,11 +5,11 @@
                 <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
             </div>
             <span class="head-place">
-                <img :src="head+ '?imageView2/2/w/120/h/120'" alt="" class="head">
+                <img :src="avatar+ '?imageView2/2/w/120/h/120'" alt="" class="head">
             </span>
             <div v-if="img">
                 <img 
-                    :src="avatar + '?imageView2/2/w/360'"
+                    :src="img + '?imageView2/2/w/360'"
                     alt="" 
                     v-preview="img"
                     class="img"
