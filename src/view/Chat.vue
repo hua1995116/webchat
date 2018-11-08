@@ -25,7 +25,7 @@
           <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
           <div v-if="getInfos.length > 0" class="chat-top">到顶啦~</div>
           <Message 
-            v-for="(obj,index) in getInfos" :key="index"
+            v-for="obj in getInfos" :key="obj._id"
             :is-self="obj.username === userid" 
             :name="obj.username" 
             :head="obj.src" 
@@ -164,12 +164,6 @@
             roomid: this.roomid
           }
           await this.$store.dispatch('getAllMessHistory', data);
-          const length = this.getInfos.length;
-          const curIndex = length - (this.current - 1) * 20;
-          const curDom = document.querySelectorAll('.chat-container .clear')[curIndex];
-          if (curDom) {
-            curDom.scrollIntoView();
-          }
         }
       }, 100))
 
@@ -179,7 +173,7 @@
           that.chatValue = that.chatValue + target.innerHTML;
         }
         e.stopPropagation();
-      })
+      });
     },
     methods: {
       openSimpleDialog () {
@@ -191,7 +185,7 @@
       handleGithub() {
         Alert({
           content: 'https://github.com/hua1995116/webchat'
-        })
+        });
       },
       handleTips() {
         Alert({
