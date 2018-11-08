@@ -5,11 +5,11 @@
                 <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
             </div>
             <span class="head-place">
-                <img :src="avatar+ '?imageView2/2/w/120/h/120'" alt="" class="head">
+                <img :src="avatar" alt="" class="head">
             </span>
             <div v-if="img">
                 <img 
-                    :src="img + '?imageView2/2/w/360'"
+                    :src="pic"
                     alt="" 
                     v-preview="img"
                     class="img"
@@ -42,12 +42,20 @@
                 });
             },
             avatar() {
+                let avatar = this.head;
                 const reg = /\.\/static\/img\/(\d+)\.jpg/;
                 const matches = this.head.match(reg);
                 if (matches) {
-                    return `//s3.qiufengh.com/avatar/${matches[1]}.jpeg`;
+                    avatar = `//s3.qiufengh.com/avatar/${matches[1]}.jpeg`;
                 }
-                return this.head;
+                return `${avatar}?imageView2/2/w/120/h/120`;
+            },
+            pic() {
+                let pic = this.img;
+                if (pic.indexOf('data:image') > -1) {
+                    return pic;
+                }
+                return `${pic}?imageView2/2/w/360`
             }
         },
         mounted() {
