@@ -134,8 +134,8 @@
         src: this.src,
         roomid: this.roomid
       }
-      socket.emit('login', obj)
-      socket.on('login', function (obj) {
+      socket.emit('room', obj)
+      socket.on('room', function (obj) {
         that.$store.commit('setUsers', obj)
       })
       socket.on('logout', function (obj) {
@@ -223,7 +223,7 @@
               src: that.src,
               img: fr.result,
               msg: '',
-              room: that.roomid,
+              roomid: that.roomid,
               time: new Date()
             }
             socket.emit('message', obj)
@@ -256,7 +256,7 @@
             src: this.src,
             img: '',
             msg,
-            room: this.roomid,
+            roomid: this.roomid,
             time: new Date()
           }
           // 传递消息信息

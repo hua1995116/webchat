@@ -15,6 +15,7 @@ const store = new Vuex.Store({
       src: getItem('src'),
       userid: getItem('userid')
     },
+    isLogin: false,
     // 存放历史记录
     messhistory: {
       infos: [],
@@ -32,6 +33,10 @@ const store = new Vuex.Store({
       username: ROBOT_NAME,
       src: ROBOT_URL
     }],
+    unRead: {
+      room1: 0,
+      room2: 0
+    },
     // svg
     svgmodal: null,
     // 是否启动tab
@@ -48,6 +53,19 @@ const store = new Vuex.Store({
     getEmoji: state => state.emojiShow
   },
   mutations: {
+    setUnread(state, value) {
+      const unRead = {
+        room1: 0,
+        room2: 0
+      };
+      for (let i in value) {
+        unRead[i] = value[i].count;
+      }
+      state.unRead = unRead
+    },
+    setLoginState(state, value) {
+      state.isLogin = value;
+    },
     setUserInfo(state, data) {
       const {type, value} = data;
       setItem(type, value);
