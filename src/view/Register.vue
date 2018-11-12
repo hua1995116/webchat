@@ -28,7 +28,7 @@
       async submit() {
         const name = document.form1.username.value.trim()
         const password = document.form1.password.value.trim()
-        const src = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 273)}.jpeg`
+        const src = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 272)}.jpeg`
         if (name !== '' && password !== '') {
           const data = {
             name: name,
