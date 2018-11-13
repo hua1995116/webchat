@@ -41,7 +41,7 @@ function websocket(server) {
     }, 1 * 60 * 1000);
     io.on('connection', function (socket) {
       //监听用户发布聊天内容
-      console.log('socket connect!');      
+      console.log('socket connect!');
       socket.on('message', function (msgObj) {
         console.log('socket message!'); 
         //向所有客户端广播发布的消息
@@ -99,14 +99,18 @@ function websocket(server) {
           if(err) {
             return;
           }
-          console.log(res);
-          const rooms = JSON.parse(res.roomInfo);
-          // 数据库查数据， 若缓存中没有数据，更新缓存
-          if(Object.keys(userR.rooms).length === 0) {
-            userR.rooms = rooms;
+          if(res) {
+            console.log(res);
+            const rooms = JSON.parse(res.roomInfo);
+            // 数据库查数据， 若缓存中没有数据，更新缓存
+            if(Object.keys(userR.rooms).length === 0) {
+              userR.rooms = rooms;
+            }
+            // 通知自己有多少条未读消息
+            socket.emit('count', rooms);
+            return;
           }
-          // 通知自己有多少条未读消息
-          socket.emit('count', rooms);
+          socket.emit('count', userR.rooms);
         })
         
       });
