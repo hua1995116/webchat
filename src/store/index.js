@@ -54,14 +54,9 @@ const store = new Vuex.Store({
   },
   mutations: {
     setUnread(state, value) {
-      const unRead = {
-        room1: 0,
-        room2: 0
-      };
       for (let i in value) {
-        unRead[i] = value[i].count;
+        state.unRead[i] = +value[i];
       }
-      state.unRead = unRead
     },
     setLoginState(state, value) {
       state.isLogin = value;

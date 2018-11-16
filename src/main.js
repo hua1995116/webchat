@@ -40,13 +40,19 @@ const popNotice = function(msgInfo) {
 
 socket.on('connect', () => {
   console.log('connect');
-  const roomId = queryString(window.location.href, 'roomId')
+  // console.log(socket.id);
+  const roomId = queryString(window.location.href, 'roomId');
+  const userId = store.state.userInfo.userid;
+  if (userId) {
+    socket.emit('login', {name: userId});
+  }
   if (roomId) {
     const obj = {
-      name: store.state.userInfo.userid,
+      name: userId,
       src: store.state.userInfo.src,
       roomid: roomId
     }
+    // console.log(obj);
     socket.emit('room', obj);
   }
 })
