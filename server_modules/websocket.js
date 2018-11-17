@@ -17,38 +17,37 @@ function websocket(server) {
     const io = require('socket.io')(server);
     const users = {};
 
-    // setInterval(function() {
-    //   for(let key in userRedis) {
-    //     const info = userRedis[key] && userRedis[key].rooms;
-    //     const username = key;
-    //     const roomInfo = JSON.stringify(info);
-    //     const value = {
-    //       username,
-    //       roomInfo
-    //     }
-    //     Count.findOne({username}, (err, res) => {
-    //       if(err) {
-    //         return;
-    //       }
-    //       if(res) {
-    //         Count.update({username}, {roomInfo}, (err) => {
-    //           if(err) {
-    //             console.log('更新失败');
-    //           }
-    //         })
-    //       } else {
-    //         const count = new Count(value);
-    //         count.save(function(err, res) {
-    //           if(err) {
-    //             global.logger.error(err);
-    //             return;
-    //           }
-    //           global.logger.info(res);
-    //         })
-    //       }
-    //     })
-    //   }
-    // }, 1 * 60 * 1000);
+    setInterval(async () => {
+      const usersList = await gethAllCache('socketId');
+      for (let i = 0; i < usersList.length; i++) {
+        const name = usersList[i];
+        for (let j = 0; j < roomList.length; j++) {
+          const roomid = roomList[j];
+          const username = `${name}-${roomid}`;
+          const roomInfo = await getCacheById(username);
+          const res = await findOne({username});
+          if(res) {
+            Count.update({username}, {roomInfo}, (err) => {
+              if(err) {
+                console.log('更新失败');
+              }
+            })
+          } else {
+            const count = new Count({
+              username,
+              roomInfo
+            });
+            count.save(function(err, res) {
+              if(err) {
+                global.logger.error(err);
+                return;
+              }
+              global.logger.info(res);
+            })
+          }
+        }
+      }
+    }, 1 * 60 * 1000);
     io.on('connection',  (socket) => {
       //监听用户发布聊天内容
       console.log('socket connect!');
