@@ -22,13 +22,14 @@
   import SvgModal from '@components/svg-modal';
   import Alert from '@components/Alert';
   import Toast from '@components/Toast';
+  import socket from '../socket';
 
   export default {
     methods: {
       async submit() {
         const name = document.form1.username.value.trim()
         const password = document.form1.password.value.trim()
-        const src = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 273)}.jpeg`
+        const src = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 272)}.jpeg`
         if (name !== '' && password !== '') {
           const data = {
             name: name,
@@ -52,7 +53,8 @@
             });
             this.getSvgModal.$root.$options.clear()
             this.$store.commit('setSvgModal', null)
-            this.$router.push({path: '/'})
+            this.$router.push({path: '/'});
+            socket.emit('login', {name});
           } else {
             await Alert({
               content: res.data.data

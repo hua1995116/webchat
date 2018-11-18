@@ -10,6 +10,7 @@ import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
 import './styles/main.styl';
 import socket from './socket';
+import {queryString} from '@utils/queryString';
 
 import vuePicturePreview from './components/photo-viewer';
 Vue.use(vuePicturePreview);
@@ -38,7 +39,22 @@ const popNotice = function(msgInfo) {
 };
 
 socket.on('connect', () => {
-  console.log('connect')
+  console.log('connect');
+  // console.log(socket.id);
+  const roomId = queryString(window.location.href, 'roomId');
+  const userId = store.state.userInfo.userid;
+  if (userId) {
+    socket.emit('login', {name: userId});
+  }
+  if (roomId) {
+    const obj = {
+      name: userId,
+      src: store.state.userInfo.src,
+      roomid: roomId
+    }
+    // console.log(obj);
+    socket.emit('room', obj);
+  }
 })
 
 socket.on('disconnect', () => {

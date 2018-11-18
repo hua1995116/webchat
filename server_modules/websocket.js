@@ -1,83 +1,208 @@
 const xssFilters = require('xss-filters');
+const Count = require('../models/count');
+const Message = require('../models/message');
+const {
+  inrcCache,
+  getCacheById,
+  updateCache,
+  deleteCacheById,
+  resetCacheById,
+  updatehCache,
+  gethCacheById,
+  gethAllCache
+} = require('./RedisCache');
+const roomList = ['room1', 'room2'];
+
 function websocket(server) {
     const io = require('socket.io')(server);
-    const Message = require('../models/message')
-    const users = {}
-    
-    io.on('connection', function (socket) {
+    const users = {};
+
+    setInterval(async () => {
+      const usersList = await gethAllCache('socketId');
+      for (let i = 0; i < usersList.length; i++) {
+        const name = usersList[i];
+        for (let j = 0; j < roomList.length; j++) {
+          const roomid = roomList[j];
+          const username = `${name}-${roomid}`;
+          const roomInfo = await getCacheById(username);
+          const res = await findOne({username});
+          if(res) {
+            Count.update({username}, {roomInfo}, (err) => {
+              if(err) {
+                console.log('更新失败');
+              }
+            })
+          } else {
+            const count = new Count({
+              username,
+              roomInfo: +roomInfo 
+            });
+            count.save(function(err, res) {
+              if(err) {
+                global.logger.error(err);
+                return;
+              }
+              global.logger.info(res);
+            })
+          }
+        }
+      }
+    }, 1 * 60 * 1000);
+    io.on('connection',  (socket) => {
       //监听用户发布聊天内容
-      console.log('socket connect!');      
-      socket.on('message', function (obj) {
+      console.log('socket connect!');
+      socket.on('message', async (msgObj) => {
         console.log('socket message!'); 
         //向所有客户端广播发布的消息
-        if(!obj.msg && !obj.img) {
+        const {username, src, msg, img, roomid, time} = msgObj;
+        if(!msg && !img) {
           return;
         }
         // 后端限制字符长度
-        const msgLimit = obj.msg.slice(0, 200); 
+        const msgLimit = msg.slice(0, 200); 
         const mess = {
-          username: obj.username,
-          src: obj.src,
-          msg: xssFilters.inHTMLData(msgLimit),
-          img: obj.img, // 防止xss
-          roomid: obj.room,
-          time: obj.time
+          username,
+          src,
+          msg: xssFilters.inHTMLData(msgLimit), // 防止xss
+          img, 
+          roomid,
+          time
         }
-        io.to(mess.roomid).emit('message', mess)
-        global.logger.info(obj.username + '对房' + mess.roomid+'说：'+ mess.msg)
-        if (obj.img === '') {
-          const message = new Message(mess)
-          message.save(function (err, mess) {
+        io.to(mess.roomid).emit('message', mess);
+        global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);
+        if (mess.img === '') {
+          const message = new Message(mess);
+          message.save(function (err, res) {
             if (err) {
-              global.logger.error(err)
+              global.logger.error(err);
+              return;
             }
-            global.logger.info(mess)
+            global.logger.info(res);
           })
         }
+        const usersList = await gethAllCache('socketId');
+        usersList.map(async item => {
+          if(!users[roomid][item]) {
+            const key = `${item}-${roomid}`
+            await inrcCache(key);
+            const socketid = await gethCacheById('socketId', item);
+            const count = await getCacheById(key);
+            const roomInfo = {};
+            roomInfo[roomid] = count;
+            socket.to(socketid).emit('count', roomInfo);
+          }
+        }) 
       })
-      socket.on('login',function (obj) {
+      // 建立连接
+      socket.on('login',async (user) => {
         console.log('socket login!');
-        if (!obj.name) {
+        const {name} = user;
+        if (!name) {
           return;
         }
-        socket.name = obj.name
-        socket.room = obj.roomid
-        if (!users[obj.roomid]) {
-          users[obj.roomid] = {}
-        }
-        users[obj.roomid][obj.name] = obj
-        socket.join(obj.roomid)
-        io.to(obj.roomid).emit('login', users[obj.roomid])
-        global.logger.info(obj.name + '加入了' + obj.roomid)
-      })
-      socket.on('logout',function (obj) {
-        try{
-          console.log('socket loginout!');
-          const is = Object.hasOwnProperty.call(users[obj.roomid], obj.name)
-          if (is) {
-            delete users[obj.roomid][obj.name]
-            global.logger.info(obj.name + '退出了' + obj.roomid)
-            io.to(obj.roomid).emit('logout', users[obj.roomid])
-            socket.leave(obj.roomid)
+        socket.name = name;
+        const roomInfo = {};
+        await updatehCache('socketId', name, socket.id);
+
+        for(let i = 0; i < roomList.length; i++) {
+          const roomid = roomList[i];
+          const key = `${name}-${roomid}`;
+          // 循环所有房间
+          const res = await findOne({username: key});
+          const count = await getCacheById(key);
+
+          if(res) {
+            // 数据库查数据， 若缓存中没有数据，更新缓存
+            if(+count === 0) {
+              updateCache(key, res.roomInfo);
+            }
+            roomInfo[roomid] = res.roomInfo;
+          } else {
+            roomInfo[roomid] = +count;
           }
-        } catch (e) {
-          global.logger.error(e)
         }
+        // 通知自己有多少条未读消息
+        socket.emit('count', roomInfo);
+        
+      });
+      // 加入房间
+      socket.on('room', async (user) => {
+        console.log('socket add room!');
+        const {name, roomid} = user;
+        if (!name || !roomid) {
+          return;
+        }
+        socket.name = name;
+        socket.roomid = roomid;
+
+        if (!users[roomid]) {
+          users[roomid] = {};
+        }
+        // 初始化user
+        users[roomid][name] = Object.assign({}, {
+          socketid: socket.id
+        }, user);
+
+        // 初始化user
+        const key = `${name}-${roomid}`;
+        await updatehCache('socketId', name, socket.id);
+
+        // 进入房间默认置空，表示全部已读
+        await resetCacheById(key);
+        // 进行会话
+        socket.join(roomid);
+
+        const onlineUsers = {};
+        for(let item in users[roomid]) {
+          onlineUsers[item] = {};
+          onlineUsers[item].src = users[roomid][item].src;
+        }
+        io.to(roomid).emit('room', onlineUsers);
+        global.logger.info(`${name} 加入了 ${roomid}`);
+      });
+
+      socket.on('roomout', async (user) => {
+        console.log('socket loginout!');
+        const {name, roomid} = user;
+        await handleLogoutRoom(roomid, name);
       })
     
-      socket.on('disconnect', function (e) {
-        // console.log(e);
+      socket.on('disconnect', async () => {
         console.log('socket disconnect!');
-        console.log(socket.room, socket.name);
-        if (users[socket.room] && users[socket.room].hasOwnProperty(socket.name)) {
-          delete users[socket.room][socket.name]
-          // 用户监听用退出聊天室
-          global.logger.info(socket.name + '退出了' + socket.room)
-          socket.leave(socket.roomid)
-          io.to(socket.room).emit('logout', users[socket.room])
-        }
+        const {name, roomid} = socket;
+        await handleLogoutRoom(roomid, name);
       })
+
+      const handleLogoutRoom = async (roomid, name) => {
+        try {
+          if(users[roomid] && users[roomid].hasOwnProperty(name)) {
+            const key = `${name}-${roomid}`;
+            const roomInfo = {};
+            const count = await getCacheById(key);
+            roomInfo[roomid] = count;
+            socket.emit('count', roomInfo);
+            delete users[roomid][name];
+            global.logger.info(`${name} 退出了 ${roomid}`);
+            io.to(roomid).emit('roomout', users[roomid]);
+            socket.leave(roomid);
+          }
+        } catch(e) {
+          console.log(e);
+        }
+      }
     })
+}
+
+function findOne(query) {
+  return new Promise((resv, rej) => {
+    Count.findOne(query, (err, res) => {
+      if(err) {
+        rej(err);
+        return;
+      }
+      resv(res);
+    })
+  })
 }
 
 module.exports = websocket

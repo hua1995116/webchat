@@ -19,6 +19,7 @@
   import SvgModal from '@components/svg-modal';
   import Alert from '@components/Alert';
   import Toast from '@components/Toast';
+  import socket from '../socket';
 //  import Loading from '../components/loading/loading'
 
   export default{
@@ -53,7 +54,8 @@
             });
             this.getSvgModal.$root.$options.clear()
             this.$store.commit('setSvgModal', null)
-            this.$router.push({path: '/'})
+            this.$router.push({path: '/'});
+            socket.emit('login', {name});
           } else {
             Alert({
               content: res.data.data
