@@ -89,7 +89,6 @@ function websocket(server) {
             const count = await getCacheById(key);
             const roomInfo = {};
             roomInfo[roomid] = count;
-            // console.log('count: ', socketid, roomInfo);
             socket.to(socketid).emit('count', roomInfo);
           }
         }) 
@@ -117,15 +116,12 @@ function websocket(server) {
             if(+count === 0) {
               updateCache(key, res);
             }
-            // 通知自己有多少条未读消息
-            roomInfo[roomid] = res;
-            return;
+            roomInfo[roomid] = res.roomInfo;
+          } else {
+            roomInfo[roomid] = count;
           }
-          // console.log('key:', key, 'count:', count)
-          roomInfo[roomid] = count;
-          // console.log('roomInfo-item:', roomInfo);
         }
-        // console.log('roomInfo:', roomInfo);
+        // 通知自己有多少条未读消息
         socket.emit('count', roomInfo);
         
       });

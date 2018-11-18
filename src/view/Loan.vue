@@ -50,7 +50,6 @@
       if (!this.isLogin) {
         // 登录了,发送进入信息。
          if (this.userid) {
-          socket.emit('login', {name: this.userid});
           // 处理未读消息
           socket.on('count', (userCount) => {
             this.$store.commit('setUnread', userCount);
