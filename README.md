@@ -14,11 +14,15 @@
 - [x] 发送链接
 - [x] 发送表情
 - [x] 图片预览
+- [x] 消息未读
+- [x] 断线重连
 
 
 ## 启动项目
 
-环境: MongoDB/Node v7+
+Dev环境: MongoDB、Node 8.5.0+、Npm 5.3.0+
+
+Prod环境: Redis、MongoDB、Node 8.5.0+、Npm 5.3.0+
 
 ```
 npm install -----安装依赖

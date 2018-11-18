@@ -14,11 +14,15 @@
 - [x] send link
 - [x] send emjio
 - [x] preview picture
+- [x] Message not read
+- [x] Broken line reconnection
 
 
 ## Start
 
-Environment: MongoDB/Node v7+
+Dev Env: MongoDB、Node 8.5.0+、Npm 5.3.0+
+
+Prod Env: Redis、MongoDB、Node 8.5.0+、Npm 5.3.0+
 
 ```Shell
 npm install
