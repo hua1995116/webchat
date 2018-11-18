@@ -53,7 +53,7 @@
           // 处理未读消息
           socket.on('count', (userCount) => {
             this.$store.commit('setUnread', userCount);
-            // console.log(userCount);
+            console.log(userCount);
           })
           this.$store.commit('setLoginState', true);
         }

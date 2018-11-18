@@ -35,7 +35,7 @@ function websocket(server) {
           } else {
             const count = new Count({
               username,
-              roomInfo
+              roomInfo: +roomInfo 
             });
             count.save(function(err, res) {
               if(err) {
@@ -114,11 +114,11 @@ function websocket(server) {
           if(res) {
             // 数据库查数据， 若缓存中没有数据，更新缓存
             if(+count === 0) {
-              updateCache(key, res);
+              updateCache(key, res.roomInfo);
             }
             roomInfo[roomid] = res.roomInfo;
           } else {
-            roomInfo[roomid] = count;
+            roomInfo[roomid] = +count;
           }
         }
         // 通知自己有多少条未读消息
@@ -161,7 +161,7 @@ function websocket(server) {
         global.logger.info(`${name} 加入了 ${roomid}`);
       });
 
-      socket.on('logout', async (user) => {
+      socket.on('roomout', async (user) => {
         console.log('socket loginout!');
         const {name, roomid} = user;
         await handleLogoutRoom(roomid, name);
@@ -183,7 +183,7 @@ function websocket(server) {
             socket.emit('count', roomInfo);
             delete users[roomid][name];
             global.logger.info(`${name} 退出了 ${roomid}`);
-            io.to(roomid).emit('logout', users[roomid]);
+            io.to(roomid).emit('roomout', users[roomid]);
             socket.leave(roomid);
           }
         } catch(e) {

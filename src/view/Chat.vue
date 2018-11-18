@@ -138,7 +138,7 @@
       socket.on('room', function (obj) {
         that.$store.commit('setUsers', obj)
       })
-      socket.on('logout', function (obj) {
+      socket.on('roomout', function (obj) {
         that.$store.commit('setUsers', obj)
       })
       loading.show()
@@ -198,7 +198,7 @@
           name: this.userid,
           roomid: this.roomid
         }
-        socket.emit('logout', obj)
+        socket.emit('roomout', obj)
         this.$router.goBack()
         this.$store.commit('setTab', true)
       },
