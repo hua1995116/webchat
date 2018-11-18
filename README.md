@@ -44,7 +44,8 @@ npm run server
 
 ## 技术交流
 
-<img src="https://s3.qiufengh.com/pic/WechatIMG112.jpeg" width="400" />
+
+<img src="https://s3.qiufengh.com/pic/WechatIMG134.jpeg" width="400" />
 
 ## 技术栈
 
