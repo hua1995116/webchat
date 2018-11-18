@@ -1,6 +1,16 @@
 const xssFilters = require('xss-filters');
 const Count = require('../models/count');
 const Message = require('../models/message');
+let cache = {};
+
+if(process.env.NODE_ENV === 'production') {
+  cache = require('./RedisCache');
+  console.log('RedisCache!!!!');
+} else {
+  cache = require('./cache');
+  console.log('cache!!!!');
+}
+
 const {
   inrcCache,
   getCacheById,
@@ -10,7 +20,8 @@ const {
   updatehCache,
   gethCacheById,
   gethAllCache
-} = require('./RedisCache');
+} = cache;
+
 const roomList = ['room1', 'room2'];
 
 function websocket(server) {
