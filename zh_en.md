@@ -77,3 +77,11 @@ Website
 ## API
 
 <a href="./API.md">API</a>
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT)
+
+MIT License
+
+Copyright (c) 2018 蓝色的秋风
