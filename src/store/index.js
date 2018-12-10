@@ -28,10 +28,31 @@ const store = new Vuex.Store({
       infos: []
     },
     // 存放机器人开场白
-    robotmsg: [{
-      msg: 'Hi~有什么想知道的可以问我',
+    robotmsg: [
+    {
       username: ROBOT_NAME,
-      src: ROBOT_URL
+      src: ROBOT_URL,
+      msg: '如果微信群过期了,添加作者微信(添加时记得备注:项目交流)'
+    },
+    {
+      username: ROBOT_NAME,
+      src: ROBOT_URL,
+      img: "https://s3.qiufengh.com/webchat/webcaht-my.jpeg"
+    },
+    {
+      username: ROBOT_NAME,
+      src: ROBOT_URL,
+      msg: '期待你的加入'
+    },
+    {
+      username: ROBOT_NAME,
+      src: ROBOT_URL,
+      img: "https://s3.qiufengh.com/webchat/webchat-group.jpeg"
+    },
+    {
+      username: ROBOT_NAME,
+      src: ROBOT_URL,
+      msg: '如果还有什么想知道的可以问我'
     }],
     unRead: {
       room1: 0,
