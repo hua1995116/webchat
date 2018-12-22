@@ -1,0 +1,144 @@
+.clear {
+    margin-top: 10px;
+
+    .item {
+        max-width: 100%;
+        position: relative;
+        clear: both;
+        display: inline-block;
+        padding: 16px 40px 16px 20px;
+        margin: 10px 10px 20px 10px;
+        border-radius: 10px;
+        background-color: #fff;
+
+        .img {
+            max-width: 200px;
+        }
+
+        .name {
+            position: absolute;
+            top: -20px;
+            width: 280px;
+            height: 20px;
+            overflow: hidden;
+            -ms-text-overflow: ellipsis;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .msg {
+            word-break: break-all;
+        }
+
+        .time {
+            position: absolute;
+            top: -40px;
+            width: 200px;
+            height: 20px;
+            right: -70px;
+        }
+
+        .head-place {
+            display: block;
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 0;
+            background: #fff;
+            border-radius: 50px;
+            overflow: hidden;
+        }
+
+        .head {
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+        }
+
+        &:after {
+            position: absolute;
+            top: 15px;
+            content: '';
+            width: 0;
+            height: 0;
+        }
+    }
+}
+
+.left {
+    .item {
+        // animation: show-chat-even 0.25s 1 ease-in
+        float: left;
+        margin-left: 80px;
+        color: #313035;
+
+        &:after {
+            left: -15px;
+            border-top: 15px solid #fff;
+            border-left: 15px solid transparent;
+        }
+    }
+
+    .name {
+        text-align: left;
+        left: -70px;
+    }
+
+    .time {
+        text-align: left;
+    }
+
+    .head-place {
+        left: -70px;
+    }
+}
+
+.right {
+    .item {
+        // animation: show-chat-odd 0.25s 1 ease-in
+        float: right;
+        margin-right: 80px;
+        color: #fff;
+        background: #2196f3;
+
+        &:after {
+            right: -15px;
+            border-top: 15px solid #2196f3;
+            border-right: 15px solid transparent;
+        }
+    }
+
+    .name {
+        color: #313035;
+        text-align: right;
+        right: -70px;
+    }
+
+    .time {
+        text-align: right;
+    }
+
+    .head-place {
+        right: -70px;
+    }
+
+    @keyframes show-chat-odd {
+        0% {
+            margin-right: -480px;
+        }
+
+        100% {
+            margin-right: 0;
+        }
+    }
+
+    @keyframes show-chat-even {
+        0% {
+            margin-left: -480px;
+        }
+
+        100% {
+            margin-left: 0;
+        }
+    }
+}

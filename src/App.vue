@@ -15,35 +15,34 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  export default {
-    data () {
-      return {
-        bottomNav: 'recents'
-      }
-    },
-    methods: {
-      handleChange (val) {
-        this.bottomNav = val
-      }
-    },
-    computed: {
-      ...mapState([
-        'istab'
-      ])
+import { mapState } from "vuex";
+export default {
+  data() {
+    return {
+      bottomNav: "recents"
+    };
+  },
+  methods: {
+    handleChange(val) {
+      this.bottomNav = val;
     }
+  },
+  computed: {
+    ...mapState(["istab"])
   }
+};
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  #app
-    width: 100%
-    height: 100%
-    .app-bottom
-      position: fixed
-      bottom: 0
-      z-index: 102
-      width: 100%
+#app {
+  width: 100%;
+  height: 100%;
 
-
+  .app-bottom {
+    position: fixed;
+    bottom: 0;
+    z-index: 102;
+    width: 100%;
+  }
+}
 </style>
