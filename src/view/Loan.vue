@@ -31,72 +31,73 @@
 </template>
 
 <script>
-  import Confirm from '@components/Confirm';
-  import {mapState} from 'vuex';
-  import {ROBOT_URL, HOST_URL1, HOST_URL2} from '@const/index';
-  import socket from '../socket';
+import Confirm from "@components/Confirm";
+import { mapState } from "vuex";
+import { ROBOT_URL, HOST_URL1, HOST_URL2 } from "@const/index";
+import socket from "../socket";
 
-  export default {
-    data() {
-      return {
-        house1: HOST_URL1,
-        house2: HOST_URL2,
-        robot: ROBOT_URL
+export default {
+  data() {
+    return {
+      house1: HOST_URL1,
+      house2: HOST_URL2,
+      robot: ROBOT_URL
+    };
+  },
+  async mounted() {
+    this.$store.commit("setTab", true);
+    // 只全局监听一次
+    if (!this.isLogin) {
+      // 登录了,发送进入信息。
+      if (this.userid) {
+        // 处理未读消息
+        socket.on("count", userCount => {
+          this.$store.commit("setUnread", userCount);
+          console.log(userCount);
+        });
+        this.$store.commit("setLoginState", true);
       }
-    },
-    async mounted() {
-      this.$store.commit('setTab', true);
-      // 只全局监听一次
-      if (!this.isLogin) {
-        // 登录了,发送进入信息。
-         if (this.userid) {
-          // 处理未读消息
-          socket.on('count', (userCount) => {
-            this.$store.commit('setUnread', userCount);
-            console.log(userCount);
-          })
-          this.$store.commit('setLoginState', true);
-        }
-      }
-    },
-    methods: {
-      async chatwindow(roomID) {
-        const uerId = this.userid;
-        if (!uerId) {
-          const res = await Confirm({
-            title: '提示',
-            content: '聊天请先登录，但是你可以查看聊天记录哦~'
-          });
-          if (res === 'submit') {
-            this.$router.push({ path: 'login' });
-          }
-          return;
-        }
-        this.$store.commit('setTab', false);
-        this.$router.push({path: '/chat', query: {roomId: roomID}});
-      },
-      chatRobot() {
-        this.$store.commit('setTab', false);
-        this.$router.push({path: '/robot'});
-      }
-    },
-    computed: {
-      ...mapState({
-        userid: state => state.userInfo.userid,
-        src: state => state.userInfo.src,
-        isLogin: state => state.isLogin,
-        unRead1: state => state.unRead.room1,
-        unRead2: state => state.unRead.room2
-      })
     }
+  },
+  methods: {
+    async chatwindow(roomID) {
+      const uerId = this.userid;
+      if (!uerId) {
+        const res = await Confirm({
+          title: "提示",
+          content: "聊天请先登录，但是你可以查看聊天记录哦~"
+        });
+        if (res === "submit") {
+          this.$router.push({ path: "login" });
+        }
+        return;
+      }
+      this.$store.commit("setTab", false);
+      this.$router.push({ path: "/chat", query: { roomId: roomID } });
+    },
+    chatRobot() {
+      this.$store.commit("setTab", false);
+      this.$router.push({ path: "/robot" });
+    }
+  },
+  computed: {
+    ...mapState({
+      userid: state => state.userInfo.userid,
+      src: state => state.userInfo.src,
+      isLogin: state => state.isLogin,
+      unRead1: state => state.unRead.room1,
+      unRead2: state => state.unRead.room2
+    })
   }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" rel="stylesheet/stylus">
-.avatar 
+.avatar {
   position: relative;
-  .tip
+
+  .tip {
     position: absolute;
     right: -5px;
     top: -8px;
@@ -107,7 +108,12 @@
     background: #ff2a2a;
     color: #fff;
     font-size: 12px;
-  .mu-avatar 
-    img
+  }
+
+  .mu-avatar {
+    img {
       border-radius: 5px;
+    }
+  }
+}
 </style>
