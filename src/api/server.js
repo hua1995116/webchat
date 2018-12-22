@@ -20,7 +20,10 @@ const Service = {
 
   postUploadAvatar: data => Axios.post('/file/avatar', data, {
     headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-  })
+  }),
+
+  // 请求公告
+  getNotice: () => Axios.get('https://s3.qiufengh.com/config/notice-config.js')
 }
 
 export default Service

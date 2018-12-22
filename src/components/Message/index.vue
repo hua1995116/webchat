@@ -74,7 +74,7 @@
             padding: 16px 40px 16px 20px
             margin: 10px 10px 20px 10px
             border-radius: 10px
-            background-color: rgba(25, 147, 147, 0.2)
+            background-color: #fff
             .img
                 max-width: 200px
             .name
@@ -120,10 +120,10 @@
             // animation: show-chat-even 0.25s 1 ease-in
             float: left
             margin-left: 80px
-            color: #0EC879
+            color: #313035
             &:after
                 left: -15px
-                border-top: 15px solid rgba(25, 147, 147, 0.2)
+                border-top: 15px solid #fff
                 border-left: 15px solid transparent
         .name
             text-align: left
@@ -138,12 +138,14 @@
             // animation: show-chat-odd 0.25s 1 ease-in
             float: right
             margin-right: 80px
-            color: #0AD5C1
+            color: #fff
+            background: #2196f3
             &:after
                 right: -15px
-                border-top: 15px solid rgba(25, 147, 147, 0.2)
+                border-top: 15px solid #2196f3
                 border-right: 15px solid transparent
         .name
+            color: #313035
             text-align: right
             right: -70px;
         .time
