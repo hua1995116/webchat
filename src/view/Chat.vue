@@ -19,7 +19,7 @@
           <mu-icon-button icon="people" slot="right" @click="openSimpleDialog"/>
         </mu-appbar>
       </div>
-      <div class="notice" :class="[noticeBar ? 'notice-hidden' : '']">
+      <div class="notice" v-if="noticeList.length > 0" :class="[noticeBar ? 'notice-hidden' : '']">
         <div class="notice-container">
           <div class="notice-li" v-for="(item, key) in noticeList" :key="key">
             <a :href="item.href">{{key + 1}}. {{item.title}}</a>
