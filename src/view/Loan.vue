@@ -21,7 +21,7 @@
       <mu-divider/>
       <mu-list>
         <mu-sub-header>客服</mu-sub-header>
-        <mu-list-item title="客服大白(有问题问我)" @click="chatRobot()">
+        <mu-list-item title="客服大白(微信群，作者联系方式，找我)" @click="chatRobot()">
           <mu-avatar :src="robot" slot="leftAvatar"/>
           <mu-icon value="chat_bubble" slot="right"/>
         </mu-list-item>

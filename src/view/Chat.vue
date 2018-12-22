@@ -1,15 +1,6 @@
 <template>
   <div>
     <div class="container">
-      <div class="title">
-        <mu-appbar title="Title">
-          <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
-          <div class="center">
-            聊天({{Object.keys(getUsers).length}})
-          </div>
-          <mu-icon-button icon="people" slot="right" @click="openSimpleDialog"/>
-        </mu-appbar>
-      </div>
       <mu-dialog width="360" :open.sync="openSimple">
         <div class="all-chat">
           <div slot="title">在线人员</div>
@@ -19,8 +10,26 @@
         </div>
         <mu-button slot="actions" flat color="primary" @click="closeSimpleDialog">关闭</mu-button>
       </mu-dialog>
+      <div class="title">
+        <mu-appbar title="Title">
+          <mu-icon-button icon="chevron_left" slot="left" @click="goback"/>
+          <div class="center">
+            聊天({{Object.keys(getUsers).length}})
+          </div>
+          <mu-icon-button icon="people" slot="right" @click="openSimpleDialog"/>
+        </mu-appbar>
+      </div>
+      <div class="notice" v-if="noticeList.length > 0" :class="[noticeBar ? 'notice-hidden' : '']">
+        <div class="notice-container">
+          <div class="notice-li" v-for="(item, key) in noticeList" :key="key">
+            <a :href="item.href">{{key + 1}}. {{item.title}}</a>
+          </div>
+        </div>
+        <div class="notice-tool-bar" @click="handleNotice"> 
+          {{noticeBar ? '显示通知' : '关闭通知'}}
+        </div>
+      </div>
       <div class="chat-inner">
-        
         <div class="chat-container" v-if="isLoadingAchieve">
           <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
           <div v-if="getInfos.length > 0" class="chat-top">到顶啦~</div>
@@ -95,14 +104,18 @@
   import {inHTMLData} from 'xss-filters-es6';
   import socket from '../socket';
   import emoji from '@utils/emoji';
+  import {setItem, getItem} from '@utils/localStorage';
   import {queryString} from '@utils/queryString';
   import Message from '@components/Message';
   import loading from '@components/loading/loading';
   import Alert from '@components/Alert';
   import debounce from 'lodash/debounce';
+  import url from '@api/server';
 
   export default{
     data() {
+      const notice = getItem('notice') || {};
+      const {noticeBar, noticeVersion} = notice;
       return {
         roomid: '',
         isLoadingAchieve: false,
@@ -110,10 +123,13 @@
         chatValue: '',
         emoji: emoji,
         current: 1,
-        openSimple: false
+        openSimple: false,
+        noticeBar: !!noticeBar,
+        noticeList: [],
+        noticeVersion: noticeVersion || '20181222'
       }
     },
-    created() {
+    async created() {
       const roomId = queryString(window.location.href, 'roomId')
       this.roomid = roomId
       if (!roomId) {
@@ -123,6 +139,12 @@
         // 防止未登录
         this.$router.push({path: '/login'})
       }
+      const res = await url.getNotice();
+      this.noticeList = res.data.noticeList;
+      if (res.data.version !== res.data.version) {
+        this.noticeBar = false;
+      }
+      this.noticeVersion = res.data.version;
     },
     mounted() {
       this.container = document.querySelector('.chat-inner')
@@ -176,6 +198,13 @@
       });
     },
     methods: {
+      handleNotice() {
+        this.noticeBar = !this.noticeBar;
+        setItem('notice', {
+          noticeBar: this.noticeBar,
+          noticeVersion: this.noticeVersion
+        })
+      },
       openSimpleDialog () {
         this.openSimple = true;
       },
@@ -290,129 +319,4 @@
   }
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus" scoped>
-  .container
-    width: 100%
-    height: 100%
-    overflow: hidden
-    background: #ffffff
-    -webkit-overflow-scrolling: touch
-    .chat-inner 
-      position: absolute
-      width: 100%
-      overflow-y: scroll
-      overflow-x: hidden
-      top: 56px
-      bottom: 80px
-    .title
-      position: fixed
-      top: 0
-      left: 0
-      width: 100%
-      z-index: 1
-      .center
-        -webkit-box-flex: 1
-        -webkit-flex: 1
-        -ms-flex: 1
-        flex: 1
-        padding-left: 8px
-        padding-right: 8px
-        white-space: nowrap
-        text-overflow: ellipsis
-        overflow: hidden
-        font-size: 20px
-        font-weight: 400
-        line-height: 56px
-        text-align: center
-    .chat-container
-      overflow: hidden
-      .chat-top
-        text-align: center
-        margin: 5px 0 5px
-        color: #D1CFD2
-      .chat-no-people
-        width: 100%
-        height: 300px;
-        line-height: 300px;
-        text-align: center
-        color: #D1CFD2
-    .bottom
-      position: fixed
-      width: 100%
-      height: 80px
-      bottom: 0
-      left: 0
-      z-index: 1
-      border-top: 1px solid #ddd;
-      background: #f7f6fb
-      .chat
-        width: 100%
-        display: flex
-        .input
-          flex: 1
-          padding: 0 4px 4px 4px
-          input
-            width: 100%
-            height: 42px
-            box-sizing: border-box
-            border: 1px solid #e8e7ea
-            border-radius: 3px
-            color: #333333
-            font-size: 19px
-            padding-left: 5px
-          .mu-text-field
-            width: 100%
-        .demo-raised-button
-          margin-right: 8px
-          min-width: 80px
-          width: 80px
-          height: 40px
-          background: #eeeff3
-          color: #8c8c96
-      .functions
-        width: 100%
-        .fun-li
-          width: 40px
-          height: 30px
-          display: inline-block
-          position: relative
-          color: #828187
-          text-align: center
-          .iconfont
-            font-size: 20px
-        .emoji-content 
-          position: absolute;
-          bottom: 30px;
-          left: -42px;
-          width: 375px;
-          height: 210px;
-          border-top: 1px solid #f3f3f3;
-          overflow: hidden;
-          background-color: #fff;
-          .emoji-container 
-            width: 10000px;
-          .emoji-tabs 
-            overflow: auto;
-            .emoji-block
-              width: 1170px;
-              height: 200px;
-              float: left;
-              span 
-                display: inline-block;
-                cursor: pointer;
-                font-size: 26px;
-                min-width: 48px;
-                line-height 39px;
-                text-align: center;
-                list-style: none;
-
-.all-chat
-  .online
-    display: inline-block
-    margin: 5px
-    img
-      width: 40px
-      height: 40px
-      border-radius: 100%   
-
-</style>
+<style lang="stylus" rel="stylesheet/stylus" src="./Chat.styl" scoped></style>
