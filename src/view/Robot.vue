@@ -11,11 +11,11 @@
     <div class="chat-inner">
       <div v-for="(obj, index) in getRobotMsg" :key="index" class="">
         <Message
-              :is-self="obj.username === hoster" 
-              :name="obj.username" 
-              :head="obj.src" 
+              :is-self="obj.username === hoster"
+              :name="obj.username"
+              :head="obj.src"
               :msg="obj.msg"
-              :img="obj.img" 
+              :img="obj.img"
               :mytime="obj.time"
             ></Message>
       </div>
@@ -32,6 +32,7 @@
 
 <script type="text/ecmascript-6">
 import { mapGetters, mapState } from "vuex";
+import Alert from '@components/Alert';
 import Message from "@components/Message";
 import { HOSTER_URL, HOSTER_NAME } from "@const/index";
 
@@ -52,6 +53,12 @@ export default {
     },
     sendmessage() {
       const info = document.getElementById("msg").value;
+      if (info === '') {
+        Alert({
+          content: '内容不能为空'
+        })
+        return;
+      }
       const id = this.userid;
       const data = {
         info,
