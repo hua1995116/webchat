@@ -49,7 +49,7 @@ npm run server
 ## 技术交流
 
 
-<img src="https://s3.qiufengh.com/pic/WechatIMG134.jpeg" width="300" />
+<img src="https://s3.qiufengh.com/webchat/webchat-group.jpeg?imageView2/2/w/360" width="300" />
 
 如果群过期加微信，拉你进群。
 
