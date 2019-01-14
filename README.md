@@ -36,7 +36,7 @@ npm run dev -----运行
 ```
 npm run build 
 
-npm run server
+npm run prod
 
 ```
 
