@@ -22,7 +22,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import VueCropper from 'vue-cropper';
+  import {VueCropper} from 'vue-cropper';
   import { getItem } from '@utils/localStorage';
   import Alert from '@components/Alert';
   import Header from '@components/Header';
