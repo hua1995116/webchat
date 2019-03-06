@@ -25,23 +25,25 @@
             <a :href="item.href">{{key + 1}}. {{item.title}}</a>
           </div>
         </div>
-        <div class="notice-tool-bar" @click="handleNotice"> 
+        <div class="notice-tool-bar" @click="handleNotice">
           {{noticeBar ? '显示通知' : '关闭通知'}}
         </div>
       </div>
       <div class="chat-inner">
         <div class="chat-container" v-if="isLoadingAchieve">
           <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-          <div v-if="getInfos.length > 0" class="chat-top">到顶啦~</div>
-          <Message 
+          <!-- <div v-if="getInfos.length > 0" class="chat-top">到顶啦~</div> -->
+          <Message
             v-for="obj in getInfos" :key="obj._id"
-            :is-self="obj.username === userid" 
-            :name="obj.username" 
-            :head="obj.src" 
+            :is-self="obj.username === userid"
+            :name="obj.username"
+            :head="obj.src"
             :msg="obj.msg"
-            :img="obj.img" 
+            :img="obj.img"
             :mytime="obj.time"
             :container="container"
+            :isNeedScroll="isNeedScroll"
+            :firstNode="firstNode"
             ></Message>
           <div class="clear"></div>
         </div>
@@ -50,7 +52,7 @@
         <div class="functions">
           <div class="fun-li" @click="imgupload">
             <i class="icon iconfont icon-camera"></i>
-          </div> 
+          </div>
           <div class="fun-li emoji">
             <i class="icon iconfont icon-emoji"></i>
             <div class="emoji-content" v-show="getEmoji">
@@ -111,6 +113,7 @@
   import Alert from '@components/Alert';
   import debounce from 'lodash/debounce';
   import url from '@api/server';
+import { setTimeout } from 'timers';
 
   export default{
     data() {
@@ -126,7 +129,9 @@
         openSimple: false,
         noticeBar: !!noticeBar,
         noticeList: [],
-        noticeVersion: noticeVersion || '20181222'
+        noticeVersion: noticeVersion || '20181222',
+        isNeedScroll: true,
+        firstNode: []
       }
     },
     async created() {
@@ -178,14 +183,18 @@
       }, 500);
 
       this.container.addEventListener('scroll', debounce(async (e) => {
-        // console.log(e.target.scrollTop, e.target.scrollHeight);
-        if (e.target.scrollTop === 0) {
+        if (e.target.scrollTop >= 0 && e.target.scrollTop < 10) {
           this.current++
           const data = {
             current: +this.current,
             roomid: this.roomid
           }
+          this.isNeedScroll = false;
           await this.$store.dispatch('getAllMessHistory', data);
+          setTimeout(() => {
+            this.firstNode = [document.querySelector('.chat-container .left')];
+            this.isNeedScroll = true;
+          }, 0);
         }
       }, 100))
 
