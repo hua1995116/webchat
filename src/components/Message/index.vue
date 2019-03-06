@@ -64,16 +64,7 @@ export default {
     }
   },
   mounted() {
-    if (this.isNeedScroll) {
-      if (this.firstNode.length === 0) {
-        this.firstNode.push(this.$refs.msg);
-      }
-      this.$refs.msg.scrollIntoView();
-    } else {
-      if (this.firstNode.length > 0) {
-        this.firstNode[0].scrollIntoView();
-      }
-    }
+    this.$refs.msg.scrollIntoView();
   }
 };
 </script>

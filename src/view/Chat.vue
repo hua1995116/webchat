@@ -42,8 +42,6 @@
             :img="obj.img"
             :mytime="obj.time"
             :container="container"
-            :isNeedScroll="isNeedScroll"
-            :firstNode="firstNode"
             ></Message>
           <div class="clear"></div>
         </div>
@@ -129,9 +127,7 @@ import { setTimeout } from 'timers';
         openSimple: false,
         noticeBar: !!noticeBar,
         noticeList: [],
-        noticeVersion: noticeVersion || '20181222',
-        isNeedScroll: true,
-        firstNode: []
+        noticeVersion: noticeVersion || '20181222'
       }
     },
     async created() {
@@ -189,12 +185,7 @@ import { setTimeout } from 'timers';
             current: +this.current,
             roomid: this.roomid
           }
-          this.isNeedScroll = false;
           await this.$store.dispatch('getAllMessHistory', data);
-          setTimeout(() => {
-            this.firstNode = [document.querySelector('.chat-container .left')];
-            this.isNeedScroll = true;
-          }, 0);
         }
       }, 100))
 
