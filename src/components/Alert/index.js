@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import './index.css'
+import Vue from 'vue';
+import './index.css';
 
-const root = window.document.body
+const root = window.document.body;
 
 export default function Alert(config) {
   const wrap = document.createElement('div');
@@ -12,10 +12,10 @@ export default function Alert(config) {
   wrap.style.left = '0';
   wrap.style.top = '0';
 
-  root.appendChild(wrap)
-  wrap.appendChild(div)
+  root.appendChild(wrap);
+  wrap.appendChild(div);
 
-  config = config || {}
+  config = config || {};
 
   return new Promise(resolve => new Vue({
     el: div,
@@ -27,8 +27,8 @@ export default function Alert(config) {
     },
     methods: {
       close() {
-        root.removeChild(wrap)
-        resolve(this)
+        root.removeChild(wrap);
+        resolve(this);
       }
     },
     template: `
@@ -42,5 +42,5 @@ export default function Alert(config) {
         </div>
       </div>
     `
-  }))
+  }));
 }

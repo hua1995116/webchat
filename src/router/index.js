@@ -11,10 +11,10 @@ import BaseTransition from '../BaseTransition.vue';
 import loading from '../components/loading/loading';
 
 Router.prototype.goBack = function () {
-  this.isBack = true
-  window.history.go(-1)
-}
-Vue.use(Router)
+  this.isBack = true;
+  window.history.go(-1);
+};
+Vue.use(Router);
 
 const router = new Router({
   routes: [
@@ -61,15 +61,15 @@ const router = new Router({
       component: Login
     }
   ]
-})
+});
 
 router.beforeEach((to, from, next) => {
-  loading.show()
-  next()
-})
+  loading.show();
+  next();
+});
 
 router.afterEach(route => {
-  loading.hide()
-})
+  loading.hide();
+});
 
-export default router
+export default router;

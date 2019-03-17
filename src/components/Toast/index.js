@@ -1,16 +1,16 @@
-import Vue from 'vue'
-import './index.css'
+import Vue from 'vue';
+import './index.css';
 
-const root = window.document.body
+const root = window.document.body;
 
 export default function Toast(config) {
-  const wrap = document.createElement('div')
-  const div = document.createElement('div')
+  const wrap = document.createElement('div');
+  const div = document.createElement('div');
 
-  root.appendChild(wrap)
-  wrap.appendChild(div)
+  root.appendChild(wrap);
+  wrap.appendChild(div);
 
-  config = config || {}
+  config = config || {};
 
   return new Promise(resolve => new Vue({
     el: div,
@@ -23,17 +23,17 @@ export default function Toast(config) {
     },
     methods: {
       close() {
-        root.removeChild(wrap)
-        resolve(this)
+        root.removeChild(wrap);
+        resolve(this);
       }
     },
     mounted() {
       setTimeout(() => {
-        this.toast = true
-      }, this.timeout)
+        this.toast = true;
+      }, this.timeout);
       setTimeout(() => {
-        this.close()
-      }, this.timeout + 1000)
+        this.close();
+      }, this.timeout + 1000);
     },
     template: `
       <div class="wind-toast" :class="{'opacity0': toast}">
@@ -42,5 +42,5 @@ export default function Toast(config) {
         </div>
       </div>
     `
-  }))
+  }));
 }

@@ -1,22 +1,22 @@
-import Vue from 'vue'
-import '../Alert/index.css'
-import './index.css'
+import Vue from 'vue';
+import '../Alert/index.css';
+import './index.css';
 
-const root = window.document.body
+const root = window.document.body;
 
 export default function Alert(config) {
-  const wrap = document.createElement('div')
-  const div = document.createElement('div')
+  const wrap = document.createElement('div');
+  const div = document.createElement('div');
   wrap.style.position = 'absolute';
   wrap.style.width = '100%';
   wrap.style.height = '100%';
   wrap.style.left = '0';
   wrap.style.top = '0';
 
-  root.appendChild(wrap)
-  wrap.appendChild(div)
+  root.appendChild(wrap);
+  wrap.appendChild(div);
 
-  config = config || {}
+  config = config || {};
 
   return new Promise(resolve => new Vue({
     el: div,
@@ -28,12 +28,12 @@ export default function Alert(config) {
     },
     methods: {
       submit() {
-        root.removeChild(wrap)
-        resolve('submit')
+        root.removeChild(wrap);
+        resolve('submit');
       },
       close() {
-        root.removeChild(wrap)
-        resolve('close')
+        root.removeChild(wrap);
+        resolve('close');
       }
     },
     template: `
@@ -49,5 +49,5 @@ export default function Alert(config) {
         </div>
       </div>
     `
-  }))
+  }));
 }

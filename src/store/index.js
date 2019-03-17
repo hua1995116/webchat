@@ -91,10 +91,10 @@ const store = new Vuex.Store({
       state.emojiShow = data;
     },
     setTab(state, data) {
-      state.istab = data
+      state.istab = data;
     },
     setSvgModal(state, data) {
-      state.svgmodal = data
+      state.svgmodal = data;
     },
     addRoomDetailInfos(state, data) {
       state.roomdetail.infos.push(...data);
@@ -104,19 +104,19 @@ const store = new Vuex.Store({
       state.roomdetail.infos = data.concat(list);
     },
     setRoomDetailInfos(state) {
-      state.roomdetail.infos = []
+      state.roomdetail.infos = [];
     },
     setUsers(state, data) {
-      state.roomdetail.users = data
+      state.roomdetail.users = data;
     },
     setAllMessHistory(state, data) {
-      state.messhistory.allmessage = data
+      state.messhistory.allmessage = data;
     },
     setMessHistoryInfos(state, data) {
-      state.messhistory.infos = data
+      state.messhistory.infos = data;
     },
     setRobotMsg(state, data) {
-      state.robotmsg.push(data)
+      state.robotmsg.push(data);
     }
   },
   actions: {
@@ -125,41 +125,41 @@ const store = new Vuex.Store({
       return res.data;
     },
     async uploadImg({commit}, data) {
-      const res = await url.postUploadFile(data)
+      const res = await url.postUploadFile(data);
       if (res) {
         if (res.data.errno === 0) {
-          console.log('上传成功')
+          console.log('上传成功');
         }
       }
     },
     async registerSubmit({commit}, data) {
-      const res = await url.RegisterUser(data)
+      const res = await url.RegisterUser(data);
       if (res.data.errno === 0) {
         return {
           status: 'success',
           data: res.data
-        }
+        };
       }
       return {
         status: 'fail',
         data: res.data
-      }
+      };
     },
     async loginSubmit({commit}, data) {
-      const res = await url.loginUser(data)
+      const res = await url.loginUser(data);
       if (res.data.errno === 0) {
         return {
           status: 'success',
           data: res.data
-        }
+        };
       }
       return {
         status: 'fail',
         data: res.data
-      }
+      };
     },
     async getAllMessHistory({commit}, data) {
-      const res = await url.RoomHistoryAll(data)
+      const res = await url.RoomHistoryAll(data);
       if (res.data.data.errno === 0) {
         commit('addRoomDefatilInfosHis', res.data.data.data);
       }
@@ -167,7 +167,7 @@ const store = new Vuex.Store({
     async getRobatMess({commit}, data) {
       const username = ROBOT_NAME;
       const src = ROBOT_URL;
-      const res = await url.getRobotMessage(data)
+      const res = await url.getRobotMessage(data);
       if (res) {
         const robotdata = JSON.parse(res.data.data);
         let msg = '';
@@ -175,13 +175,13 @@ const store = new Vuex.Store({
         if (robotdata.code === 100000) {
           msg = robotdata.text;
         } else if (robotdata.code === 200000) {
-          msg = robotdata.text + robotdata.url
+          msg = robotdata.text + robotdata.url;
         } else {
-          msg = '暂不支持此类对话'
+          msg = '暂不支持此类对话';
         }
         commit('setRobotMsg', {msg, username, src});
       }
     }
   }
-})
-export default store
+});
+export default store;

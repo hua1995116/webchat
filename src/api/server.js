@@ -1,4 +1,4 @@
-import Axios from './axios'
+import Axios from './axios';
 
 const Service = {
   // 登录接口
@@ -24,7 +24,7 @@ const Service = {
 
   // 请求公告
   getNotice: () => Axios.get('https://s3.qiufengh.com/config/notice-config.js')
-}
+};
 
-export default Service
+export default Service;
 

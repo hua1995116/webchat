@@ -51,15 +51,15 @@ socket.on('connect', () => {
       name: userId,
       src: store.state.userInfo.src,
       roomid: roomId
-    }
+    };
     // console.log(obj);
     socket.emit('room', obj);
   }
-})
+});
 
 socket.on('disconnect', () => {
   console.log('disconnect');
-})
+});
 
 socket.on('message', function (obj) {
   store.commit('addRoomDetailInfos', [obj]);
@@ -71,7 +71,7 @@ socket.on('message', function (obj) {
       popNotice(obj);
     });
   }
-})
+});
 
 document.addEventListener('touchstart', (e) => {
   if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
@@ -79,7 +79,7 @@ document.addEventListener('touchstart', (e) => {
   } else {
     store.commit('setEmoji', false);
   }
-})
+});
 
 document.addEventListener('click', (e) => {
   if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
@@ -87,7 +87,7 @@ document.addEventListener('click', (e) => {
   } else {
     store.commit('setEmoji', false);
   }
-})
+});
 
 /* eslint-disable no-new */
 new Vue({
@@ -96,4 +96,4 @@ new Vue({
   store,
   template: '<App/>',
   components: {App}
-})
+});

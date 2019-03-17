@@ -100,7 +100,7 @@
 </template>
 
 <script type="text/ecmascript-6" scoped>
-  import {mapGetters, mapState} from 'vuex'
+  import {mapGetters, mapState} from 'vuex';
   import {inHTMLData} from 'xss-filters-es6';
   import socket from '../socket';
   import emoji from '@utils/emoji';
@@ -128,17 +128,17 @@ import { setTimeout } from 'timers';
         noticeBar: !!noticeBar,
         noticeList: [],
         noticeVersion: noticeVersion || '20181222'
-      }
+      };
     },
     async created() {
-      const roomId = queryString(window.location.href, 'roomId')
-      this.roomid = roomId
+      const roomId = queryString(window.location.href, 'roomId');
+      this.roomid = roomId;
       if (!roomId) {
-        this.$router.push({path: '/'})
+        this.$router.push({path: '/'});
       }
       if (!this.userid) {
         // 防止未登录
-        this.$router.push({path: '/login'})
+        this.$router.push({path: '/login'});
       }
       const res = await url.getNotice();
       this.noticeList = res.data.noticeList;
@@ -148,46 +148,46 @@ import { setTimeout } from 'timers';
       this.noticeVersion = res.data.version;
     },
     mounted() {
-      this.container = document.querySelector('.chat-inner')
+      this.container = document.querySelector('.chat-inner');
       // socket内部，this指针指向问题
-      const that = this
-      this.$store.commit('setRoomDetailInfos')
+      const that = this;
+      this.$store.commit('setRoomDetailInfos');
       const obj = {
         name: this.userid,
         src: this.src,
         roomid: this.roomid
-      }
-      socket.emit('room', obj)
+      };
+      socket.emit('room', obj);
       socket.on('room', function (obj) {
-        that.$store.commit('setUsers', obj)
-      })
+        that.$store.commit('setUsers', obj);
+      });
       socket.on('roomout', function (obj) {
-        that.$store.commit('setUsers', obj)
-      })
-      loading.show()
+        that.$store.commit('setUsers', obj);
+      });
+      loading.show();
       setTimeout(async () => {
         const data = {
           current: +this.current,
           roomid: this.roomid
-        }
-        await this.$store.dispatch('getAllMessHistory', data)
-        loading.hide()
-        this.isLoadingAchieve = true
+        };
+        await this.$store.dispatch('getAllMessHistory', data);
+        loading.hide();
+        this.isLoadingAchieve = true;
         this.$nextTick(() => {
-          this.container.scrollTop = 10000
-        })
+          this.container.scrollTop = 10000;
+        });
       }, 500);
 
       this.container.addEventListener('scroll', debounce(async (e) => {
         if (e.target.scrollTop >= 0 && e.target.scrollTop < 10) {
-          this.current++
+          this.current++;
           const data = {
             current: +this.current,
             roomid: this.roomid
-          }
+          };
           await this.$store.dispatch('getAllMessHistory', data);
         }
-      }, 100))
+      }, 100));
 
       this.$refs.emoji.addEventListener('click', function(e) {
         var target = e.target || e.srcElement;
@@ -203,7 +203,7 @@ import { setTimeout } from 'timers';
         setItem('notice', {
           noticeBar: this.noticeBar,
           noticeVersion: this.noticeVersion
-        })
+        });
       },
       openSimpleDialog () {
         this.openSimple = true;
@@ -220,32 +220,32 @@ import { setTimeout } from 'timers';
         Alert({
           title: '请我喝杯奶茶',
           html: '<div><img style="width: 200px" src="//s3.qiufengh.com/money/WechatIMG64.jpeg" /></div>'
-        })
+        });
       },
       goback () {
         const obj = {
           name: this.userid,
           roomid: this.roomid
-        }
-        socket.emit('roomout', obj)
-        this.$router.goBack()
-        this.$store.commit('setTab', true)
+        };
+        socket.emit('roomout', obj);
+        this.$router.goBack();
+        this.$store.commit('setTab', true);
       },
       setLog() {
         // 版本更新日志
       },
       fileup() {
-        const that = this
-        const file1 = document.getElementById('inputFile').files[0]
+        const that = this;
+        const file1 = document.getElementById('inputFile').files[0];
         if (file1) {
-          const formdata = new window.FormData()
-          formdata.append('file', file1)
-          formdata.append('username', this.userid)
-          formdata.append('src', this.src)
-          formdata.append('roomid', that.roomid)
-          formdata.append('time', new Date())
-          this.$store.dispatch('uploadImg', formdata)
-          const fr = new window.FileReader()
+          const formdata = new window.FormData();
+          formdata.append('file', file1);
+          formdata.append('username', this.userid);
+          formdata.append('src', this.src);
+          formdata.append('roomid', that.roomid);
+          formdata.append('time', new Date());
+          this.$store.dispatch('uploadImg', formdata);
+          const fr = new window.FileReader();
           fr.onload = function () {
             const obj = {
               username: that.userid,
@@ -254,20 +254,20 @@ import { setTimeout } from 'timers';
               msg: '',
               roomid: that.roomid,
               time: new Date()
-            }
-            socket.emit('message', obj)
-          }
-          fr.readAsDataURL(file1)
+            };
+            socket.emit('message', obj);
+          };
+          fr.readAsDataURL(file1);
           this.$nextTick(() => {
-            this.container.scrollTop = 10000
-          })
+            this.container.scrollTop = 10000;
+          });
         } else {
-          console.log('必须有文件')
+          console.log('必须有文件');
         }
       },
       imgupload() {
-        const file = document.getElementById('inputFile')
-        file.click()
+        const file = document.getElementById('inputFile');
+        file.click();
       },
       submess() {
         // 判断发送信息是否为空
@@ -275,8 +275,8 @@ import { setTimeout } from 'timers';
           if (this.chatValue.length > 200) {
             Alert({
               content: '请输入100字以内'
-            })
-            return
+            });
+            return;
           }
           const msg = inHTMLData(this.chatValue); // 防止xss
 
@@ -287,14 +287,14 @@ import { setTimeout } from 'timers';
             msg,
             roomid: this.roomid,
             time: new Date()
-          }
+          };
           // 传递消息信息
-          socket.emit('message', obj)
-          this.chatValue = ''
+          socket.emit('message', obj);
+          this.chatValue = '';
         } else {
           Alert({
             content: '内容不能为空'
-          })
+          });
         }
       }
     },
@@ -316,7 +316,7 @@ import { setTimeout } from 'timers';
     components: {
       Message
     }
-  }
+  };
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" src="./Chat.styl" scoped></style>

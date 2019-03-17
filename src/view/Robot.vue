@@ -56,7 +56,7 @@ export default {
       if (info === '') {
         Alert({
           content: '内容不能为空'
-        })
+        });
         return;
       }
       const id = this.userid;

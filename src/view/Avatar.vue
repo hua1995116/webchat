@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapState} from 'vuex';
   import {VueCropper} from 'vue-cropper';
   import { getItem } from '@utils/localStorage';
   import Alert from '@components/Alert';
@@ -74,9 +74,9 @@
           } else {
             Alert({
               content: '上传失败'
-            })
+            });
           }
-        })
+        });
       },
       async handleSubmit() {
         const res = await Confirm({
@@ -96,14 +96,14 @@
         if (!/\.(jpg|jpeg|png|webp|GIF|JPG|PNG)$/.test(e.target.value)) {
           Alert({
             content: '图片类型必须是jpeg,jpg,png中的一种!'
-          })
+          });
           return false;
         }
 
         if (file.size > 3 * 1024 * 1024) {
           Alert({
             content: '图片大小必须小于3M!'
-          })
+          });
           return false;
         }
 
@@ -120,7 +120,7 @@
           if (num === 1) {
             this.option.img = data;
           }
-        }
+        };
         reader.readAsArrayBuffer(file);
       }
     },
@@ -130,7 +130,7 @@
         src: state => state.userInfo.src
       })
     }
-  }
+  };
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
   .wrapper {

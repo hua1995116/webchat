@@ -1,15 +1,15 @@
-import Vue from 'vue'
-import './index.css'
-import Vivus from 'vivus'
+import Vue from 'vue';
+import './index.css';
+import Vivus from 'vivus';
 
-const root = window.document.body
+const root = window.document.body;
 
 export default function svg () {
-  const wrap = window.document.createElement('div')
-  const div = window.document.createElement('div')
+  const wrap = window.document.createElement('div');
+  const div = window.document.createElement('div');
 
-  root.appendChild(wrap)
-  wrap.appendChild(div)
+  root.appendChild(wrap);
+  wrap.appendChild(div);
 
   return new Vue({
     el: div,
@@ -17,16 +17,16 @@ export default function svg () {
       timer: null
     },
     clear() {
-      clearInterval(this.timer)
-      root.removeChild(wrap)
+      clearInterval(this.timer);
+      root.removeChild(wrap);
     },
     mounted() {
-      const vivus = new Vivus('my-svg')
+      const vivus = new Vivus('my-svg');
       this.timer = setInterval(function () {
         vivus.stop()
           .reset()
-          .play(2)
-      }, 5000)
+          .play(2);
+      }, 5000);
     },
     template: `
       <div class="svg">
@@ -75,7 +75,7 @@ export default function svg () {
             </svg>
         </div>
     `
-  })
+  });
 }
 
 
