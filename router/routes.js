@@ -104,9 +104,9 @@ module.exports = (app) => {
   app.post('/file/uploadimg', upload.single('file'),  async (req, res, next) => {
     const file = req.file;
     if(file) {
-        
+
         const {mimetype, filename, size, path: localPath} = file;
-        
+
         const {username, roomid, time, src} = req.body;
 
         const staticUrl = path.join('./static_temp', filename);
@@ -129,7 +129,7 @@ module.exports = (app) => {
           rmDirFiles('./static_temp');
           img = path.join(urlPath, filename);
         }
-        
+
         const mess = {
           username,
           src,
@@ -137,7 +137,7 @@ module.exports = (app) => {
           roomid,
           time,
         }
-        
+
         const message = new Message(mess);
         message.save((err, mess) => {
           if (err) {
@@ -154,14 +154,14 @@ module.exports = (app) => {
             msg: '保存成功!'
           });
         })
-        return; 
+        return;
     } else {
         res.json({
             errno: 500,
             msg: '保存异常!'
         });
     }
-    
+
   });
 
   app.post('/file/avatar', uploadAvatar.single('file'),  async (req, res, next) => {
@@ -203,7 +203,7 @@ module.exports = (app) => {
               msg: '保存异常!'
             });
             return;
-            
+
           }
           res.json({
             errno: 0,
@@ -220,7 +220,7 @@ module.exports = (app) => {
             msg: '保存异常!'
         });
     }
-    
+
   });
 
   // 注册
@@ -298,9 +298,10 @@ module.exports = (app) => {
     })
   }),
   // 获取历史记录
-  app.get('/history/message', (req, res) => {
-    const id = req.query.roomid
-    const current = req.query.current
+  app.get('/history/message', async (req, res) => {
+    const id = req.query.roomid;
+    const current = req.query.current;
+    const total = req.query.total || 0;
     if (!id || !current) {
       global.logger.error('roomid | page current can\'t find')
       res.json({
@@ -313,34 +314,23 @@ module.exports = (app) => {
       total: 0,
       current: current
     }
-    const task1 = new Promise((resolve, reject) => {
-      const skip = parseInt((current - 1) * 20)
-      Message.find({roomid: id}).skip(skip).sort({"time": -1}).limit(20).exec((err, data) => {
-        if (err) {
-          global.logger.error(err)
-          return reject()
-        } else {
-          message.data = data.reverse();
-          return resolve()
-        }
-      })
-    })
-    const task2 = new Promise((resolve, reject) => {
-      Message.find({roomid: id}).count().exec((err, data) => {
-        if (err) {
-          global.logger.error(err)
-          return reject()
-        } else {
-          message.total = data
-          return resolve()
-        }
-      })
-    })
-    Promise.all([task1, task2]).then(() => {
+    try {
+      const messageTotal = await Message.find({roomid: id}).count().exec();
+      message.total = messageTotal;
+      let skip = parseInt((current - 1) * 20);
+      if(+total) {
+        skip += (messageTotal - total);
+      }
+      const messageData = await Message.find({roomid: id}).skip(skip).sort({"time": -1}).limit(20).exec();
+      message.data = messageData.reverse();
       res.json({
         data: message
       })
-    })
+    } catch(e) {
+      res.json({
+        data: message
+      })
+    }
   }),
   // 机器人消息
   app.get('/robotapi', (req, res) => {

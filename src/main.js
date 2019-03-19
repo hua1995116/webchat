@@ -38,9 +38,8 @@ const popNotice = function(msgInfo) {
   }
 };
 
-socket.on('connect', () => {
+socket.on('connect', async () => {
   console.log('connect');
-  // console.log(socket.id);
   const roomId = queryString(window.location.href, 'roomId');
   const userId = store.state.userInfo.userid;
   if (userId) {
@@ -52,13 +51,24 @@ socket.on('connect', () => {
       src: store.state.userInfo.src,
       roomid: roomId
     };
-    // console.log(obj);
     socket.emit('room', obj);
+
+    if (store.state.isDiscount) {
+      await store.commit('setRoomDetailInfos');
+      await store.commit('setCurrent', 1);
+      await store.commit('setDiscount', false);
+      await store.commit('setTotal', 0);
+      await store.dispatch('getAllMessHistory', {
+        current: 1,
+        roomid: roomId
+      });
+    }
   }
 });
 
 socket.on('disconnect', () => {
   console.log('disconnect');
+  store.commit('setDiscount', true);
 });
 
 socket.on('message', function (obj) {

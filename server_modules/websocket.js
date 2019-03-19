@@ -46,7 +46,7 @@ function websocket(server) {
           } else {
             const count = new Count({
               username,
-              roomInfo: +roomInfo 
+              roomInfo: +roomInfo
             });
             count.save(function(err, res) {
               if(err) {
@@ -63,24 +63,24 @@ function websocket(server) {
       //监听用户发布聊天内容
       console.log('socket connect!');
       socket.on('message', async (msgObj) => {
-        console.log('socket message!'); 
+        console.log('socket message!');
         //向所有客户端广播发布的消息
         const {username, src, msg, img, roomid, time} = msgObj;
         if(!msg && !img) {
           return;
         }
         // 后端限制字符长度
-        const msgLimit = msg.slice(0, 200); 
+        const msgLimit = msg.slice(0, 200);
         const mess = {
           username,
           src,
           msg: xssFilters.inHTMLData(msgLimit), // 防止xss
-          img, 
+          img,
           roomid,
           time
         }
-        io.to(mess.roomid).emit('message', mess);
-        global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);
+
+        // global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);
         if (mess.img === '') {
           const message = new Message(mess);
           message.save(function (err, res) {
@@ -89,6 +89,7 @@ function websocket(server) {
               return;
             }
             global.logger.info(res);
+            io.to(mess.roomid).emit('message', res);
           })
         }
         const usersList = await gethAllCache('socketId');
@@ -102,7 +103,7 @@ function websocket(server) {
             roomInfo[roomid] = count;
             socket.to(socketid).emit('count', roomInfo);
           }
-        }) 
+        })
       })
       // 建立连接
       socket.on('login',async (user) => {
@@ -134,7 +135,7 @@ function websocket(server) {
         }
         // 通知自己有多少条未读消息
         socket.emit('count', roomInfo);
-        
+
       });
       // 加入房间
       socket.on('room', async (user) => {
@@ -177,7 +178,7 @@ function websocket(server) {
         const {name, roomid} = user;
         await handleLogoutRoom(roomid, name);
       })
-    
+
       socket.on('disconnect', async () => {
         console.log('socket disconnect!');
         const {name, roomid} = socket;

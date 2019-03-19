@@ -205,3 +205,49 @@
     }
   }
 }
+
+
+@keyframes lds-rolling {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@-webkit-keyframes lds-rolling {
+  0% {
+    -webkit-transform: translate(-50%, -50%) rotate(0deg);
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    -webkit-transform: translate(-50%, -50%) rotate(360deg);
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.chat-loading {
+  .lds-rolling {
+    height:40px;
+    overflow: hidden;
+  }
+  .lds-rolling div,
+  .lds-rolling div:after {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #2196f3;
+    border-top-color: transparent;
+    border-radius: 50%;
+    margin: 20px auto 0;
+  }
+  .lds-rolling div {
+    -webkit-animation: lds-rolling 1s linear infinite;
+    animation: lds-rolling 1s linear infinite;
+  }
+  .lds-rolling div:after {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+  }
+}
