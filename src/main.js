@@ -56,7 +56,8 @@ socket.on('connect', async () => {
     if (store.state.isDiscount) {
       await store.commit('setRoomDetailInfos');
       await store.commit('setCurrent', 1);
-      store.commit('setDiscount', false);
+      await store.commit('setDiscount', false);
+      await store.commit('setTotal', 0);
       await store.dispatch('getAllMessHistory', {
         current: 1,
         roomid: roomId

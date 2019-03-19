@@ -230,34 +230,24 @@
 
 .chat-loading {
   .lds-rolling {
-    width: 40px;
-    height: 40px;
-    margin: 0 auto;
-    position: relative;
+    height:40px;
+    overflow: hidden;
   }
   .lds-rolling div,
   .lds-rolling div:after {
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    border: 20px solid #2196f3;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #2196f3;
     border-top-color: transparent;
     border-radius: 50%;
+    margin: 20px auto 0;
   }
   .lds-rolling div {
     -webkit-animation: lds-rolling 1s linear infinite;
     animation: lds-rolling 1s linear infinite;
-    top: 100px;
-    left: 100px;
   }
   .lds-rolling div:after {
     -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
-  }
-  .lds-rolling {
-    width: 40px !important;
-    height: 40px !important;
-    -webkit-transform: translate(-20px, -20px) scale(0.2) translate(20px, 20px);
-    transform: translate(-20px, -20px) scale(0.2) translate(20px, 20px);
   }
 }

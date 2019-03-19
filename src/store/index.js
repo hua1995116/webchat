@@ -159,11 +159,13 @@ const store = new Vuex.Store({
         data: res.data
       };
     },
-    async getAllMessHistory({commit}, data) {
+    async getAllMessHistory({state, commit}, data) {
       const res = await url.RoomHistoryAll(data);
       if (res.data.data.errno === 0) {
         commit('addRoomDefatilInfosHis', res.data.data.data);
-        commit('setTotal', res.data.data.total);
+        if (!state.roomdetail.total) {
+          commit('setTotal', res.data.data.total);
+        }
       }
     },
     async getRobatMess({commit}, data) {

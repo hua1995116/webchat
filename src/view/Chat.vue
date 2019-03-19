@@ -25,22 +25,21 @@
             <a :href="item.href">{{key + 1}}. {{item.title}}</a>
           </div>
         </div>
-        <div class="notice-tool-bar" @click="handleNotice">
+        <!-- <div class="notice-tool-bar" @click="handleNotice">
           {{noticeBar ? '显示通知' : '关闭通知'}}
-        </div>
+        </div> -->
       </div>
       <div class="chat-inner">
         <div class="chat-container" v-if="isLoadingAchieve">
           <div v-if="getInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
           <div class="chat-loading">
             <div class="lds-css ng-scope">
-              <div style="width:100%;height:100%" class="lds-rolling">
+              <div class="lds-rolling">
                 <div>
                 </div>
               </div>
             </div>
           </div>
-
           <!-- <div v-if="getInfos.length > 0" class="chat-top">到顶啦~</div> -->
           <Message
             v-for="obj in getInfos"
