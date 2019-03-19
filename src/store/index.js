@@ -15,17 +15,15 @@ const store = new Vuex.Store({
       src: getItem('src'),
       userid: getItem('userid')
     },
+    isDiscount: false,
     isLogin: false,
-    // 存放历史记录
-    messhistory: {
-      infos: [],
-      allmessage: []
-    },
     // 存放房间信息，为了方便以后做多房间
     roomdetail: {
       id: '',
       users: {},
-      infos: []
+      infos: [],
+      current: 1,
+      total: 0
     },
     // 存放机器人开场白
     robotmsg: [
@@ -66,14 +64,23 @@ const store = new Vuex.Store({
     emojiShow: false
   },
   getters: {
+    getTotal: state => state.roomdetail.total,
+    getCurrent: state => state.roomdetail.current,
     getUsers: state => state.roomdetail.users,
     getInfos: state => state.roomdetail.infos,
-    getMessHistoryInfos: state => state.messhistory.infos,
-    getMessHistoryAll: state => state.messhistory.allmessage,
     getRobotMsg: state => state.robotmsg,
     getEmoji: state => state.emojiShow
   },
   mutations: {
+    setTotal(state, value) {
+      state.roomdetail.total = value;
+    },
+    setDiscount(state, value) {
+      state.isDiscount = value;
+    },
+    setCurrent(state, value) {
+      state.roomdetail.current = value;
+    },
     setUnread(state, value) {
       for (let i in value) {
         state.unRead[i] = +value[i];
@@ -108,12 +115,6 @@ const store = new Vuex.Store({
     },
     setUsers(state, data) {
       state.roomdetail.users = data;
-    },
-    setAllMessHistory(state, data) {
-      state.messhistory.allmessage = data;
-    },
-    setMessHistoryInfos(state, data) {
-      state.messhistory.infos = data;
     },
     setRobotMsg(state, data) {
       state.robotmsg.push(data);
@@ -162,6 +163,7 @@ const store = new Vuex.Store({
       const res = await url.RoomHistoryAll(data);
       if (res.data.data.errno === 0) {
         commit('addRoomDefatilInfosHis', res.data.data.data);
+        commit('setTotal', res.data.data.total);
       }
     },
     async getRobatMess({commit}, data) {

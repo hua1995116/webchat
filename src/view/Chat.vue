@@ -31,10 +31,20 @@
       </div>
       <div class="chat-inner">
         <div class="chat-container" v-if="isLoadingAchieve">
-          <div v-if="getInfos.length === 0 && getMessHistoryInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
+          <div v-if="getInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
+          <div class="chat-loading">
+            <div class="lds-css ng-scope">
+              <div style="width:100%;height:100%" class="lds-rolling">
+                <div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- <div v-if="getInfos.length > 0" class="chat-top">到顶啦~</div> -->
           <Message
-            v-for="obj in getInfos" :key="obj._id"
+            v-for="obj in getInfos"
+            :key="obj._id"
             :is-self="obj.username === userid"
             :name="obj.username"
             :head="obj.src"
@@ -167,6 +177,7 @@ import { setTimeout } from 'timers';
       loading.show();
       setTimeout(async () => {
         const data = {
+          total: +this.getTotal,
           current: +this.current,
           roomid: this.roomid
         };
@@ -179,15 +190,16 @@ import { setTimeout } from 'timers';
       }, 500);
 
       this.container.addEventListener('scroll', debounce(async (e) => {
-        if (e.target.scrollTop >= 0 && e.target.scrollTop < 10) {
-          this.current++;
+        if (e.target.scrollTop >= 0 && e.target.scrollTop < 50) {
+          this.$store.commit('setCurrent', +this.getCurrent + 1);
           const data = {
-            current: +this.current,
+            total: +this.getTotal,
+            current: +this.getCurrent,
             roomid: this.roomid
           };
           await this.$store.dispatch('getAllMessHistory', data);
         }
-      }, 100));
+      }, 50));
 
       this.$refs.emoji.addEventListener('click', function(e) {
         var target = e.target || e.srcElement;
@@ -303,7 +315,8 @@ import { setTimeout } from 'timers';
         'getEmoji',
         'getInfos',
         'getUsers',
-        'getMessHistoryInfos'
+        'getCurrent',
+        'getTotal'
       ]),
       ...mapState([
         'isbind'
