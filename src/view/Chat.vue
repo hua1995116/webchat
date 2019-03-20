@@ -156,11 +156,12 @@ import { setTimeout } from 'timers';
       }
       this.noticeVersion = res.data.version;
     },
-    mounted() {
+    async mounted() {
       this.container = document.querySelector('.chat-inner');
       // socket内部，this指针指向问题
       const that = this;
-      this.$store.commit('setRoomDetailInfos');
+      await this.$store.commit('setRoomDetailInfos');
+      await this.$store.commit('setTotal', 0);
       const obj = {
         name: this.userid,
         src: this.src,
