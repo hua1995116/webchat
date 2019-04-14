@@ -30,9 +30,9 @@
         </div> -->
       </div>
       <div class="chat-inner">
-        <div class="chat-container" v-if="isLoadingAchieve">
+        <div class="chat-container">
           <div v-if="getInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-          <div class="chat-loading">
+          <div v-if="getInfos.length !== 0 && isloading" class="chat-loading">
             <div class="lds-css ng-scope">
               <div class="lds-rolling">
                 <div>
@@ -127,8 +127,8 @@ import { setTimeout } from 'timers';
       const notice = getItem('notice') || {};
       const {noticeBar, noticeVersion} = notice;
       return {
+        isloading: false,
         roomid: '',
-        isLoadingAchieve: false,
         container: {},
         chatValue: '',
         emoji: emoji,
@@ -181,9 +181,10 @@ import { setTimeout } from 'timers';
           current: +this.current,
           roomid: this.roomid
         };
+        this.isloading = true;
         await this.$store.dispatch('getAllMessHistory', data);
+        this.isloading = false;
         loading.hide();
-        this.isLoadingAchieve = true;
         this.$nextTick(() => {
           this.container.scrollTop = 10000;
         });
@@ -197,7 +198,9 @@ import { setTimeout } from 'timers';
             current: +this.getCurrent,
             roomid: this.roomid
           };
+          this.isloading = true;
           await this.$store.dispatch('getAllMessHistory', data);
+          this.isloading = false;
         }
       }, 50));
 

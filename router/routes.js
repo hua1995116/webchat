@@ -7,9 +7,6 @@ const multer = require('multer');
 const qnUpload = require('../deploy/qiniu');
 const {cmder, rmDirFiles} = require('../utils/cmd');
 const fileTool = require('fs-extra');
-const imagemin = require('imagemin');
-const imageminMozjpeg = require('imagemin-mozjpeg');
-const imageminPngquant = require('imagemin-pngquant');
 
 const mkdirsSync = function(dirname) {
   if (fs.existsSync(dirname)) {
@@ -33,7 +30,7 @@ const createFolder = function (folder) {
   }
 };
 
-const uploadFolder = './cache_temp';
+const uploadFolder = './static_temp';
 const urlPath = './static/files';
 
 console.log(uploadFolder);
@@ -110,22 +107,15 @@ module.exports = (app) => {
         const {username, roomid, time, src} = req.body;
 
         const staticUrl = path.join('./static_temp', filename);
-        const shrinkFiles = await imagemin(['cache_temp/*.png', 'cache_temp/*.jpg', 'cache_temp/*.jpeg'], 'static_temp', {
-          use: [
-              imageminMozjpeg({quality: '65'}),
-              imageminPngquant({quality: '65'})
-          ]
-        });
         let img = '';
         if(process.env.NODE_ENV === 'production') {
           await qnUpload([staticUrl]);
           // 因为是服务器运行可以直接写脚本
-          await cmder(`rm -rf ./cache_temp/* && rm -rf ./static_temp/* `);
+          await cmder(`rm -rf ./static_temp/* `);
           img =`//s3.qiufengh.com/webchat/` + filename;
         } else {
           // 兼容windows
           fileTool.copySync('./static_temp', './static/files');
-          rmDirFiles('./cache_temp');
           rmDirFiles('./static_temp');
           img = path.join(urlPath, filename);
         }
@@ -174,22 +164,15 @@ module.exports = (app) => {
 
         const staticUrl = path.join('./static_temp', filename);
 
-        const shrinkFiles = await imagemin(['cache_temp/*.png', 'cache_temp/*.jpg', 'cache_temp/*.jpeg'], 'static_temp', {
-          use: [
-              imageminMozjpeg({quality: '30'}),
-              imageminPngquant({quality: '30'})
-          ]
-        });
         let img = '';
         if(process.env.NODE_ENV === 'production') {
           await qnUpload([staticUrl]);
           // 因为是服务器运行可以直接写脚本
-          await cmder(`rm -rf ./cache_temp/* && rm -rf ./static_temp/* `);
+          await cmder(`rm -rf ./static_temp/* `);
           img =`//s3.qiufengh.com/webchat/` + filename;
         } else {
           // 兼容windows
           fileTool.copySync('./static_temp', './static/files');
-          rmDirFiles('./cache_temp');
           rmDirFiles('./static_temp');
           img = path.join(urlPath, filename);
         }

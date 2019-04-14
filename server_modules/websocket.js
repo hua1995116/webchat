@@ -80,7 +80,7 @@ function websocket(server) {
           time
         }
 
-        // global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);
+        global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);
         if (mess.img === '') {
           const message = new Message(mess);
           message.save(function (err, res) {
@@ -89,9 +89,10 @@ function websocket(server) {
               return;
             }
             global.logger.info(res);
-            io.to(mess.roomid).emit('message', res);
           })
         }
+        io.to(mess.roomid).emit('message', mess);
+        // 未读消息
         const usersList = await gethAllCache('socketId');
         usersList.map(async item => {
           if(!users[roomid][item]) {

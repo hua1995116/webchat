@@ -64,7 +64,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$refs.msg);
     this.$refs.msg.scrollIntoView();
   }
 };
