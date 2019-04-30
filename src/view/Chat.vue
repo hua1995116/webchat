@@ -245,6 +245,7 @@ import { setTimeout } from 'timers';
         socket.emit('roomout', obj);
         this.$router.goBack();
         this.$store.commit('setTab', true);
+        this.$store.commit('setCurrent', 0)
       },
       setLog() {
         // 版本更新日志
