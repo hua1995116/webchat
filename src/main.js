@@ -11,10 +11,6 @@ import 'muse-ui/dist/muse-ui.css';
 import './styles/main.styl';
 import socket from './socket';
 import {queryString} from '@utils/queryString';
-import ios from './utils/ios';
-
-// 微信 回弹 bug
-ios();
 
 import vuePicturePreview from './components/photo-viewer';
 Vue.use(vuePicturePreview);

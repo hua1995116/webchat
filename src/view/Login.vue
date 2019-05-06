@@ -20,6 +20,7 @@ import SvgModal from "@components/svg-modal";
 import Alert from "@components/Alert";
 import Toast from "@components/Toast";
 import socket from "../socket";
+import ios from '@utils/ios';
 //  import Loading from '../components/loading/loading'
 
 export default {
@@ -73,6 +74,8 @@ export default {
     }
   },
   mounted() {
+    // 微信 回弹 bug
+      ios();
     this.$store.commit("setTab", false);
     if (!this.getSvgModal) {
       const svg = SvgModal();

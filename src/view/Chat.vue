@@ -120,7 +120,8 @@
   import Alert from '@components/Alert';
   import debounce from 'lodash/debounce';
   import url from '@api/server';
-import { setTimeout } from 'timers';
+  import { setTimeout } from 'timers';
+  import ios from '@utils/ios';
 
   export default{
     data() {
@@ -157,6 +158,8 @@ import { setTimeout } from 'timers';
       this.noticeVersion = res.data.version;
     },
     async mounted() {
+      // 微信 回弹 bug
+      ios();
       this.container = document.querySelector('.chat-inner');
       // socket内部，this指针指向问题
       const that = this;

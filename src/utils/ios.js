@@ -2,16 +2,13 @@ export default function () {
   const u = navigator.userAgent;
   const isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
   const classList = 'input';
-  setTimeout(() => {
-    [].forEach.call(document.querySelectorAll(classList), function(el) {
-      el.addEventListener("blur", function(e) {
-        console.log(1111);
-        if (isIOS) {
-          blurAdjust();
-        }
-      });
+  [].forEach.call(document.querySelectorAll(classList), function(el) {
+    el.addEventListener("blur", function(e) {
+      if (isIOS) {
+        blurAdjust();
+      }
     });
-  }, 1000);
+  });
 
   // 解决苹果不回弹页面 https://blog.csdn.net/m0_37520980/article/details/86305488
   function blurAdjust(e) {
