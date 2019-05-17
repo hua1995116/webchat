@@ -250,6 +250,7 @@
           roomid: this.roomid
         };
         socket.emit('roomout', obj);
+        this.$router.isBack = true;
         this.$router.goBack();
         this.$store.commit('setTab', true);
         this.$store.commit('setCurrent', 0);

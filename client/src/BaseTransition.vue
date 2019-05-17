@@ -32,7 +32,7 @@
     height: 100%;
     background: #fff;
     overflow: hidden;
-    box-shadow: 0 0 15px 0px #d0cece;
+    box-shadow: 0 0 15px 0px #dbdada;
   }
   .child-view {
     position: absolute;

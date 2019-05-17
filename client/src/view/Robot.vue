@@ -1,33 +1,37 @@
 <template>
-  <div class="container">
-    <div class="title">
-      <mu-appbar color="lightBlue400">
-        <mu-button icon slot="left" @click="goback">
-          <mu-icon value="chevron_left"></mu-icon>
-        </mu-button>
-        大白客服
-        <mu-button icon slot="right">
-          <mu-icon value="expand_more"></mu-icon>
-        </mu-button>
-      </mu-appbar>
-    </div>
-    <div class="chat-inner">
-      <div v-for="(obj, index) in getRobotMsg" :key="index" class="">
-        <Message
-              :is-self="obj.username === hoster"
-              :name="obj.username"
-              :head="obj.src"
-              :msg="obj.msg"
-              :img="obj.img"
-              :mytime="obj.time"
-            ></Message>
+  <div>
+    <div class="container">
+      <div class="title">
+        <mu-appbar color="lightBlue400">
+          <mu-button icon slot="left" @click="goback">
+            <mu-icon value="chevron_left"></mu-icon>
+          </mu-button>
+          大白客服
+          <mu-button icon slot="right">
+            <mu-icon value="expand_more"></mu-icon>
+          </mu-button>
+        </mu-appbar>
       </div>
-    </div>
-    <div class="con-input">
-      <div class="input" @keyup.enter="sendmessage">
-        <input type="text" id="msg">
+      <div class="chat-inner">
+        <div class="message-list" v-show="ishow">
+          <Message
+            v-for="obj in getRobotMsg"
+            :key="obj.id"
+            :is-self="obj.username === hoster"
+            :name="obj.username"
+            :head="obj.src"
+            :msg="obj.msg"
+            :img="obj.img"
+            :mytime="obj.time"
+          ></Message>
+        </div>
       </div>
-      <mu-button class="demo-raised-button" color="primary" @click="sendmessage">发送</mu-button>
+      <div class="con-input">
+        <div class="input" @keyup.enter="sendmessage">
+          <input type="text" id="msg">
+        </div>
+        <mu-button class="demo-raised-button" color="primary" @click="sendmessage">发送</mu-button>
+      </div>
     </div>
   </div>
 
@@ -43,14 +47,18 @@ export default {
   data() {
     return {
       hoster: HOSTER_NAME,
-      hosterImg: HOSTER_URL
+      hosterImg: HOSTER_URL,
+      ishow: false,
     };
   },
   mounted() {
-    // this.$store.commit('setTab', true);
+    setTimeout(() => {
+      this.ishow = true;
+    }, 200);
   },
   methods: {
     goback() {
+      this.$router.isBack = true;
       this.$router.goBack();
       this.$store.commit("setTab", true);
     },
@@ -68,6 +76,7 @@ export default {
         id
       };
       this.$store.commit("setRobotMsg", {
+        id: (+new Date()).toString(16),
         msg: info,
         username: this.hoster,
         src: this.hosterImg

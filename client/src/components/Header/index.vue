@@ -28,6 +28,7 @@ export default {
 
   methods: {
     goback() {
+      this.$router.isBack = true;
       this.$router.goBack();
       this.$store.commit("setTab", true);
     }

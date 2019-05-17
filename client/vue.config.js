@@ -15,7 +15,7 @@ module.exports = {
     },
     devServer: {
       port: 9099,
-      proxy: {
+      proxy: { // https://cli.vuejs.org/zh/config/#devserver-proxy
         '/socket.io': {
           target: '127.0.0.1:9090',
           ws: true,
