@@ -24,7 +24,8 @@ router.get('/', function (req, res, next) {
   next();
 });
 //声明静态资源地址
-app.use(express.static('./dist'));
+app.use(express.static('dist'));
+// app.use(express.static('static'));
 app.use(router);
 // 服务器提交的数据json化
 app.use(bodyParser.json())

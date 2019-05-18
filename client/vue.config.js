@@ -13,6 +13,8 @@ module.exports = {
             .set('@const',resolve('src/const'))
             .set('@api',resolve('src/api'))
     },
+    assetsDir: './static/',
+    publicPath: process.env.NODE_ENV === 'production' ? '//s3.qiufengh.com/' : '',
     devServer: {
       port: 9099,
       proxy: { // https://cli.vuejs.org/zh/config/#devserver-proxy
@@ -22,6 +24,11 @@ module.exports = {
           changeOrigin: true
         },
         '/api': {
+          target: 'http://127.0.0.1:9090',
+          ws: false,
+          changeOrigin: true
+        },
+        '/static': {
           target: 'http://127.0.0.1:9090',
           ws: false,
           changeOrigin: true

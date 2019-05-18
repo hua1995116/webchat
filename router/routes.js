@@ -115,7 +115,7 @@ module.exports = (app) => {
           img =`//s3.qiufengh.com/webchat/` + filename;
         } else {
           // 兼容windows
-          fileTool.copySync('./static_temp', './static/files');
+          fileTool.copySync('./static_temp', './dist/static/files');
           rmDirFiles('./static_temp');
           img = path.join(urlPath, filename);
         }
@@ -172,7 +172,7 @@ module.exports = (app) => {
           img =`//s3.qiufengh.com/webchat/` + filename;
         } else {
           // 兼容windows
-          fileTool.copySync('./static_temp', './static/files');
+          fileTool.copySync('./static_temp', './dist/static/files');
           rmDirFiles('./static_temp');
           img = path.join(urlPath, filename);
         }

@@ -40,7 +40,8 @@
     height: 100%;
     width: 100%;
     overflow: hidden;
-    transition: all .4s cubic-bezier(.55,0,.1,1);
+    will-change: transform;
+    transition: all 500ms cubic-bezier(0.075, 0.82, 0.165, 1) ;
   }
   .slide-left-enter{
     -webkit-transform: translate(100%, 0);
