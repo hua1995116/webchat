@@ -8,6 +8,7 @@ import Login from '../view/Login';
 import Chat from '../view/Chat.vue';
 import Avatar from '../view/Avatar';
 import BaseTransition from '../BaseTransition.vue';
+import BaseView from '../BaseView.vue';
 import loading from '../components/loading/loading';
 
 Router.prototype.goBack = function () {
@@ -42,13 +43,27 @@ const router = new Router({
     },
     {
       path: '/home',
-      name: 'Home',
-      component: Home
-    },
-    {
-      path: '/avatar',
-      name: 'avatar',
-      component: Avatar
+      name: 'HomeBaseTransition',
+      component: BaseView,
+      children: [
+        {
+          path: '',
+          name: 'Home',
+          component: BaseTransition,
+          children: [
+            {
+              path: '/avatar',
+              name: 'avatar',
+              component: Avatar
+            },
+            {
+              path: '',
+              name: 'Home',
+              component: Home,
+            },
+          ]
+        },
+      ]
     },
     {
       path: '/register',

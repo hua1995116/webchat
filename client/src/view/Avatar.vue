@@ -1,16 +1,24 @@
 <template>
-  <div class="wrapper">
-    <Header></Header>
-    <vue-cropper 
-      ref="cropper" 
-      :fixed="option.fixed" 
-      :img="option.img" 
-      :outputSize="option.size" 
+  <div>
+    <Header
+      leftIcon="chevron_left"
+      rightIcon=""
+      content="修改头像"
+      color=""
+      @leftClick="goback"
+      ></Header>
+    <div class="wrapper">
+      <vue-cropper
+      ref="cropper"
+      :fixed="option.fixed"
+      :img="option.img"
+      :outputSize="option.size"
       :outputType="option.outputType"
       :info="option.info"
       :canMoveBox="option.canMoveBox"
       :autoCrop="option.autoCrop">
     </vue-cropper>
+    </div>
     <div class="tools">
       <label class="btn" for="uploads">上传头像</label>
       <input type="file" id="uploads" style="position:absolute; clip:rect(0 0 0 0);" accept="image/png, image/jpeg, image/gif, image/jpg"
@@ -51,6 +59,10 @@
     mounted() {},
 
     methods: {
+      goback() {
+        this.$router.isBack = true;
+        this.$router.goBack();
+      },
       postAvatar() {
         loading.show();
         this.$refs.cropper.getCropBlob(async (data) => {
@@ -61,8 +73,6 @@
           const res = await this.$store.dispatch('uploadAvatar', formdata);
           loading.hide();
           if (res.errno === 0) {
-            console.log(res);
-            console.log(res.data.url);
             this.$store.commit('setUserInfo', {
               type: 'src',
               value: res.data.url
@@ -136,6 +146,7 @@
   .wrapper {
     width: 375px;
     height: 375px;
+    overflow: auto
   }
   .btn {
     display: inline-block;

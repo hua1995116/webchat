@@ -12,10 +12,13 @@ import 'muse-ui/dist/muse-ui.css';
 import './styles/main.styl';
 import socket from './socket';
 import {queryString} from '@utils/queryString';
+import {getRoomInfo} from '@utils/cache';
 
 import vuePicturePreview from './components/photo-viewer';
-Vue.use(vuePicturePreview);
+import flexTouch from "vue-flex-touch";
 
+Vue.use(vuePicturePreview);
+Vue.use(flexTouch, { timeout: 900 });
 Vue.use(MuseUI);
 Vue.config.productionTip = false;
 
@@ -55,13 +58,12 @@ socket.on('connect', async () => {
     socket.emit('room', obj);
 
     if (store.state.isDiscount) {
-      await store.commit('setRoomDetailInfos');
-      await store.commit('setCurrent', 1);
+      const {total, current} = getRoomInfo(roomId);
       await store.commit('setDiscount', false);
-      await store.commit('setTotal', 0);
       await store.dispatch('getAllMessHistory', {
-        current: 1,
-        roomid: roomId
+        current: current + 1,
+        roomid: roomId,
+        total: total
       });
     }
   }
@@ -73,7 +75,7 @@ socket.on('disconnect', () => {
 });
 
 socket.on('message', function (obj) {
-  store.commit('addRoomDetailInfos', [obj]);
+  store.commit('setRoomDetailInfosAfter', [obj]);
   console.log(Notification.permission);
   if (Notification.permission === "granted") {
     popNotice(obj);
@@ -82,6 +84,13 @@ socket.on('message', function (obj) {
       popNotice(obj);
     });
   }
+});
+
+socket.on('room', (obj) => {
+  store.commit('setUsers', obj);
+});
+socket.on('roomout', (obj) => {
+  store.commit('setUsers', obj);
 });
 
 document.addEventListener('touchstart', (e) => {

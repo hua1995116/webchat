@@ -6,6 +6,7 @@ import Vuex from 'vuex';
 import url from '@api/server.js';
 import {setItem, getItem} from '@utils/localStorage';
 import {ROBOT_NAME, ROBOT_URL} from '@const/index';
+import {updateRoomInfo, getRoomInfo, updateCache, getCache} from '@utils/cache';
 
 Vue.use(Vuex);
 
@@ -64,9 +65,10 @@ const store = new Vuex.Store({
     // svg
     svgmodal: null,
     // 是否启动tab
-    istab: false,
 
-    emojiShow: false
+    emojiShow: false,
+
+    theme: "#2196f3"
   },
   getters: {
     getTotal: state => state.roomdetail.total,
@@ -102,21 +104,26 @@ const store = new Vuex.Store({
     setEmoji(state, data) {
       state.emojiShow = data;
     },
-    setTab(state, data) {
-      state.istab = data;
-    },
     setSvgModal(state, data) {
       state.svgmodal = data;
     },
-    addRoomDetailInfos(state, data) {
+    setRoomDetailInfosAfter(state, data) {
       state.roomdetail.infos.push(...data);
     },
-    addRoomDefatilInfosHis(state, data) {
+    setRoomDetailInfosBefore(state, {data, roomid}) {
       const list = state.roomdetail.infos;
-      state.roomdetail.infos = data.concat(list);
+      const newData = data.concat(list);
+      state.roomdetail.infos = newData;
+      updateCache(roomid, {
+        data: newData
+      });
     },
-    setRoomDetailInfos(state) {
-      state.roomdetail.infos = [];
+    setRoomDetailInfos(state, {data, roomid}) {
+      state.roomdetail.infos = data;
+      console.log(data);
+      updateCache(roomid, {
+        data
+      });
     },
     setUsers(state, data) {
       state.roomdetail.users = data;
@@ -165,12 +172,33 @@ const store = new Vuex.Store({
       };
     },
     async getAllMessHistory({state, commit}, data) {
-      const res = await url.RoomHistoryAll(data);
-      if (res.data.data.errno === 0) {
-        commit('addRoomDefatilInfosHis', res.data.data.data);
-        if (!state.roomdetail.total) {
-          commit('setTotal', res.data.data.total);
+      try {
+        const res = await url.RoomHistoryAll(data);
+        if (res.data.data.errno === 0) {
+          const result = res.data.data;
+          if(data.current === 1) {
+            commit('setRoomDetailInfos', {
+              data: result.data,
+              roomid: data.roomid
+            });
+          } else {
+            commit('setRoomDetailInfosBefore', {
+              data: result.data,
+              roomid: data.roomid
+            });
+          }
+          updateRoomInfo(data.roomid, {
+            current: data.current,
+            total: result.total
+          })
         }
+      } catch(e) {
+        const cache = getCache(data.roomid);
+        console.log(cache);
+        commit('setRoomDetailInfos', {
+          data: cache.data,
+          roomid: data.roomid
+        });
       }
     },
     async getRobatMess({commit}, data) {

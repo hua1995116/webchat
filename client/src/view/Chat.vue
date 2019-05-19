@@ -11,7 +11,7 @@
         <mu-button slot="actions" flat color="primary" @click="closeSimpleDialog">关闭</mu-button>
       </mu-dialog>
       <div class="title">
-        <mu-appbar color="lightBlue400">
+        <mu-appbar color="primary">
           <mu-button icon slot="left" @click="goback">
             <mu-icon value="chevron_left"></mu-icon>
           </mu-button>
@@ -46,6 +46,7 @@
           </div>
           <!-- <div v-if="getInfos.length > 0" class="chat-top">到顶啦~</div> -->
           <Message
+            @flexTouch="hadnleTouch"
             v-for="obj in getInfos"
             :key="obj._id"
             :is-self="obj.username === userid"
@@ -126,6 +127,7 @@
   import url from '@api/server';
   import { setTimeout } from 'timers';
   import ios from '@utils/ios';
+  import {updateRoomInfo, getRoomInfo} from '@utils/cache';
 
   export default{
     data() {
@@ -162,64 +164,67 @@
       this.noticeVersion = res.data.version;
     },
     async mounted() {
+      loading.show({
+        marginTop: '56px',
+        background: '#f1f5f8'
+      });
       // 微信 回弹 bug
       ios();
+      this.emitRoom();
       this.container = document.querySelector('.chat-inner');
       // socket内部，this指针指向问题
       const that = this;
-      await this.$store.commit('setRoomDetailInfos');
-      await this.$store.commit('setTotal', 0);
-      const obj = {
-        name: this.userid,
-        src: this.src,
-        roomid: this.roomid
-      };
-      socket.emit('room', obj);
-      socket.on('room', function (obj) {
-        that.$store.commit('setUsers', obj);
-      });
-      socket.on('roomout', function (obj) {
-        that.$store.commit('setUsers', obj);
-      });
-      loading.show();
-      setTimeout(async () => {
-        const data = {
-          total: +this.getTotal,
-          current: +this.current,
-          roomid: this.roomid
-        };
-        this.isloading = true;
-        await this.$store.dispatch('getAllMessHistory', data);
-        this.isloading = false;
-        loading.hide();
-        this.$nextTick(() => {
-          this.container.scrollTop = 10000;
-        });
-      }, 500);
+      this.isloading = true;
+      await this.getRoomMessage();
+      this.isloading = false;
+      loading.hide();
 
-      this.container.addEventListener('scroll', debounce(async (e) => {
-        if (e.target.scrollTop >= 0 && e.target.scrollTop < 50) {
-          this.$store.commit('setCurrent', +this.getCurrent + 1);
-          const data = {
-            total: +this.getTotal,
-            current: +this.getCurrent,
-            roomid: this.roomid
-          };
-          this.isloading = true;
-          await this.$store.dispatch('getAllMessHistory', data);
-          this.isloading = false;
-        }
-      }, 50));
-
-      this.$refs.emoji.addEventListener('click', function(e) {
-        var target = e.target || e.srcElement;
-        if (!!target && target.tagName.toLowerCase() === 'span') {
-          that.chatValue = that.chatValue + target.innerHTML;
-        }
-        e.stopPropagation();
-      });
+      this.bindEmoji();
+      this.bindScroll();
     },
     methods: {
+      hadnleTouch(data) {
+        this.chatValue = this.chatValue + data;
+      },
+      bindScroll() {
+        this.container.addEventListener('scroll', debounce(async (e) => {
+          if (e.target.scrollTop >= 0 && e.target.scrollTop < 50) {
+            this.isloading = true;
+            await this.getRoomMessage();
+            this.isloading = false;
+          }
+        }, 50));
+      },
+      bindEmoji() {
+        this.$refs.emoji.addEventListener('click', (e) => {
+          var target = e.target || e.srcElement;
+          if (!!target && target.tagName.toLowerCase() === 'span') {
+            this.chatValue = this.chatValue + target.innerHTML;
+          }
+          e.stopPropagation();
+        });
+      },
+      async getRoomMessage() {
+        const {current, total} = getRoomInfo(this.roomid);
+        const data = {
+          total,
+          current: current + 1,
+          roomid: this.roomid
+        };
+        try {
+          await this.$store.dispatch('getAllMessHistory', data);
+        } catch(e) {
+
+        }
+      },
+      emitRoom() {
+        const obj = {
+          name: this.userid,
+          src: this.src,
+          roomid: this.roomid
+        };
+        socket.emit('room', obj);
+      },
       handleNotice() {
         this.noticeBar = !this.noticeBar;
         setItem('notice', {
@@ -252,8 +257,10 @@
         socket.emit('roomout', obj);
         this.$router.isBack = true;
         this.$router.goBack();
-        this.$store.commit('setTab', true);
-        this.$store.commit('setCurrent', 0);
+        updateRoomInfo(this.roomid, {
+          total: 0,
+          current: 0,
+        })
       },
       setLog() {
         // 版本更新日志
@@ -277,6 +284,7 @@
               img: fr.result,
               msg: '',
               roomid: that.roomid,
+              type: 'img',
               time: new Date()
             };
             socket.emit('message', obj);
@@ -310,7 +318,8 @@
             img: '',
             msg,
             roomid: this.roomid,
-            time: new Date()
+            time: new Date(),
+            type: 'text'
           };
           // 传递消息信息
           socket.emit('message', obj);

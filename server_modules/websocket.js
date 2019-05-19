@@ -65,7 +65,7 @@ function websocket(server) {
       socket.on('message', async (msgObj) => {
         console.log('socket message!');
         //向所有客户端广播发布的消息
-        const {username, src, msg, img, roomid, time} = msgObj;
+        const {username, src, msg, img, roomid, time, type} = msgObj;
         if(!msg && !img) {
           return;
         }
@@ -77,7 +77,8 @@ function websocket(server) {
           msg: xssFilters.inHTMLData(msgLimit), // 防止xss
           img,
           roomid,
-          time
+          time,
+          type
         }
 
         global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);

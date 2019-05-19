@@ -1,5 +1,16 @@
 <template>
   <div class="hello">
+    <div class="">
+      <mu-appbar>
+        <mu-button icon slot="left" >
+          <!-- <mu-icon value="chevron_left"></mu-icon> -->
+        </mu-button>
+        <div class="title">webchat</div>
+        <mu-button icon slot="right">
+          <mu-icon value="expand_more"></mu-icon>
+        </mu-button>
+      </mu-appbar>
+    </div>
     <mu-paper>
       <mu-list>
         <mu-sub-header>最近聊天记录</mu-sub-header>
@@ -56,11 +67,13 @@
         </mu-list-item> -->
       </mu-list>
     </mu-paper>
+    <Bottom></Bottom>
   </div>
 </template>
 
 <script>
 import Confirm from "@components/Confirm";
+import Bottom from "@components/Bottom";
 import { mapState } from "vuex";
 import { ROBOT_URL, HOST_URL1, HOST_URL2 } from "@const/index";
 import socket from "../socket";
@@ -74,7 +87,6 @@ export default {
     };
   },
   async mounted() {
-    this.$store.commit("setTab", true);
     // 只全局监听一次
     if (!this.isLogin) {
       // 登录了,发送进入信息。
@@ -101,11 +113,9 @@ export default {
         }
         return;
       }
-      this.$store.commit("setTab", false);
       this.$router.push({ path: "/chat", query: { roomId: roomID } });
     },
     chatRobot() {
-      this.$store.commit("setTab", false);
       this.$router.push({ path: "/robot" });
     }
   },
@@ -117,12 +127,18 @@ export default {
       unRead1: state => state.unRead.room1,
       unRead2: state => state.unRead.room2
     })
+  },
+  components: {
+    Bottom
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" rel="stylesheet/stylus">
+.title {
+  text-align: center;
+}
 .avatar {
   position: relative;
 

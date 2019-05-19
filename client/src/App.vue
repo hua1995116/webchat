@@ -3,14 +3,6 @@
     <router-view></router-view>
     <lg-preview></lg-preview>
     <!--tab选项卡-->
-    <div class="app-bottom" v-if="istab">
-      <mu-paper>
-        <mu-bottom-nav :value="bottomNav" @change="handleChange">
-          <mu-bottom-nav-item value="#/" title="主页" icon="restore" to="/"/>
-          <mu-bottom-nav-item value="#/home" title="我的" icon="location_on" to="/home"/>
-        </mu-bottom-nav>
-      </mu-paper>
-    </div>
   </div>
 </template>
 
@@ -23,18 +15,9 @@ export default {
     };
   },
   mounted() {
-    const hash = location.hash;
-    this.bottomNav = hash;
   },
   methods: {
-    handleChange(val) {
-      console.log(val);
-      this.bottomNav = val;
-    }
   },
-  computed: {
-    ...mapState(["istab"])
-  }
 };
 </script>
 
@@ -42,12 +25,5 @@ export default {
 #app {
   width: 100%;
   height: 100%;
-
-  .app-bottom {
-    position: fixed;
-    bottom: 0;
-    z-index: 102;
-    width: 100%;
-  }
 }
 </style>

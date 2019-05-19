@@ -44,6 +44,7 @@
       <mu-button full-width class="demo-raised-button" color="primary" @click="logout">退出</mu-button>
     </div>
     <div style="height:80px"></div>
+    <Bottom></Bottom>
   </div>
 </template>
 
@@ -52,12 +53,12 @@ import { mapState } from "vuex";
 import { clear, removeItem } from "@utils/localStorage";
 import Confirm from "@components/Confirm";
 import Alert from "@components/Alert";
+import Bottom from "@components/Bottom";
 export default {
   data() {
     return {};
   },
   async mounted() {
-    this.$store.commit("setTab", true);
     if (!this.userid) {
       const data = await Confirm({
         title: "提示",
@@ -75,7 +76,6 @@ export default {
   methods: {
     changeAvatar() {
       this.$router.push("/avatar");
-      this.$store.commit("setTab", false);
     },
     async rmLocalData() {
       const data = await Confirm({
@@ -106,7 +106,6 @@ export default {
           room2: 0
         });
         this.$router.push("/");
-        this.$store.commit("setTab", false);
       }
     },
     handleGithub() {
@@ -127,6 +126,9 @@ export default {
       userid: state => state.userInfo.userid,
       src: state => state.userInfo.src
     })
+  },
+  components: {
+    Bottom
   }
 };
 </script>

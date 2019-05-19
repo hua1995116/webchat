@@ -1,14 +1,15 @@
 <template>
   <div class="header">
       <div class="title">
-        <mu-appbar color="lightBlue400">
-          <mu-button icon slot="left" @click="goback">
-            <mu-icon value="chevron_left"></mu-icon>
+        <mu-appbar :color="color">
+          <mu-button icon slot="left" @click="leftClick">
+            <mu-icon :value="leftIcon"></mu-icon>
           </mu-button>
           <div class="center">
+            {{content}}
           </div>
-          <mu-button icon slot="right">
-            <mu-icon value="expand_more"></mu-icon>
+          <mu-button icon slot="right" @click="rightClick">
+            <mu-icon :value="rightIcon"></mu-icon>
           </mu-button>
         </mu-appbar>
       </div>
@@ -17,6 +18,7 @@
 
 <script>
 export default {
+  props: ['content', 'leftIcon', 'rightIcon', 'color'],
   components: {},
   data() {
     return {};
@@ -24,13 +26,15 @@ export default {
 
   computed: {},
 
-  mounted() {},
+  mounted() {
+  },
 
   methods: {
-    goback() {
-      this.$router.isBack = true;
-      this.$router.goBack();
-      this.$store.commit("setTab", true);
+    leftClick() {
+      this.$emit('leftClick');
+    },
+    rightClick() {
+      this.$emit('rightClick');
     }
   }
 };

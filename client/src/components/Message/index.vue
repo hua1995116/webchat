@@ -4,7 +4,7 @@
             <div class="name">
                 <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
             </div>
-            <span class="head-place">
+            <span class="head-place" v-flex-touch="handleTouch">
                 <img :src="avatar" alt="" class="head">
             </span>
             <div v-if="img">
@@ -65,6 +65,11 @@ export default {
   },
   mounted() {
     this.$refs.msg.scrollIntoView();
+  },
+  methods: {
+    handleTouch(e) {
+      this.$emit('flexTouch', `@${this.name}，`);
+    }
   }
 };
 </script>

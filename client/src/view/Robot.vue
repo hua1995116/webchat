@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="title">
-        <mu-appbar color="lightBlue400">
+        <mu-appbar color="primary">
           <mu-button icon slot="left" @click="goback">
             <mu-icon value="chevron_left"></mu-icon>
           </mu-button>
@@ -60,7 +60,6 @@ export default {
     goback() {
       this.$router.isBack = true;
       this.$router.goBack();
-      this.$store.commit("setTab", true);
     },
     sendmessage() {
       const info = document.getElementById("msg").value;

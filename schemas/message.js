@@ -12,6 +12,9 @@ var MessageSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  type: {
+    type: String,
+  },
   time: {
     type: Date,
     default: Date.now()

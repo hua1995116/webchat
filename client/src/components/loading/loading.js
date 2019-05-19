@@ -11,8 +11,10 @@ $loading.innerHTML = `<div class="logo">
                       </div>`;
 
 const Loading = {
-  show() {
+  show(style) {
     try {
+      $loading.style.opacity = 1;
+      Object.keys(style).map(item => ($loading.style[item] = style[item]));
       $body.appendChild($loading);
     } catch (e) {
     }
@@ -20,7 +22,10 @@ const Loading = {
   hide() {
     try {
       if ($loading.parentNode === $body) {
-        $body.removeChild($loading);
+        $loading.style.opacity = 0;
+        setTimeout(() => {
+          $body.removeChild($loading);
+        }, 200);
       }
     } catch (e) {
     }

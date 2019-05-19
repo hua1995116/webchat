@@ -23,6 +23,11 @@ module.exports = {
           ws: true,
           changeOrigin: true
         },
+        'sockjs-node': {
+          target: '127.0.0.1:9090',
+          ws: false,
+          changeOrigin: true
+        },
         '/api': {
           target: 'http://127.0.0.1:9090',
           ws: false,
