@@ -41,7 +41,7 @@
       <!--<mu-divider/>-->
     </div>
     <div class="logout">
-      <mu-button full-width class="demo-raised-button" color="primary" @click="logout">退出</mu-button>
+      <mu-button full-width class="demo-raised-button" color="error" @click="logout">退出</mu-button>
     </div>
     <div style="height:80px"></div>
     <Bottom></Bottom>
@@ -176,12 +176,6 @@ export default {
 }
 
 .logout {
-  width: 200px;
-  margin: 0 auto;
-
-  .mu-raised-button {
-    background: #ff4081;
-    color: #fff;
-  }
+  margin: 0 20px;
 }
 </style>

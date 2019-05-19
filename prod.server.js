@@ -42,7 +42,6 @@ require('./router/routes.js')(app)
 
 if ('development' === app.get('env')) {
   app.set('showStackError', true)
-  // app.use(morgan(':method :url :status'))
   app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO}))
   app.locals.pretty = true
   mongoose.set('debug', true)

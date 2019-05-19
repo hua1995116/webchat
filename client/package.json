@@ -10,11 +10,15 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "lodash": "^4.17.11",
     "muse-ui": "^3.0.2",
+    "socket.io-client": "^1.7.3",
     "vue": "^2.6.10",
+    "vue-cropper": "^0.4.9",
     "vue-flex-touch": "^1.0.0",
     "vue-router": "^3.0.3",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "xss-filters-es6": "^1.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",
