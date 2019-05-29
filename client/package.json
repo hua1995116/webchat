@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build && rm -rf ../dist && cp -r dist ../",
+    "build-cdn": "CDN=1 vue-cli-service build && rm -rf ../dist && cp -r dist ../",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },

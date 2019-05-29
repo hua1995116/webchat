@@ -1,18 +1,30 @@
 <template>
   <div class="login">
-    <div class="header">
-    </div>
     <div class="content">
-      <form action="" name="form1">
-         <mu-text-field class="field-input-login" label="帐号" v-model="username" name="username"></mu-text-field>
+      <form action="" name="form2">
+        <div class="context-logo">
+          <img src="https://s3.qiufengh.com/webchat/webchat-logo-160.png" alt="">
+          <!-- <SvgModal></SvgModal> -->
+        </div>
+        <Input v-model="username" type="text" placeholder="注册账号"/>
         <br/>
-        <mu-text-field class="field-input-login" label="密码" v-model="password" :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'" name="password"></mu-text-field>
+        <Input v-model="password" type="password" placeholder="输入密码"/>
         <br/>
-        <div class="btn-radius" @click="submit">注册</div>
+        <div class="box box2" @click="submit">
+          <Arrow></Arrow>
+        </div>
       </form>
-      <div @click="login" class="tip-user">
-        我已有帐号
+      <div class="bottom-wraper">
+        <mu-flex align-items="center">
+          <mu-flex justify-content="center" fill><div @click="login" class="tip-user">去登录</div></mu-flex>
+          <mu-flex justify-content="center">|</mu-flex>
+          <mu-flex justify-content="center" fill><div class="tip-user">忘记密码</div></mu-flex>
+        </mu-flex>
+        <div class="bottom-arguemnt">
+          登录即可代表同意协议
+        </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -24,8 +36,15 @@ import Alert from "@components/Alert";
 import Toast from "@components/Toast";
 import socket from "../socket";
 import ios from '@utils/ios';
+import Arrow from '@components/arrow';
+import Input from '@components/input';
 
 export default {
+  components: {
+    Arrow,
+    SvgModal,
+    Input
+  },
   data() {
     return {
       username: "",

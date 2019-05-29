@@ -1,29 +1,49 @@
 <template>
   <div class="login">
-    <div class="header">
-    </div>
     <div class="content">
       <form action="" name="form2">
-        <mu-text-field class="field-input-login" label="帐号" v-model="username" name="username"></mu-text-field>
+        <div class="context-logo">
+          <img src="https://s3.qiufengh.com/webchat/webchat-logo-160.png" alt="">
+          <!-- <SvgModal></SvgModal> -->
+        </div>
+        <Input v-model="username" type="text" placeholder="输入账号"/>
         <br/>
-        <mu-text-field class="field-input-login" label="密码" v-model="password" :action-icon="visibility ? 'visibility_off' : 'visibility'" :action-click="() => (visibility = !visibility)" :type="visibility ? 'text' : 'password'" name="password"></mu-text-field>
+        <Input v-model="password" type="password" placeholder="输入密码"/>
         <br/>
-        <div class="btn-radius" @click="submit">登录</div>
+        <div class="box box2" @click="submit">
+          <Arrow></Arrow>
+        </div>
       </form>
-      <div @click="register" class="tip-user">注册帐号</div>
+      <div class="bottom-wraper">
+        <mu-flex align-items="center">
+          <mu-flex justify-content="center" fill><div @click="register" class="tip-user">注册帐号</div></mu-flex>
+          <mu-flex justify-content="center">|</mu-flex>
+          <mu-flex justify-content="center" fill><div class="tip-user">忘记密码</div></mu-flex>
+        </mu-flex>
+        <div class="bottom-arguemnt">
+          登录即可代表同意协议
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import SvgModal from "@components/svg-modal";
+import SvgModal from "@components/svg-modal/index.vue";
 import Alert from "@components/Alert";
 import Toast from "@components/Toast";
 import socket from "../socket";
 import ios from '@utils/ios';
-//  import Loading from '../components/loading/loading'
+import Arrow from '@components/arrow';
+import Input from '@components/input';
 
 export default {
+  components: {
+    Arrow,
+    SvgModal,
+    Input
+  },
   data() {
     return {
       loading: "",
@@ -56,8 +76,6 @@ export default {
             type: "src",
             value: res.data.src
           });
-          this.getSvgModal.$root.$options.clear();
-          this.$store.commit("setSvgModal", null);
           this.$router.push({ path: "/" });
           socket.emit("login", { name });
         } else {
@@ -79,15 +97,8 @@ export default {
   mounted() {
     // 微信 回弹 bug
     ios();
-    if (!this.getSvgModal) {
-      const svg = SvgModal();
-      this.$store.commit("setSvgModal", svg);
-    }
   },
   computed: {
-    getSvgModal() {
-      return this.$store.state.svgmodal;
-    }
   }
 };
 </script>
@@ -99,29 +110,25 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
-  background-image: url('//s3.qiufengh.com/webchat/bg.jpg');
+  background: #eaeaea;
   background-size: 100% 100%;
   background-position: center center;
-  .header {
-    height: 50px;
-  }
   .content {
-    width: 80%;
-    margin: 70px auto 20px;
-    .field-input-login {
-      .mu-input-label {
-        color: rgba(254, 244, 244, 0.74)
-      }
-      .mu-input-line {
-        background-color: rgba(254, 244, 244, 0.74)
+    width: 80vw;
+    margin: 60px auto 20px;
+    .context-logo {
+      width: 70vw;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 80px;
+        height: 80px;
       }
     }
     .mu-input {
-      color: rgba(254, 244, 244, 0.74);
       width: 100%;
-    }
-    .mu-text-field-input {
-      color: #fff;
     }
   }
 }
@@ -139,7 +146,67 @@ export default {
 .tip-user {
   width 100%;
   text-align:center;
-  margin-top: 20px;
-  color:#fff;
+}
+
+.bottom-wraper {
+  position: absolute;
+  bottom: 50px;
+  left:0;
+  right: 0;
+  margin: 0 auto;
+  width: 60vw;
+  .bottom-arguemnt {
+    margin-top: 5px;
+    text-align: center;
+  }
+}
+
+.box {
+  width: 80px;
+  height: 80px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(120deg, #2196f3 0%, #8fd3f4 100%);
+}
+
+.box2 {
+  border-radius: 55% 45% 73% 27% / 70% 58% 42% 30%;
+  animation: morph1 4s infinite;
+}
+// @keyframes morph {
+//   0% {
+//     border-radius: 26% 74% 49% 51% / 21% 51% 49% 79%;
+//   }
+//   25% {
+//     border-radius: 74% 26% 50% 50% / 53% 29% 71% 47%;
+//   }
+//   50% {
+//     border-radius: 48% 52% 28% 72% / 45% 71% 29% 55%;
+//   }
+//   75% {
+//     border-radius: 48% 52% 76% 24% / 70% 49% 51% 30%;
+//   }
+//   100% {
+//     border-radius: 26% 74% 49% 51% / 21% 51% 49% 79%;
+//   }
+// }
+@keyframes morph1 {
+  0% {
+    border-radius: 26% 74% 49% 51% / 21% 51% 49% 79%;
+  }
+  25% {
+    border-radius: 74% 26% 50% 50% / 53% 29% 71% 47%;
+  }
+  50% {
+    border-radius: 48% 52% 28% 72% / 45% 71% 29% 55%;
+  }
+  75% {
+    border-radius: 48% 52% 76% 24% / 70% 49% 51% 30%;
+  }
+  100% {
+    border-radius: 26% 74% 49% 51% / 21% 51% 49% 79%;
+  }
 }
 </style>

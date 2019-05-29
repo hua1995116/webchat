@@ -14,7 +14,7 @@ module.exports = {
             .set('@api',resolve('src/api'))
     },
     assetsDir: './static/',
-    publicPath: process.env.NODE_ENV === 'production' ? '//s3.qiufengh.com/' : '',
+    publicPath: process.env.CDN ? '//s3.qiufengh.com/webchat' : '',
     devServer: {
       port: 9099,
       proxy: { // https://cli.vuejs.org/zh/config/#devserver-proxy

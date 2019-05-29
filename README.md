@@ -1,15 +1,18 @@
 # webchat
+
+<img src="https://s3.qiufengh.com/webchat/webchat-logo-160.png" />
+
 [![Build Status](https://www.travis-ci.org/hua1995116/webchat.svg?branch=master)](https://www.travis-ci.org/hua1995116/webchat)
 
-[中文版](./README.md) [English](./zh_en.md) 
+[中文版](./README.md) [English](./zh_en.md)
 
 ## 功能
 
 - [x] 注册登录功能
-- [x] 聊天功能 
-- [x] 查看历史记录 
-- [x] 多个聊天室 
-- [x] 与机器人对接 
+- [x] 聊天功能
+- [x] 查看历史记录
+- [x] 多个聊天室
+- [x] 与机器人对接
 - [x] 图片发送
 - [x] 发送链接
 - [x] 发送表情
@@ -34,7 +37,7 @@ npm run dev -----运行
 ## 打包
 
 ```
-npm run build 
+npm run build
 
 npm run prod
 

@@ -1,63 +1,35 @@
-let fs = require('fs');
-let join = require('path').join;
-const path = require('path'); 
-const upload = require('./qiniu');
+const qiniuNode= require('qiniu-node');
+const config = require('./config');
+const fs = require('fs');
+const path = require('path');
 
-const url  = '//s3.qiufengh.com/';
-const bucket = 'webchat/'
-const uploadUrl = url + bucket;
-
-/**
- * 
- * @param startPath  起始目录文件夹路径
- * @returns {Array}
- */
-function findSync(startPath) {
-    let result = [];
-    function finder(path) {
-        let files = fs.readdirSync(path);
-        files.forEach((val, index) => {
-            let fPath = join(path, val);
-            let stats = fs.statSync(fPath);
-            if(stats.isFile()&&val.indexOf('.map') === -1) result.push(val);
-        });
-
+function readUploadFiles(dir) {
+  const rootPath = path.join(__dirname, dir);
+  const dirs = fs.readdirSync(rootPath);
+  return dirs.reduce((all, file) => {
+    const curPath = path.join(rootPath, file);
+    const isDir = fs.statSync(curPath).isDirectory();
+    const extname = path.extname(curPath);
+    if(!isDir && extname !== '.map') {
+      all.push(curPath);
     }
-    finder(startPath);
-    return result;
-}
-let JSfileNames = findSync('../dist/static/js');
-
-let CSSfileNames = findSync('../dist/static/css');
-
-function readFileSync() {
-    fs.readFile('../dist/index.html', 'utf8', function(err, data) {
-        if(err) {
-            console.log(err);
-        }
-        data = data.toString();
-        for(var i in JSfileNames) {
-            data = data.replace(`/static/js/${JSfileNames[i]}`, `${uploadUrl}${JSfileNames[i]}?v=${+new Date()}`);
-        }
-        for(var i in CSSfileNames) {
-            const reg = new RegExp(`=\.{0,1}\/static\/css\/${CSSfileNames[i]}`);
-            data = data.replace(reg, `=${uploadUrl}${CSSfileNames[i]}?v=${+new Date()}`);
-        }
-        
-        const rootJs = path.join(process.cwd(), '../dist/static/js');
-        const rootCss = path.join(process.cwd(), '../dist/static/css');
-        const exportList = exportUrlList(rootJs, JSfileNames).concat(exportUrlList(rootCss, CSSfileNames));
-        upload(exportList).then(() =>{
-            fs.writeFile('../dist/index.html', data, (err) => {
-                if (err) throw err;
-                console.log('The file has been saved!');
-            });
-        });
-    });
+    return all;
+  }, []);
 }
 
-function exportUrlList(root, arr) {
-    return arr.map(item => (path.join(root, item)))
+function main() {
+  const cssFiles = readUploadFiles('../dist/static/css');
+  const JsFiles = readUploadFiles('../dist/static/js');
+  const qiniuCss = new qiniuNode({
+    ...config,
+    dir: 'webchat/static/css/'
+  });
+  const qiniuJs = new qiniuNode({
+    ...config,
+    dir: 'webchat/static/js/'
+  });
+  qiniuCss.upload(cssFiles);
+  qiniuJs.upload(JsFiles);
 }
 
-readFileSync();
+main();

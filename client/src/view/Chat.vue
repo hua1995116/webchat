@@ -188,12 +188,12 @@
       },
       bindScroll() {
         this.container.addEventListener('scroll', debounce(async (e) => {
-          if (e.target.scrollTop >= 0 && e.target.scrollTop < 50) {
+          if (e.target.scrollTop >= 0 && e.target.scrollTop < 100) {
             this.isloading = true;
             await this.getRoomMessage();
             this.isloading = false;
           }
-        }, 50));
+        }, 10));
       },
       bindEmoji() {
         this.$refs.emoji.addEventListener('click', (e) => {
