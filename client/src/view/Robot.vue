@@ -27,10 +27,11 @@
         </div>
       </div>
       <div class="con-input">
-        <div class="input" @keyup.enter="sendmessage">
+        <!-- <div class="input" @keyup.enter="sendmessage">
           <input type="text" id="msg">
         </div>
-        <mu-button class="demo-raised-button" color="primary" @click="sendmessage">发送</mu-button>
+        <mu-button class="demo-raised-button" color="primary" @click="sendmessage">发送</mu-button> -->
+        <InputSumbit></InputSumbit>
       </div>
     </div>
   </div>
@@ -41,6 +42,7 @@
 import { mapGetters, mapState } from "vuex";
 import Alert from '@components/Alert';
 import Message from "@components/Message";
+import InputSumbit from "@components/input-sumbit";
 import { HOSTER_URL, HOSTER_NAME } from "@const/index";
 
 export default {
@@ -92,7 +94,8 @@ export default {
     })
   },
   components: {
-    Message
+    Message,
+    InputSumbit
   }
 };
 </script>

@@ -5,10 +5,12 @@ import Robot from '../view/Robot';
 import Home from '../view/Home';
 import Register from '../view/Register';
 import Login from '../view/Login';
-import Chat from '../view/Chat.vue';
+import Chat from '../view/Chat';
 import Avatar from '../view/Avatar';
-import BaseTransition from '../BaseTransition.vue';
-import BaseView from '../BaseView.vue';
+import GroupDetail from '../view/GroupDetail';
+import GroupMember from '../view/GroupMember';
+import BaseTransition from '../BaseTransition';
+import BaseView from '../BaseView';
 import loading from '../components/loading/loading';
 
 Router.prototype.goBack = function () {
@@ -38,6 +40,16 @@ const router = new Router({
           path: '/robot',
           name: 'Robot',
           component: Robot
+        },
+        {
+          path: '/groupDetail',
+          name: 'GroupDetail',
+          component: GroupDetail
+        },
+        {
+          path: '/groupMember',
+          name: 'GroupMember',
+          component: GroupMember
         }
       ]
     },

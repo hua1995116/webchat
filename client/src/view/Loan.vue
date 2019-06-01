@@ -3,7 +3,6 @@
     <div class="">
       <mu-appbar>
         <mu-button icon slot="left" >
-          <!-- <mu-icon value="chevron_left"></mu-icon> -->
         </mu-button>
         <div class="title">webchat</div>
         <mu-button icon slot="right">
@@ -16,10 +15,10 @@
         <mu-sub-header>最近聊天记录</mu-sub-header>
         <mu-list-item avatar button :ripple="true" @click="chatwindow('room1')">
           <mu-list-item-action>
-            <mu-avatar class="avatar">
+            <div class="avatar">
               <span class="tip" v-if="unRead1!==0">{{unRead1 > 99 ? '99+' : unRead1}}</span>
-              <img :src="house1">
-            </mu-avatar>
+              <Avatar :src="house1" size="small"></Avatar>
+            </div>
           </mu-list-item-action>
           <mu-list-item-title>聊天室1</mu-list-item-title>
           <mu-list-item-action>
@@ -28,24 +27,16 @@
         </mu-list-item>
         <mu-list-item avatar button :ripple="true" @click="chatwindow('room2')">
           <mu-list-item-action>
-            <mu-avatar class="avatar">
-              <span class="tip" v-if="unRead2!==0">{{unRead1 > 99 ? '99+' : unRead2}}</span>
-              <img :src="house2">
-            </mu-avatar>
+            <div class="avatar">
+              <span class="tip" v-if="unRead2!==0">{{unRead2 > 99 ? '99+' : unRead2}}</span>
+              <Avatar :src="house2" size="small"></Avatar>
+            </div>
           </mu-list-item-action>
           <mu-list-item-title>聊天室2</mu-list-item-title>
           <mu-list-item-action>
             <mu-icon value="chat_bubble"></mu-icon>
           </mu-list-item-action>
         </mu-list-item>
-
-        <!-- <mu-list-item title="聊天室2" @click="chatwindow('room2')">
-          <div class="avatar" slot="leftAvatar">
-            <span class="tip" v-if="unRead2!==0">{{unRead2 > 99 ? '99+' : unRead2}}</span>
-             <mu-avatar :src="house2" />
-          </div>
-          <mu-icon value="chat_bubble" slot="right"/>
-        </mu-list-item> -->
       </mu-list>
       <mu-divider/>
       <mu-list>
@@ -61,10 +52,6 @@
             <mu-icon value="chat_bubble"></mu-icon>
           </mu-list-item-action>
         </mu-list-item>
-        <!-- <mu-list-item title="客服大白(微信群，作者联系方式，找我)" @click="chatRobot()">
-          <mu-avatar :src="robot" slot="leftAvatar"/>
-          <mu-icon value="chat_bubble" slot="right"/>
-        </mu-list-item> -->
       </mu-list>
     </mu-paper>
     <Bottom></Bottom>
@@ -74,6 +61,7 @@
 <script>
 import Confirm from "@components/Confirm";
 import Bottom from "@components/Bottom";
+import Avatar from "@components/Avatar";
 import { mapState } from "vuex";
 import { ROBOT_URL, HOST_URL1, HOST_URL2 } from "@const/index";
 import socket from "../socket";
@@ -129,7 +117,8 @@ export default {
     })
   },
   components: {
-    Bottom
+    Bottom,
+    Avatar
   }
 };
 </script>

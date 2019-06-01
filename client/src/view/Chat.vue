@@ -1,15 +1,6 @@
 <template>
   <div>
     <div class="container">
-      <mu-dialog width="360" :open.sync="openSimple">
-        <div class="all-chat">
-          <div slot="title">在线人员</div>
-          <div v-for="(obj,index) in getUsers" class="online" :key="index">
-            <img :src="obj.src" alt="">
-          </div>
-        </div>
-        <mu-button slot="actions" flat color="primary" @click="closeSimpleDialog">关闭</mu-button>
-      </mu-dialog>
       <div class="title">
         <mu-appbar color="primary">
           <mu-button icon slot="left" @click="goback">
@@ -233,10 +224,7 @@
         });
       },
       openSimpleDialog () {
-        this.openSimple = true;
-      },
-      closeSimpleDialog () {
-        this.openSimple = false;
+        this.$router.push({ path: "/groupDetail" });
       },
       handleGithub() {
         Alert({
