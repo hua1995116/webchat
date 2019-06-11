@@ -181,6 +181,7 @@ const store = new Vuex.Store({
               data: result.data,
               roomid: data.roomid
             });
+
           } else {
             commit('setRoomDetailInfosBefore', {
               data: result.data,
@@ -191,6 +192,9 @@ const store = new Vuex.Store({
             current: data.current,
             total: result.total
           })
+          return {
+            data: result.data
+          }
         }
       } catch(e) {
         const cache = getCache(data.roomid);

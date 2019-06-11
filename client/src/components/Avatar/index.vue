@@ -9,7 +9,6 @@ export default {
   props: ['size', 'type', 'src'],
   components: {},
   data () {
-    console.log(this.src);
     const avatarSzie = `w-avatar-${this.size || 'normal'}`;
     const avatarType = `w-avatar-${this.type || 'square'}`;
     return {

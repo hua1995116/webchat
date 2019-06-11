@@ -35,7 +35,7 @@
               </div>
             </div>
           </div>
-          <!-- <div v-if="getInfos.length > 0" class="chat-top">到顶啦~</div> -->
+          <div v-if="isEnd && getInfos.length !== 0" class="chat-top">到顶啦~</div>
           <Message
             @flexTouch="hadnleTouch"
             v-for="obj in getInfos"
@@ -120,6 +120,8 @@
   import ios from '@utils/ios';
   import {updateRoomInfo, getRoomInfo} from '@utils/cache';
 
+  let isMore = false;
+
   export default{
     data() {
       const notice = getItem('notice') || {};
@@ -130,11 +132,11 @@
         container: {},
         chatValue: '',
         emoji: emoji,
-        current: 1,
         openSimple: false,
         noticeBar: !!noticeBar,
         noticeList: [],
-        noticeVersion: noticeVersion || '20181222'
+        noticeVersion: noticeVersion || '20181222',
+        isEnd: false
       };
     },
     async created() {
@@ -180,9 +182,13 @@
       bindScroll() {
         this.container.addEventListener('scroll', debounce(async (e) => {
           if (e.target.scrollTop >= 0 && e.target.scrollTop < 100) {
-            this.isloading = true;
-            await this.getRoomMessage();
-            this.isloading = false;
+            if(!isMore && !this.isEnd) {
+              this.isloading = true;
+              isMore = true;
+              await this.getRoomMessage();
+              isMore = false;
+              this.isloading = false;
+            }
           }
         }, 10));
       },
@@ -203,7 +209,11 @@
           roomid: this.roomid
         };
         try {
-          await this.$store.dispatch('getAllMessHistory', data);
+          const result = await this.$store.dispatch('getAllMessHistory', data);
+          console.log(result);
+          if(!result.data.length) {
+            this.isEnd = true;
+          }
         } catch(e) {
 
         }

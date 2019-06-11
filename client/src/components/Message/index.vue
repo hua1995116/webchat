@@ -4,9 +4,7 @@
             <div class="name">
                 <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
             </div>
-            <span class="head-place" v-flex-touch="handleTouch">
-                <img :src="avatar" alt="" class="head">
-            </span>
+            <Avatar class="head-place" size="small" :src="avatar" v-flex-touch="handleTouch"></Avatar>
             <div v-if="img">
                 <img
                     :src="pic"
@@ -25,9 +23,13 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Avatar from "@components/Avatar";
 import dateFormat from "../../utils/date";
 import { inHTMLData, uriInUnQuotedAttr } from "xss-filters-es6";
 export default {
+  components: {
+    Avatar,
+  },
   props: ["name", "img", "msg", "head", "mytime", "is-self", "container", "isNeedScroll", "firstNode"],
   computed: {
     getdate() {
