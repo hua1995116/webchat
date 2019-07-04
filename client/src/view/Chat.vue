@@ -24,7 +24,7 @@
           {{noticeBar ? '显示通知' : '关闭通知'}}
         </div>
       </div> -->
-      <div class="chat-inner">
+      <div class="chat-inner" @scroll="bindScroll">
         <div class="chat-container">
           <div v-if="getInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
           <div v-if="getInfos.length !== 0 && isloading" class="chat-loading">
@@ -173,24 +173,24 @@
       loading.hide();
 
       this.bindEmoji();
-      this.bindScroll();
     },
     methods: {
       hadnleTouch(data) {
         this.chatValue = this.chatValue + data;
       },
-      bindScroll() {
-        this.container.addEventListener('scroll', debounce(async (e) => {
-          if (e.target.scrollTop >= 0 && e.target.scrollTop < 100) {
-            if(!isMore && !this.isEnd) {
-              this.isloading = true;
-              isMore = true;
-              await this.getRoomMessage();
-              isMore = false;
-              this.isloading = false;
-            }
-          }
-        }, 10));
+      bindScroll: debounce(async function (e) {
+        if (e.target.scrollTop >= 0 && e.target.scrollTop < 100) {
+          this.handleScroll();
+        }
+      }, 30),
+      async handleScroll() {
+        if(!isMore && !this.isEnd) {
+          this.isloading = true;
+          isMore = true;
+          await this.getRoomMessage();
+          isMore = false;
+          this.isloading = false;
+        }
       },
       bindEmoji() {
         this.$refs.emoji.addEventListener('click', (e) => {
