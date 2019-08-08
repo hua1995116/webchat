@@ -85,6 +85,8 @@ npm run prod
 
 [vue-chat项目之重构与体验优化](http://blog.csdn.net/blueblueskyhua/article/details/78159672)
 
+[消息未读之点不完的小红点（Node+Websocket）](https://juejin.im/post/5bf227676fb9a049ac78bfcf)
+
 ## API
 
 <a href="./API.md">API</a>
