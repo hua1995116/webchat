@@ -11,9 +11,15 @@ $loading.innerHTML = `<div class="logo">
                       </div>`;
 
 const Loading = {
-  show() {
+  show({delay = 0}) {
     try {
-      $body.appendChild($loading);
+      if(!delay) {
+        setTimeout(() => {
+          $body.appendChild($loading);
+        }, delay);
+      } else {
+        $body.appendChild($loading);
+      }
     } catch (e) {
     }
   },
