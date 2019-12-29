@@ -38,7 +38,12 @@ app.use(session({
   saveUninitialized: true
 }))
 
-require('./router/routes.js')(app)
+// require('./router/routes.js')(app)
+
+app.use('/api/file', require('./router/files'));
+app.use('/api/user', require('./router/users'));
+app.use('/api/message', require('./router/messages'));
+app.use('/api/friend', require('./router/friends'));
 
 if ('development' === app.get('env')) {
   app.set('showStackError', true)

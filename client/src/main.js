@@ -18,7 +18,7 @@ import vuePicturePreview from './components/photo-viewer';
 import flexTouch from "vue-flex-touch";
 
 Vue.use(vuePicturePreview);
-Vue.use(flexTouch, { timeout: 900 });
+Vue.use(flexTouch, { timeout: 900, preventDefault: false });
 Vue.use(MuseUI);
 Vue.config.productionTip = false;
 

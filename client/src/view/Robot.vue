@@ -31,7 +31,7 @@
           <input type="text" id="msg">
         </div>
         <mu-button class="demo-raised-button" color="primary" @click="sendmessage">发送</mu-button> -->
-        <InputSumbit></InputSumbit>
+        <InputSumbit @sumbit="sendmessage"></InputSumbit>
       </div>
     </div>
   </div>
@@ -63,8 +63,7 @@ export default {
       this.$router.isBack = true;
       this.$router.goBack();
     },
-    sendmessage() {
-      const info = document.getElementById("msg").value;
+    sendmessage(info) {
       if (info === '') {
         Alert({
           content: '内容不能为空'
@@ -83,7 +82,6 @@ export default {
         src: this.hosterImg
       });
       this.$store.dispatch("getRobatMess", data);
-      document.getElementById("msg").value = "";
     }
   },
   computed: {

@@ -101,6 +101,10 @@ export default {
           type: "src",
           value: ""
         });
+        this.$store.commit("setUserInfo", {
+          type: "id",
+          value: ""
+        });
         this.$store.commit("setUnread", {
           room1: 0,
           room2: 0

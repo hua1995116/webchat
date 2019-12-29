@@ -1,12 +1,12 @@
 const User = require('../models/user')
 const Message = require('../models/message')
 const superagent = require('superagent')
-const path = require('path')
-const fs = require('fs')
-const multer = require('multer');
+// const path = require('path')
+// const fs = require('fs')
+// const multer = require('multer');
 const qnUpload = require('../deploy/qiniu');
-const {cmder, rmDirFiles} = require('../utils/cmd');
-const fileTool = require('fs-extra');
+// const {cmder, rmDirFiles} = require('../utils/cmd');
+// const fileTool = require('fs-extra');
 
 const mkdirsSync = function(dirname) {
   if (fs.existsSync(dirname)) {

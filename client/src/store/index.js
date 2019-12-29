@@ -14,7 +14,10 @@ const store = new Vuex.Store({
   state: {
     userInfo: {
       src: getItem('src'),
-      userid: getItem('userid')
+      userid: getItem('userid'),
+      id: getItem('id'),
+    },
+    lookUserInfo: {
     },
     isDiscount: false,
     isLogin: false,
@@ -130,9 +133,16 @@ const store = new Vuex.Store({
     },
     setRobotMsg(state, data) {
       state.robotmsg.push(data);
+    },
+    setLookUserInfo(state, data) {
+      state.lookUserInfo = data;
     }
   },
   actions: {
+    async addFriend({}, data) {
+      const res = await url.postAddFriend(data);
+      return res;
+    },
     async uploadAvatar({}, data) {
       const res = await url.postUploadAvatar(data);
       return res.data;
@@ -170,6 +180,12 @@ const store = new Vuex.Store({
         status: 'fail',
         data: res.data
       };
+    },
+    async getUserInfo({state, commit}, data) {
+      const res = await url.getUserInfo(data);
+      if(res.data.errno === 0) {
+        commit('setLookUserInfo', res.data.data);
+      }
     },
     async getAllMessHistory({state, commit}, data) {
       try {

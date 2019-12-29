@@ -37,10 +37,12 @@
           </div>
           <div v-if="isEnd && getInfos.length !== 0" class="chat-top">到顶啦~</div>
           <Message
-            @flexTouch="hadnleTouch"
             v-for="obj in getInfos"
+            @avatarClick="handleInfo"
+            @flexTouch="hadnleTouch"
             :key="obj._id"
             :is-self="obj.username === userid"
+            :id="obj._id"
             :name="obj.username"
             :head="obj.src"
             :msg="obj.msg"
@@ -175,6 +177,10 @@
       this.bindEmoji();
     },
     methods: {
+      handleInfo(item) {
+        console.log(item);
+        this.$router.push({ path: "/persionDetail", query: { id: item.id } });
+      },
       hadnleTouch(data) {
         this.chatValue = this.chatValue + data;
       },

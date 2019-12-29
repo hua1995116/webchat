@@ -1,9 +1,9 @@
 <template>
   <div class="chat">
-    <div class="input" @keyup.enter="submess">
+    <div class="input" @keyup.enter="handleSubmit">
       <input type="text" v-model="chatValue">
     </div>
-    <mu-button class="demo-raised-button" color="primary" @click="submess">发送</mu-button>
+    <mu-button class="demo-raised-button" color="primary" @click="handleSubmit">发送</mu-button>
   </div>
 </template>
 
@@ -13,6 +13,7 @@ export default {
   components: {},
   data () {
     return {
+      chatValue: '',
     };
   },
 
@@ -22,7 +23,8 @@ export default {
 
   methods: {
     handleSubmit() {
-      this.$emit('sumbit');
+      this.$emit('sumbit', this.chatValue);
+      this.chatValue = '';
     }
   }
 }

@@ -80,6 +80,10 @@ export default {
             type: "src",
             value: data.src
           });
+          this.$store.commit("setUserInfo", {
+            type: "id",
+            value: res.data.id
+          });
           this.getSvgModal.$root.$options.clear();
           this.$store.commit("setSvgModal", null);
           this.$router.push({ path: "/" });

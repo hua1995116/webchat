@@ -4,7 +4,13 @@
             <div class="name">
                 <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
             </div>
-            <Avatar class="head-place" size="small" :src="avatar" v-flex-touch="handleTouch"></Avatar>
+            <Avatar
+              @click.native="handleClick"
+              class="head-place"
+              size="small"
+              :src="avatar"
+              v-flex-touch="handleTouch"
+              ></Avatar>
             <div v-if="img">
                 <img
                     :src="pic"
@@ -30,7 +36,7 @@ export default {
   components: {
     Avatar,
   },
-  props: ["name", "img", "msg", "head", "mytime", "is-self", "container", "isNeedScroll", "firstNode"],
+  props: ["id", "name", "img", "msg", "head", "mytime", "is-self", "container", "isNeedScroll", "firstNode"],
   computed: {
     getdate() {
       return dateFormat(new Date(this.mytime), "yyyy-MM-dd HH:mm:ss");
@@ -69,7 +75,14 @@ export default {
     this.$refs.msg.scrollIntoView();
   },
   methods: {
+    handleClick() {
+      console.log(11);
+      this.$emit('avatarClick', {
+        id: this.name,
+      });
+    },
     handleTouch(e) {
+      console.log(e);
       this.$emit('flexTouch', `@${this.name}，`);
     }
   }

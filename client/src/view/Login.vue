@@ -76,6 +76,10 @@ export default {
             type: "src",
             value: res.data.src
           });
+          this.$store.commit("setUserInfo", {
+            type: "id",
+            value: res.data.id
+          });
           this.$router.push({ path: "/" });
           socket.emit("login", { name });
         } else {

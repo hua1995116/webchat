@@ -45,7 +45,8 @@ module.exports = {
         alias: {
           'vue$': 'vue/dist/vue.esm.js' // https://github.com/vuejs/vue-cli/issues/2359
         }
-      }
+      },
+      devtool: 'source-map'
     },
     lintOnSave: false //https://blog.csdn.net/weixin_39194138/article/details/82147832
 }

@@ -8,8 +8,10 @@ var UserSchema = new mongoose.Schema({
     unique: true,
     type: String
   },
+  nickname: String, // 昵称
   password: String,
   src: String,
+  socketId: String,
   meta: {
     createAt: {
       type: Date,
