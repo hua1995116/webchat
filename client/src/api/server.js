@@ -28,6 +28,8 @@ const Service = {
 
   postAddFriend: data => Axios.post('/api/friend/add', data),
 
+  postListFriend: data => Axios.post('/api/friend/list', data),
+
   // 请求公告
   getNotice: () => Axios.get('https://s3.qiufengh.com/config/notice-config.js')
 };

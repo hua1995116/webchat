@@ -6,6 +6,7 @@ const User = require('../models/user');
 const Message = require('../models/message');
 const fileTool = require('fs-extra');
 const {cmder, rmDirFiles} = require('../utils/cmd');
+const qnUpload = require('../deploy/qiniu');
 const router = Express.Router();
 
 const mkdirsSync = function(dirname) {

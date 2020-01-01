@@ -46,21 +46,53 @@ router.post('/add', async (req, res) => {
       friendId,
     }
 
+    const friendReverseMoal = {
+      selfId: friendId,
+      friendId: selfId,
+    }
+
     const friend = new Friend(friendMoal);
+    const frinedReverse = new Friend(friendReverseMoal);
 
     const friendResult = await friend.save();
 
-    console.log(friendResult);
+    const f2Result = await frinedReverse.save();
+
+    console.log(friendResult, f2Result);
 
     res.json({
-      data: 0
+      data: '添加成功',
+      errno: 0,
     })
   } catch(e) {
     console.log(e);
     res.json({
-      data: []
+      errno: 1,
+      data: '服务器异常'
     })
   }
+});
+
+router.post('/list', async (req, res) => {
+  const {selfId} = req.body;
+  if (!selfId) {
+    global.logger.error('selfId can\'t find')
+    res.json({
+      errno: 1
+    });
+    return;
+  }
+
+  const checkFriend = await Friend.find({selfId}).populate({
+    path: 'friendId',
+    select: 'name src socketId'
+  }).exec();
+  console.log(checkFriend);
+
+  res.json({
+    errno: 0,
+    data: checkFriend
+  })
 });
 
 

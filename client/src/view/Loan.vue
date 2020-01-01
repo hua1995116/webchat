@@ -53,6 +53,20 @@
           </mu-list-item-action>
         </mu-list-item>
       </mu-list>
+      <mu-list>
+        <mu-sub-header>好友</mu-sub-header>
+        <mu-list-item avatar button :ripple="true" @click="chatRobot('')" v-for="item in friendList" :key="item._id">
+          <mu-list-item-action>
+            <mu-avatar class="avatar">
+              <img :src="item.friendId.src">
+            </mu-avatar>
+          </mu-list-item-action>
+          <mu-list-item-title>{{item.friendId.name}}</mu-list-item-title>
+          <mu-list-item-action>
+            <mu-icon value="chat_bubble"></mu-icon>
+          </mu-list-item-action>
+        </mu-list-item>
+      </mu-list>
     </mu-paper>
     <Bottom></Bottom>
   </div>
@@ -87,6 +101,7 @@ export default {
         this.$store.commit("setLoginState", true);
       }
     }
+    this.$store.dispatch('postListFriend', {selfId: this.userInfo.id});
   },
   methods: {
     async chatwindow(roomID) {
@@ -113,7 +128,9 @@ export default {
       src: state => state.userInfo.src,
       isLogin: state => state.isLogin,
       unRead1: state => state.unRead.room1,
-      unRead2: state => state.unRead.room2
+      unRead2: state => state.unRead.room2,
+      userInfo: state => state.userInfo,
+      friendList: state => state.friendList
     })
   },
   components: {

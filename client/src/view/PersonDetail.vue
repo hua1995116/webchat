@@ -119,8 +119,9 @@ export default {
         friendId: this.lookUserInfo.id
       });
       if(res.data.errno === 0) {
+        console.log('1111');
         Alert({
-          content: '添加成功'
+          content: res.data.data
         })
       } else {
         Alert({

@@ -19,6 +19,7 @@ const store = new Vuex.Store({
     },
     lookUserInfo: {
     },
+    friendList: [],
     isDiscount: false,
     isLogin: false,
     // 存放房间信息，为了方便以后做多房间
@@ -136,6 +137,9 @@ const store = new Vuex.Store({
     },
     setLookUserInfo(state, data) {
       state.lookUserInfo = data;
+    },
+    setFriendList(state, data) {
+      state.friendList = data;
     }
   },
   actions: {
@@ -185,6 +189,12 @@ const store = new Vuex.Store({
       const res = await url.getUserInfo(data);
       if(res.data.errno === 0) {
         commit('setLookUserInfo', res.data.data);
+      }
+    },
+    async postListFriend({state, commit}, data) {
+      const res = await url.postListFriend(data);
+      if(res.data.errno === 0) {
+        commit('setFriendList', res.data.data);
       }
     },
     async getAllMessHistory({state, commit}, data) {
