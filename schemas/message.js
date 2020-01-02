@@ -8,6 +8,7 @@ var MessageSchema = new mongoose.Schema({
     default: ''
   },
   roomid: String,
+  roomType: String, // group single
   img: {
     type: String,
     default: ''

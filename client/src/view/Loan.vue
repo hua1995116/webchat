@@ -55,7 +55,7 @@
       </mu-list>
       <mu-list>
         <mu-sub-header>好友</mu-sub-header>
-        <mu-list-item avatar button :ripple="true" @click="chatRobot('')" v-for="item in friendList" :key="item._id">
+        <mu-list-item avatar button :ripple="true" @click="chatSingle(item.friendId._id)" v-for="item in friendList" :key="item._id">
           <mu-list-item-action>
             <mu-avatar class="avatar">
               <img :src="item.friendId.src">
@@ -77,6 +77,7 @@ import Confirm from "@components/Confirm";
 import Bottom from "@components/Bottom";
 import Avatar from "@components/Avatar";
 import { mapState } from "vuex";
+import { sort } from '@utils/tools';
 import { ROBOT_URL, HOST_URL1, HOST_URL2 } from "@const/index";
 import socket from "../socket";
 
@@ -116,7 +117,12 @@ export default {
         }
         return;
       }
-      this.$router.push({ path: "/chat", query: { roomId: roomID } });
+      this.$router.push({ path: "/chat", query: { roomId: roomID, type: 'group' } });
+    },
+    async chatSingle(friendId) {
+      const userId = this.userInfo.id;
+      const roomID = sort(userId, friendId);
+      this.$router.push({ path: "/chat", query: { roomId: roomID, to: friendId, type: 'single' } });
     },
     chatRobot() {
       this.$router.push({ path: "/robot" });

@@ -131,6 +131,7 @@
       return {
         isloading: false,
         roomid: '',
+        roomType: 'group',
         container: {},
         chatValue: '',
         emoji: emoji,
@@ -138,12 +139,17 @@
         noticeBar: !!noticeBar,
         noticeList: [],
         noticeVersion: noticeVersion || '20181222',
-        isEnd: false
+        isEnd: false,
+        to: '',
       };
     },
     async created() {
       const roomId = queryString(window.location.href, 'roomId');
+      const roomType = queryString(window.location.href, 'type');
+      const to = queryString(window.location.href, 'to');
       this.roomid = roomId;
+      this.roomType = roomType;
+      this.to = to;
       if (!roomId) {
         this.$router.push({path: '/'});
       }
@@ -165,7 +171,9 @@
       });
       // 微信 回弹 bug
       ios();
-      this.emitRoom();
+      if(this.roomType === 'group') {
+        this.emitRoom();
+      }
       this.container = document.querySelector('.chat-inner');
       // socket内部，this指针指向问题
       const that = this;
@@ -277,7 +285,8 @@
           formdata.append('file', file1);
           formdata.append('username', this.userid);
           formdata.append('src', this.src);
-          formdata.append('roomid', that.roomid);
+          formdata.append('roomType', this.roomType);
+          formdata.append('roomid', this.roomid);
           formdata.append('time', new Date());
           this.$store.dispatch('uploadImg', formdata);
           const fr = new window.FileReader();
@@ -287,6 +296,7 @@
               src: that.src,
               img: fr.result,
               msg: '',
+              roomType: that.roomType,
               roomid: that.roomid,
               type: 'img',
               time: new Date()
@@ -321,6 +331,8 @@
             src: this.src,
             img: '',
             msg,
+            to: this.to,
+            roomType: this.roomType,
             roomid: this.roomid,
             time: new Date(),
             type: 'text'

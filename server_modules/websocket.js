@@ -1,6 +1,7 @@
 const xssFilters = require('xss-filters');
 const Count = require('../models/count');
 const Message = require('../models/message');
+const User = require('../models/user');
 let cache = {};
 
 if(process.env.NODE_ENV === 'production') {
@@ -65,7 +66,7 @@ function websocket(server) {
       socket.on('message', async (msgObj) => {
         console.log('socket message!');
         //向所有客户端广播发布的消息
-        const {username, src, msg, img, roomid, time, type} = msgObj;
+        const {username, src, msg, img, roomid, roomType, time, type, to} = msgObj;
         if(!msg && !img) {
           return;
         }
@@ -74,11 +75,13 @@ function websocket(server) {
         const mess = {
           username,
           src,
+          roomType,
           msg: xssFilters.inHTMLData(msgLimit), // 防止xss
           img,
           roomid,
           time,
-          type
+          type,
+          to
         }
 
         global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);
@@ -92,24 +95,34 @@ function websocket(server) {
             global.logger.info(res);
           })
         }
-        io.to(mess.roomid).emit('message', mess);
-        // 未读消息
-        const usersList = await gethAllCache('socketId');
-        usersList.map(async item => {
-          if(!users[roomid][item]) {
-            const key = `${item}-${roomid}`
-            await inrcCache(key);
-            const socketid = await gethCacheById('socketId', item);
-            const count = await getCacheById(key);
-            const roomInfo = {};
-            roomInfo[roomid] = count;
-            socket.to(socketid).emit('count', roomInfo);
-          }
-        })
+        if(roomType === 'group') {
+          io.to(mess.roomid).emit('message', mess);
+          // 未读消息
+          const usersList = await gethAllCache('socketId');
+          usersList.map(async item => {
+            if(!users[roomid][item]) {
+              const key = `${item}-${roomid}`
+              await inrcCache(key);
+              const socketid = await gethCacheById('socketId', item);
+              const count = await getCacheById(key);
+              const roomInfo = {};
+              roomInfo[roomid] = count;
+              socket.to(socketid).emit('count', roomInfo);
+            }
+          })
+        } else {
+          console.log('id',to);
+          const userSockets = await User.findOne({ _id: to });
+          console.log('userSockets', userSockets);
+          io.to(userSockets.socketId).emit('message', mess);
+        }
+
       })
       // 建立连接
       socket.on('login',async (user) => {
-        console.log('socket login!');
+        console.log('socket login!', user.id, socket.id);
+        const userResult = await User.update({_id: user.id }, {socketId: socket.id}).exec();
+        console.log('userResult===', userResult);
         const {name} = user;
         if (!name) {
           return;

@@ -45,13 +45,15 @@ const popNotice = function(msgInfo) {
 socket.on('connect', async () => {
   console.log('connect');
   const roomId = queryString(window.location.href, 'roomId');
-  const userId = store.state.userInfo.userid;
+  const userName = store.state.userInfo.userid;
+  const userId = store.state.userInfo.id;
   if (userId) {
-    socket.emit('login', {name: userId});
+    socket.emit('login', {name: userName, id: userId});
   }
   if (roomId) {
     const obj = {
-      name: userId,
+      name: userName,
+      id: userId,
       src: store.state.userInfo.src,
       roomid: roomId
     };
