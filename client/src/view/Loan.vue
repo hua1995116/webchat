@@ -122,7 +122,7 @@ export default {
     async chatSingle(friendId) {
       const userId = this.userInfo.id;
       const roomID = sort(userId, friendId);
-      this.$router.push({ path: "/chat", query: { roomId: roomID, to: friendId, type: 'single' } });
+      this.$router.push({ path: "/chat", query: { roomId: roomID, from: userId,to: friendId, type: 'single' } });
     },
     chatRobot() {
       this.$router.push({ path: "/robot" });

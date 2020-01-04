@@ -141,15 +141,18 @@
         noticeVersion: noticeVersion || '20181222',
         isEnd: false,
         to: '',
+        from: ''
       };
     },
     async created() {
       const roomId = queryString(window.location.href, 'roomId');
       const roomType = queryString(window.location.href, 'type');
       const to = queryString(window.location.href, 'to');
+      const from = queryString(window.location.href, 'from');
       this.roomid = roomId;
       this.roomType = roomType;
       this.to = to;
+      this.from = from;
       if (!roomId) {
         this.$router.push({path: '/'});
       }
@@ -332,6 +335,7 @@
             img: '',
             msg,
             to: this.to,
+            from: this.from,
             roomType: this.roomType,
             roomid: this.roomid,
             time: new Date(),

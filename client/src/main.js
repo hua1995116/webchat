@@ -13,6 +13,7 @@ import './styles/main.styl';
 import socket from './socket';
 import {queryString} from '@utils/queryString';
 import {getRoomInfo} from '@utils/cache';
+import env from '@utils/env';
 
 import vuePicturePreview from './components/photo-viewer';
 import flexTouch from "vue-flex-touch";
@@ -48,7 +49,7 @@ socket.on('connect', async () => {
   const userName = store.state.userInfo.userid;
   const userId = store.state.userInfo.id;
   if (userId) {
-    socket.emit('login', {name: userName, id: userId});
+    socket.emit('login', {name: userName, id: userId, ...env});
   }
   if (roomId) {
     const obj = {
