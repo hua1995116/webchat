@@ -66,6 +66,8 @@ const store = new Vuex.Store({
       room1: 0,
       room2: 0
     },
+    hotUserList: [],
+    vipUserList: [],
     // svg
     svgmodal: null,
     // 是否启动tab
@@ -140,9 +142,27 @@ const store = new Vuex.Store({
     },
     setFriendList(state, data) {
       state.friendList = data;
+    },
+    sethotUserList(state, data) {
+      state.hotUserList = data;
+    },
+    setvipUserList(state, data) {
+      state.vipUserList = data;
     }
   },
   actions: {
+    async getvipuser({state, commit}, data) {
+      const res = await url.getvipuser(data);
+      if(res.data.errno === 0) {
+        commit('setvipUserList', res.data.data)
+      }
+    },
+    async getHostUserList({state, commit}, data) {
+      const res = await url.getHostUserList(data);
+      if(res.data.errno === 0) {
+        commit('sethotUserList', res.data.data)
+      }
+    },
     async addFriend({}, data) {
       const res = await url.postAddFriend(data);
       return res;

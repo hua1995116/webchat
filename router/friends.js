@@ -14,13 +14,15 @@ router.post('/add', async (req, res) => {
     });
     return;
   }
-  // const message = {
-  //   errno: 0,
-  //   data: {},
-  //   total: 0,
-  //   current: current
-  // }
   try {
+    if(selfId === friendId) {
+      res.json({
+        error: 1,
+        data: '咱不开玩笑，放过自己吧🤣'
+      })
+      return;
+    }
+
     const checkUser = await User.findOne({_id: selfId}).exec();
 
     if(checkUser.length === 0 ) {

@@ -7,11 +7,12 @@
             <mu-icon value="chevron_left"></mu-icon>
           </mu-button>
           <div class="center">
-            聊天({{Object.keys(getUsers).length}})
+            {{roomType === 'group' ? `聊天(${Object.keys(getUsers).length})` : friendName}}
           </div>
-          <mu-button icon slot="right" @click="openSimpleDialog">
+          <mu-button v-if="roomType === 'group'" icon slot="right" @click="openSimpleDialog">
             <mu-icon value="people"></mu-icon>
           </mu-button>
+          <mu-button v-else icon slot="right"></mu-button>
         </mu-appbar>
       </div>
       <!-- <div class="notice" v-if="noticeList.length > 0" :class="[noticeBar ? 'notice-hidden' : '']">
@@ -141,7 +142,8 @@
         noticeVersion: noticeVersion || '20181222',
         isEnd: false,
         to: '',
-        from: ''
+        from: '',
+        friendName: '',
       };
     },
     async created() {
@@ -149,10 +151,12 @@
       const roomType = queryString(window.location.href, 'type');
       const to = queryString(window.location.href, 'to');
       const from = queryString(window.location.href, 'from');
+      const friendName = queryString(window.location.href, 'friendName');
       this.roomid = roomId;
       this.roomType = roomType;
       this.to = to;
       this.from = from;
+      this.friendName = friendName;
       if (!roomId) {
         this.$router.push({path: '/'});
       }

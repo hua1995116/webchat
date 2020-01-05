@@ -55,7 +55,7 @@
       </mu-list>
       <mu-list>
         <mu-sub-header>好友</mu-sub-header>
-        <mu-list-item avatar button :ripple="true" @click="chatSingle(item.friendId._id)" v-for="item in friendList" :key="item._id">
+        <mu-list-item avatar button :ripple="true" @click="chatSingle(item.friendId._id, item.friendId.name)" v-for="item in friendList" :key="item._id">
           <mu-list-item-action>
             <mu-avatar class="avatar">
               <img :src="item.friendId.src">
@@ -119,10 +119,10 @@ export default {
       }
       this.$router.push({ path: "/chat", query: { roomId: roomID, type: 'group' } });
     },
-    async chatSingle(friendId) {
+    async chatSingle(friendId, friendName) {
       const userId = this.userInfo.id;
       const roomID = sort(userId, friendId);
-      this.$router.push({ path: "/chat", query: { roomId: roomID, from: userId,to: friendId, type: 'single' } });
+      this.$router.push({ path: "/chat", query: { roomId: roomID, from: userId,to: friendId, type: 'single', friendName } });
     },
     chatRobot() {
       this.$router.push({ path: "/robot" });

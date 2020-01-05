@@ -56,4 +56,50 @@ router.get('/robotapi', (req, res) => {
     })
 })
 
+router.get("/getHot", async (req, res) => {
+  const result = await Message.aggregate([
+    { $match: {} },
+    {
+      $group: {
+        _id: "$username",
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $sort: {
+        count: -1
+      }
+    },
+    {
+      $lookup: {
+        from: 'users',
+        localField: "_id",
+        foreignField: "name",
+        as: "user"
+      }
+    },
+    {
+      $unwind: "$user"
+    },
+    {
+      $limit : 10
+    },
+    {
+      $project: {
+        _id: 1,
+        count: 1,
+        'user._id': 1,
+        'user.name': 1,
+        'user.src': 1
+      }
+    },
+  ]);
+
+  res.json({
+    errno: 0,
+    data: result
+  });
+});
+
+
 module.exports = router;

@@ -1,16 +1,9 @@
 <template>
   <div>
-    <div class="header">
-      <div class="head">
-        <img :src="src" alt="">
-      </div>
-      <div class="name">
-        {{userid}}
-      </div>
-      <div class="background">
-        <img :src="src" alt="">
-      </div>
-    </div>
+    <UserHead
+      :src="src"
+      :username="userid"
+      ></UserHead>
     <div class="content">
       <mu-list>
         <mu-list-item button :ripple="true"  @click="changeAvatar">
@@ -54,6 +47,8 @@ import { clear, removeItem } from "@utils/localStorage";
 import Confirm from "@components/Confirm";
 import Alert from "@components/Alert";
 import Bottom from "@components/Bottom";
+import UserHead from "@components/userHead";
+
 export default {
   data() {
     return {};
@@ -132,52 +127,13 @@ export default {
     })
   },
   components: {
-    Bottom
+    Bottom,
+    UserHead
   }
 };
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-.header {
-  position: relative;
-  width: 100%;
-  height: 200px;
-  display: inline-block;
-
-  .head {
-    width: 80px;
-    margin: 20px auto 0;
-
-    img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-    }
-  }
-
-  .name {
-    height: 50px;
-    line-height: 50px;
-    color: #ffffff;
-    font-size: 18px;
-    text-align: center;
-  }
-
-  .background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 200px;
-    z-index: -1;
-    filter: blur(10px);
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
-  }
-}
 
 .logout {
   margin: 0 20px;

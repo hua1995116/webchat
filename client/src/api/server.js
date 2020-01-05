@@ -9,6 +9,12 @@ const Service = {
   RoomHistoryAll: data => Axios.get('/api/message/history', {
     params: data
   }),
+  getHostUserList: data => Axios.get('/api/message/getHot', {
+    params: data
+  }),
+  getvipuser: data => Axios.get('/api/user/vipuser', {
+    params: data
+  }),
   // 机器人
   getRobotMessage: data => Axios.get('/api/message/robotapi', {
     params: data

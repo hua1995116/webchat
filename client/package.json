@@ -13,6 +13,7 @@
     "core-js": "^2.6.5",
     "lodash": "^4.17.11",
     "muse-ui": "^3.0.2",
+    "randomcolor": "^0.5.4",
     "socket.io-client": "^1.7.3",
     "vue": "^2.6.10",
     "vue-cropper": "^0.4.9",

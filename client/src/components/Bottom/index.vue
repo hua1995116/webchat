@@ -3,6 +3,7 @@
     <mu-paper>
       <mu-bottom-nav :value="bottomNav" v-if="bottomNav">
         <mu-bottom-nav-item value="#/" title="主页" icon="restore" to="/"/>
+        <mu-bottom-nav-item value="#/search" title="搜索" icon="search" to="/search"/>
         <mu-bottom-nav-item value="#/home" title="我的" icon="location_on" to="/home"/>
       </mu-bottom-nav>
     </mu-paper>

@@ -10,6 +10,7 @@ import Avatar from '../view/Avatar';
 import GroupDetail from '../view/GroupDetail';
 import PersonDetail from '../view/PersonDetail';
 import GroupMember from '../view/GroupMember';
+import Search from '../view/Search';
 import BaseTransition from '../BaseTransition';
 import BaseView from '../BaseView';
 import loading from '../components/loading/loading';
@@ -82,6 +83,11 @@ const router = new Router({
           ]
         },
       ]
+    },
+    {
+      path: '/search',
+      name: 'Search',
+      component: Search,
     },
     {
       path: '/register',

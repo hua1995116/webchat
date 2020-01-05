@@ -8,16 +8,17 @@
       @leftClick="goback"
       ></Header>
     <div class="all-chat">
-      {{lookUserInfo.name}}
+      <UserHead :src="lookUserInfo.src" :username="lookUserInfo.name"></UserHead>
       <div class="group-list">
         <mu-list>
-          <mu-sub-header>声音开启设置</mu-sub-header>
+          <mu-sub-header>信息</mu-sub-header>
           <mu-list-item button :ripple="false" @click="events = !events">
             <mu-list-item-title>
-              事件和提醒
+              注册时间
             </mu-list-item-title>
-            <mu-list-item-action>
-              <mu-switch v-model="events" readonly></mu-switch>
+            <mu-list-item-action class="group-info-detail">
+              <!-- <mu-switch v-model="events" readonly></mu-switch> -->
+              2019-10-23
             </mu-list-item-action>
           </mu-list-item>
           <mu-list-item button :ripple="false" @click="calls = !calls">
@@ -25,49 +26,29 @@
               电话
             </mu-list-item-title>
             <mu-list-item-action>
-              <mu-switch v-model="calls" readonly></mu-switch>
+              <!-- <mu-switch v-model="calls" readonly></mu-switch> -->
+              12393213312
             </mu-list-item-action>
           </mu-list-item>
           <mu-list-item button :ripple="false" @click="messages = !messages">
             <mu-list-item-title>
-              信息
+              性别
             </mu-list-item-title>
             <mu-list-item-action>
-              <mu-switch v-model="messages" readonly></mu-switch>
+              <Gender sex=""></Gender>
             </mu-list-item-action>
           </mu-list-item>
         </mu-list>
       </div>
-      <div class="group-list">
-        <mu-list>
-          <mu-sub-header>通知设置</mu-sub-header>
-          <mu-list-item button :ripple="false" @click="notifications = !notifications">
-            <mu-list-item-action>
-              <mu-checkbox v-model="notifications" readonly></mu-checkbox>
-            </mu-list-item-action>
-            <mu-list-item-title>
-              通知
-            </mu-list-item-title>
-          </mu-list-item>
-          <mu-list-item button :ripple="false" @click="sounds = !sounds">
-            <mu-list-item-action>
-              <mu-checkbox v-model="sounds" readonly></mu-checkbox>
-            </mu-list-item-action>
-            <mu-list-item-title>
-              声音
-            </mu-list-item-title>
-          </mu-list-item>
-          <mu-list-item button :ripple="false" @click="videoSounds = !videoSounds">
-            <mu-list-item-action>
-              <mu-checkbox v-model="videoSounds" readonly></mu-checkbox>
-            </mu-list-item-action>
-            <mu-list-item-title>
-              视频的声音
-            </mu-list-item-title>
-          </mu-list-item>
-        </mu-list>
-      </div>
-      <mu-button color="primary" @click="handelAddFriend">添加好友</mu-button>
+      <mu-row gutter class="user-tools">
+        <mu-col span="6">
+          <mu-button class="op" @click="letchat">发起聊天</mu-button>
+        </mu-col>
+        <mu-col span="6">
+          <mu-button class="op" color="primary" @click="handelAddFriend">添加好友</mu-button>
+        </mu-col>
+      </mu-row>
+
     </div>
   </div>
 </template>
@@ -75,6 +56,8 @@
 <script>
 import Header from "@components/Header";
 import Avatar from "@components/Avatar";
+import UserHead from "@components/userHead";
+import Gender from "@components/Gender";
 import {queryString} from '@utils/queryString';
 import {mapGetters, mapState} from 'vuex';
 import Alert from '@components/Alert';
@@ -82,7 +65,9 @@ export default {
 
   components: {
     Header,
-    Avatar
+    Avatar,
+    UserHead,
+    Gender
   },
   data () {
     return {
@@ -104,15 +89,17 @@ export default {
 
   async mounted() {
     const id = queryString(window.location.href, 'id');
-    console.log(id);
     await this.$store.dispatch('getUserInfo', {
       id,
     });
-    console.log(this.lookUserInfo);
-    console.log(this.userInfo);
   },
 
   methods: {
+    letchat() {
+      Alert({
+        content: '尽情期待'
+      })
+    },
     async handelAddFriend() {
       const res = await this.$store.dispatch('addFriend', {
         selfId: this.userInfo.id,
@@ -144,7 +131,7 @@ export default {
 .all-chat {
   overflow: scroll;
   height: calc(100vh - 50px);
-  background: #ddd;
+  // background: #ddd;
 }
 .group-avatar {
   padding: 10px 0;
@@ -158,5 +145,20 @@ export default {
 .group-list {
   margin-bottom: 10px;
   background: #fff;
+  .group-info-detail {
+    min-width: 80px;
+  }
+}
+
+.user-tools {
+  width: 90%;
+  margin: 0 auto;
+  left:0;
+  right: 0;
+  position: absolute;
+  bottom: 10px;
+  .op {
+    width 100%;
+  }
 }
 </style>

@@ -14,6 +14,7 @@ import socket from './socket';
 import {queryString} from '@utils/queryString';
 import {getRoomInfo} from '@utils/cache';
 import env from '@utils/env';
+import Toast from "@components/Toast";
 
 import vuePicturePreview from './components/photo-viewer';
 import flexTouch from "vue-flex-touch";
@@ -45,6 +46,11 @@ const popNotice = function(msgInfo) {
 
 socket.on('connect', async () => {
   console.log('connect');
+  Toast({
+    content: '又可以愉快地上网啦',
+    timeout: 2000,
+    background: "#2196f3"
+  });
   const roomId = queryString(window.location.href, 'roomId');
   const userName = store.state.userInfo.userid;
   const userId = store.state.userInfo.id;
@@ -74,6 +80,11 @@ socket.on('connect', async () => {
 
 socket.on('disconnect', () => {
   console.log('disconnect');
+  Toast({
+    content: '抱歉网络开了小差',
+    timeout: 2000,
+    background: "#2196f3"
+  });
   store.commit('setDiscount', true);
 });
 

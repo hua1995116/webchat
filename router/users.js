@@ -102,4 +102,12 @@ router.get('/getInfo', async (req, res) => {
   })
 })
 
+router.get('/vipuser', async (req, res) => {
+  const userResult = await User.find({name: 'hua1995116'}, '_id name src').exec();
+  res.json({
+    errno: 0,
+    data: userResult
+  })
+})
+
 module.exports = router;
