@@ -23,6 +23,7 @@
         <div class="bottom-arguemnt">
           登录即可代表同意协议
         </div>
+        <p style="text-align: center">浙ICP备16040413号-1</p>
       </div>
 
     </div>
