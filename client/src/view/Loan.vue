@@ -106,8 +106,7 @@ export default {
   },
   methods: {
     async chatwindow(roomID) {
-      const uerId = this.userid;
-      if (!uerId) {
+      if (!this.username && !this.userid) {
         const res = await Confirm({
           title: "提示",
           content: "聊天请先登录，但是你可以查看聊天记录哦~"
@@ -130,7 +129,8 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.userInfo.userid,
+      username: state => state.userInfo.userid,
+      userid: state => state.userInfo.id,
       src: state => state.userInfo.src,
       isLogin: state => state.isLogin,
       unRead1: state => state.unRead.room1,

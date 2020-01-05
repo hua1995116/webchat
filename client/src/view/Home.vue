@@ -2,7 +2,7 @@
   <div>
     <UserHead
       :src="src"
-      :username="userid"
+      :username="username"
       ></UserHead>
     <div class="content">
       <mu-list>
@@ -54,7 +54,7 @@ export default {
     return {};
   },
   async mounted() {
-    if (!this.userid) {
+    if (!this.username && !this.userid) {
       const data = await Confirm({
         title: "提示",
         content: "需要登录后才能查看哦~",
@@ -122,7 +122,8 @@ export default {
   },
   computed: {
     ...mapState({
-      userid: state => state.userInfo.userid,
+      username: state => state.userInfo.userid,
+      userid: state => state.userInfo.id,
       src: state => state.userInfo.src
     })
   },

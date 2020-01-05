@@ -42,7 +42,7 @@
             @avatarClick="handleInfo"
             @flexTouch="hadnleTouch"
             :key="obj._id"
-            :is-self="obj.username === userid"
+            :is-self="obj.username === username"
             :id="obj._id"
             :name="obj.username"
             :head="obj.src"
@@ -160,7 +160,7 @@
       if (!roomId) {
         this.$router.push({path: '/'});
       }
-      if (!this.userid) {
+      if (!this.username && !this.userid) {
         // 防止未登录
         this.$router.push({path: '/login'});
       }
@@ -241,7 +241,7 @@
       },
       emitRoom() {
         const obj = {
-          name: this.userid,
+          name: this.username,
           src: this.src,
           roomid: this.roomid
         };
@@ -270,7 +270,7 @@
       },
       goback () {
         const obj = {
-          name: this.userid,
+          name: this.username,
           roomid: this.roomid
         };
         socket.emit('roomout', obj);
@@ -290,7 +290,7 @@
         if (file1) {
           const formdata = new window.FormData();
           formdata.append('file', file1);
-          formdata.append('username', this.userid);
+          formdata.append('username', this.username);
           formdata.append('src', this.src);
           formdata.append('roomType', this.roomType);
           formdata.append('roomid', this.roomid);
@@ -299,7 +299,7 @@
           const fr = new window.FileReader();
           fr.onload = function () {
             const obj = {
-              username: that.userid,
+              username: that.username,
               src: that.src,
               img: fr.result,
               msg: '',
@@ -334,7 +334,7 @@
           const msg = inHTMLData(this.chatValue); // 防止xss
 
           const obj = {
-            username: this.userid,
+            username: this.username,
             src: this.src,
             img: '',
             msg,
@@ -367,7 +367,8 @@
         'isbind'
       ]),
       ...mapState({
-        userid: state => state.userInfo.userid,
+        username: state => state.userInfo.userid,
+        userid: state => state.userInfo.id,
         src: state => state.userInfo.src
       })
     },
