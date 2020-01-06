@@ -3,7 +3,7 @@
     <SearchBar @change="change" @cancel="cancel"></SearchBar>
     <mu-list>
       <mu-sub-header v-if="searchUserList.length === 0">暂无查询结果</mu-sub-header>
-      <mu-list-item avatar button :ripple="false" v-for="item in searchUserList" :key="item._id">
+      <mu-list-item avatar button :ripple="false" v-for="item in searchUserList" :key="item._id" @click="lookInfo(item)">
         <mu-list-item-action>
           <mu-avatar>
             <img :src="item.src">
@@ -52,6 +52,9 @@ export default {
       console.log('cancel');
       this.$router.isBack = true;
       this.$router.goBack();
+    },
+    lookInfo(item) {
+      this.$router.push({ path: "/persionDetail", query: { id: item.name } });
     }
   }
 }
