@@ -19,6 +19,12 @@ import Toast from "@components/Toast";
 import vuePicturePreview from './components/photo-viewer';
 import flexTouch from "vue-flex-touch";
 
+Vue.directive('focus', {
+  inserted: function (el) {
+    el.focus()
+  }
+})
+
 Vue.use(vuePicturePreview);
 Vue.use(flexTouch, { timeout: 900, preventDefault: false });
 Vue.use(MuseUI);

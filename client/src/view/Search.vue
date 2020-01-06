@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SearchBar @submit="handleSearch"></SearchBar>
+    <SearchBar disabled="true" @submit="handleSearch"></SearchBar>
     <div>
       <mu-sub-header>vvvvip</mu-sub-header>
       <mu-chip class="list-chip vip-chip" color="#282b2d" v-for="item in vipUserList" :key="item._id" @click="lookInfo({_id: item.name})">
@@ -56,9 +56,10 @@ export default {
       this.$router.push({ path: "/persionDetail", query: { id: item._id } });
     },
     handleSearch() {
-      Alert({
-        content: '尽情期待'
-      })
+      // Alert({
+      //   content: '尽情期待'
+      // })
+      this.$router.push("/searchResult");
     }
   },
   computed: {

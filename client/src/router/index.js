@@ -11,7 +11,9 @@ import GroupDetail from '../view/GroupDetail';
 import PersonDetail from '../view/PersonDetail';
 import GroupMember from '../view/GroupMember';
 import Search from '../view/Search';
+import SearchResult from '../view/SearchResult';
 import BaseTransition from '../BaseTransition';
+import TopTransition from '../TopTransition';
 import BaseView from '../BaseView';
 import loading from '../components/loading/loading';
 
@@ -86,8 +88,27 @@ const router = new Router({
     },
     {
       path: '/search',
-      name: 'Search',
-      component: Search,
+      name: 'SearchBase',
+      component: BaseView,
+      children: [
+        {
+          path: '',
+          name: 'Seach',
+          component: TopTransition,
+          children: [
+            {
+              path: '',
+              name: 'Search',
+              component: Search,
+            },
+            {
+              path: '/searchResult',
+              name: 'SearchResult',
+              component: SearchResult,
+            }
+          ]
+        }
+      ]
     },
     {
       path: '/register',

@@ -68,6 +68,7 @@ const store = new Vuex.Store({
     },
     hotUserList: [],
     vipUserList: [],
+    searchUserList: [],
     // svg
     svgmodal: null,
     // 是否启动tab
@@ -148,9 +149,18 @@ const store = new Vuex.Store({
     },
     setvipUserList(state, data) {
       state.vipUserList = data;
+    },
+    setSearchList(state, data) {
+      state.searchUserList = data;
     }
   },
   actions: {
+    async getSearch({state, commit}, data) {
+      const res = await url.getSearch(data);
+      if(res.data.errno === 0) {
+        commit('setSearchList', res.data.data)
+      }
+    },
     async getvipuser({state, commit}, data) {
       const res = await url.getvipuser(data);
       if(res.data.errno === 0) {

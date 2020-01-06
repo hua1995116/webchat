@@ -82,7 +82,7 @@ router.post('/signin', (req, res) => {
 });
 
 router.get('/getInfo', async (req, res) => {
-  const id = req.query.id;
+  const { id } = req.query;
   if (!id) {
     global.logger.error('id can\'t find')
     res.json({
@@ -107,6 +107,26 @@ router.get('/vipuser', async (req, res) => {
   res.json({
     errno: 0,
     data: userResult
+  })
+})
+
+router.get('/search', async (req, res) => {
+  const { name } = req.query;
+  if(!name) {
+    global.logger.error('name can\'t find')
+    res.json({
+      errno: 0,
+      data: []
+      // msg: 'name can\'t find'
+    });
+    return;
+  }
+
+  const result = await User.find({name: new RegExp(name)}, '_id name src').exec();
+
+  res.json({
+    errno: 0,
+    data: result
   })
 })
 
