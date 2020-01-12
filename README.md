@@ -19,6 +19,11 @@
 - [x] 图片预览
 - [x] 消息未读
 - [x] 断线重连
+- [x] 好友资料查看
+- [x] 添加好友
+- [x] 单聊
+- [x] 搜索好友
+- [x] 热门好友推荐
 
 
 ## 启动项目
@@ -27,20 +32,38 @@ Dev环境: MongoDB、Node 8.5.0+、Npm 5.3.0+
 
 Prod环境: Redis、MongoDB、Node 8.5.0+、Npm 5.3.0+
 
+启动客户端
 ```
-npm install -----安装依赖
+$webchat cd client
 
-npm run dev -----运行
+$client npm install -----安装依赖
 
+$client npm run serve -----运行
+
+```
+启动服务端
+```
+$client cd ..
+
+$webchat npm install
+
+$webchat npm run dev
 ```
 
 ## 打包
 
+打包客户端
 ```
+cd client
+
 npm run build
+```
+
+服务端运行
+```
+cd ..
 
 npm run prod
-
 ```
 
 在线观看
@@ -78,6 +101,26 @@ npm run prod
 <img src="http://s3.qiufengh.com/screenshot/4.png"/>
 
 ## 版本更新
+
+**v3新增功能**
+
+1. 网络异常判断、重连提示
+2. 多端信息同步
+3. 好友资料查看
+4. 添加好友
+5. 单聊
+6. 搜索好友
+7. 热门好友推荐
+8. 性别、手机号修改
+9. 搜索加好友
+
+## 版本预览
+
+**v2 稳定版本**
+
+https://github.com/hua1995116/webchat/tree/v2.2.0
+
+**其他版本**
 
 <a href="./RELEASE.md">RELEASE</a>
 
