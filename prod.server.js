@@ -24,7 +24,8 @@ router.get('/', function (req, res, next) {
   next();
 });
 //声明静态资源地址
-app.use(express.static('./dist'));
+app.use(express.static('dist'));
+// app.use(express.static('static'));
 app.use(router);
 // 服务器提交的数据json化
 app.use(bodyParser.json())
@@ -37,11 +38,15 @@ app.use(session({
   saveUninitialized: true
 }))
 
-require('./router/routes.js')(app)
+// require('./router/routes.js')(app)
+
+app.use('/api/file', require('./router/files'));
+app.use('/api/user', require('./router/users'));
+app.use('/api/message', require('./router/messages'));
+app.use('/api/friend', require('./router/friends'));
 
 if ('development' === app.get('env')) {
   app.set('showStackError', true)
-  // app.use(morgan(':method :url :status'))
   app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO}))
   app.locals.pretty = true
   mongoose.set('debug', true)

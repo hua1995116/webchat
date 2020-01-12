@@ -8,6 +8,12 @@ var UserSchema = new mongoose.Schema({
     unique: true,
     type: String
   },
+  nickname: String, // 昵称
+  sex: Boolean, // 性别 0-男  1-女
+  iphone: {     // 电话号
+    type: String,
+    max: 20,
+  },
   password: String,
   src: String,
   meta: {

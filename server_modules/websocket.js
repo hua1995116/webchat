@@ -1,14 +1,16 @@
 const xssFilters = require('xss-filters');
 const Count = require('../models/count');
 const Message = require('../models/message');
+const User = require('../models/user');
+const Socket = require('../models/socket');
 let cache = {};
 
 if(process.env.NODE_ENV === 'production') {
   cache = require('./RedisCache');
-  console.log('RedisCache!!!!');
+  global.logger.info('RedisCache!!!!');
 } else {
   cache = require('./cache');
-  console.log('cache!!!!');
+  global.logger.info('cache!!!!');
 }
 
 const {
@@ -61,11 +63,11 @@ function websocket(server) {
     }, 1 * 60 * 1000);
     io.on('connection',  (socket) => {
       //监听用户发布聊天内容
-      console.log('socket connect!');
+      global.logger.info('socket connect!');
       socket.on('message', async (msgObj) => {
-        console.log('socket message!');
+        global.logger.info('socket message!');
         //向所有客户端广播发布的消息
-        const {username, src, msg, img, roomid, time} = msgObj;
+        const {username, src, msg, img, roomid, roomType, time, type, to, from} = msgObj;
         if(!msg && !img) {
           return;
         }
@@ -74,11 +76,16 @@ function websocket(server) {
         const mess = {
           username,
           src,
+          roomType,
           msg: xssFilters.inHTMLData(msgLimit), // 防止xss
           img,
           roomid,
-          time
+          time,
+          type,
+          from,
+          to
         }
+        global.logger.info(msgObj);
 
         global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);
         if (mess.img === '') {
@@ -91,25 +98,59 @@ function websocket(server) {
             global.logger.info(res);
           })
         }
-        io.to(mess.roomid).emit('message', mess);
-        // 未读消息
-        const usersList = await gethAllCache('socketId');
-        usersList.map(async item => {
-          if(!users[roomid][item]) {
-            const key = `${item}-${roomid}`
-            await inrcCache(key);
-            const socketid = await gethCacheById('socketId', item);
-            const count = await getCacheById(key);
-            const roomInfo = {};
-            roomInfo[roomid] = count;
-            socket.to(socketid).emit('count', roomInfo);
-          }
-        })
+        if(roomType === 'group') {
+          io.to(mess.roomid).emit('message', mess);
+          // 未读消息
+          const usersList = await gethAllCache('socketId');
+          usersList.map(async item => {
+            if(!users[roomid][item]) {
+              const key = `${item}-${roomid}`
+              await inrcCache(key);
+              const socketid = await gethCacheById('socketId', item);
+              const count = await getCacheById(key);
+              const roomInfo = {};
+              roomInfo[roomid] = count;
+              socket.to(socketid).emit('count', roomInfo);
+            }
+          })
+        } else {
+          const selfSockets = await Socket.find({ userId: from });
+          selfSockets.forEach((socket) => {
+            // 兼容多端设备
+            io.to(socket.socketId).emit('message', mess);
+          });
+          const friendSockets = await Socket.find({ userId: to });
+          friendSockets.forEach((socket) => {
+            // 兼容多端设备
+            io.to(socket.socketId).emit('message', mess);
+          });
+        }
+
       })
       // 建立连接
       socket.on('login',async (user) => {
-        console.log('socket login!');
-        const {name} = user;
+        const address = socket.request.connection.remoteAddress;
+        const ip = address.split(':').slice(-1).join('');
+        const { browser, os, name, id, ua} = user;
+        const socketRes = await Socket.findOne({userId: id ,ip: ip, browser: browser, os: os}).exec();
+        global.logger.info("socketRes", socketRes);
+        if(!socketRes) {
+          const socketCtx = {
+            browser,
+            os,
+            userId: id,
+            ua,
+            socketId: socket.id,
+            ip,
+          }
+
+          const addSocket = await new Socket(socketCtx).save();
+          global.logger.info("addSocket", addSocket);
+        } else {
+          const updateRes = await Socket.update({userId: id}, {socketId: socket.id}).exec();
+          global.logger.info('updateRes', updateRes);
+        }
+        global.logger.info('socket login!', user, socket.id, address, ip);
         if (!name) {
           return;
         }
@@ -140,7 +181,7 @@ function websocket(server) {
       });
       // 加入房间
       socket.on('room', async (user) => {
-        console.log('socket add room!');
+        global.logger.info('socket add room!');
         const {name, roomid} = user;
         if (!name || !roomid) {
           return;
@@ -175,13 +216,13 @@ function websocket(server) {
       });
 
       socket.on('roomout', async (user) => {
-        console.log('socket loginout!');
+        global.logger.info('socket loginout!');
         const {name, roomid} = user;
         await handleLogoutRoom(roomid, name);
       })
 
       socket.on('disconnect', async () => {
-        console.log('socket disconnect!');
+        global.logger.info('socket disconnect!');
         const {name, roomid} = socket;
         await handleLogoutRoom(roomid, name);
       })
@@ -200,7 +241,7 @@ function websocket(server) {
             socket.leave(roomid);
           }
         } catch(e) {
-          console.log(e);
+          global.logger.info(e);
         }
       }
     })

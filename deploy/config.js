@@ -1,8 +1,8 @@
 module.exports = {
-    accessKey: '',  
+    accessKey: '',
     secretKey: '',  // key
-    zone: 'Zone_z2', 
+    zone: 'Zone_z2',
     bucket: 'chat',   // bucket name
-    dir: 'webchat/',     // 
+    dir: 'webchat/',     //
     url: '//s3.qiufengh.com/',
 }

@@ -1,20 +1,12 @@
 var mongoose = require('mongoose')
-//聊天记录模型
-var MessageSchema = new mongoose.Schema({
-  username: String,
-  src: String,
-  msg: {
+// socket模型
+// 如果 os 和 browser 一致时，则更新数据，否则新建数据。
+var SearchSchema = new mongoose.Schema({
+  userId: mongoose.Schema.Types.ObjectId,
+  ip: String,
+  keyword: {
     type: String,
-    default: ''
-  },
-  roomid: String,
-  roomType: String, // group single
-  img: {
-    type: String,
-    default: ''
-  },
-  type: {
-    type: String,
+    max: 30
   },
   time: {
     type: Date,
@@ -22,7 +14,7 @@ var MessageSchema = new mongoose.Schema({
   }
 })
 //静态方法
-MessageSchema.statics = {
+SearchSchema.statics = {
   fetch: function (cb) {
     return this
       .find({})
@@ -35,4 +27,4 @@ MessageSchema.statics = {
       .exec(cb)
   }
 }
-module.exports = MessageSchema
+module.exports = SearchSchema

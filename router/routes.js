@@ -1,12 +1,12 @@
 const User = require('../models/user')
 const Message = require('../models/message')
 const superagent = require('superagent')
-const path = require('path')
-const fs = require('fs')
-const multer = require('multer');
+// const path = require('path')
+// const fs = require('fs')
+// const multer = require('multer');
 const qnUpload = require('../deploy/qiniu');
-const {cmder, rmDirFiles} = require('../utils/cmd');
-const fileTool = require('fs-extra');
+// const {cmder, rmDirFiles} = require('../utils/cmd');
+// const fileTool = require('fs-extra');
 
 const mkdirsSync = function(dirname) {
   if (fs.existsSync(dirname)) {
@@ -98,7 +98,7 @@ module.exports = (app) => {
   })
 
   /* POST upload listing. */
-  app.post('/file/uploadimg', upload.single('file'),  async (req, res, next) => {
+  app.post('/api/file/uploadimg', upload.single('file'),  async (req, res, next) => {
     const file = req.file;
     if(file) {
 
@@ -115,7 +115,7 @@ module.exports = (app) => {
           img =`//s3.qiufengh.com/webchat/` + filename;
         } else {
           // 兼容windows
-          fileTool.copySync('./static_temp', './static/files');
+          fileTool.copySync('./static_temp', './dist/static/files');
           rmDirFiles('./static_temp');
           img = path.join(urlPath, filename);
         }
@@ -154,7 +154,7 @@ module.exports = (app) => {
 
   });
 
-  app.post('/file/avatar', uploadAvatar.single('file'),  async (req, res, next) => {
+  app.post('/api/file/avatar', uploadAvatar.single('file'),  async (req, res, next) => {
     const file = req.file;
     console.log(req.body);
     console.log(file);
@@ -172,7 +172,7 @@ module.exports = (app) => {
           img =`//s3.qiufengh.com/webchat/` + filename;
         } else {
           // 兼容windows
-          fileTool.copySync('./static_temp', './static/files');
+          fileTool.copySync('./static_temp', './dist/static/files');
           rmDirFiles('./static_temp');
           img = path.join(urlPath, filename);
         }
@@ -207,7 +207,7 @@ module.exports = (app) => {
   });
 
   // 注册
-  app.post('/user/signup',  (req, res) => {
+  app.post('/api/user/signup',  (req, res) => {
     const _user = req.body
     // console.log(_user)
     User.findOne({name: _user.name},  (err, user) => {
@@ -234,7 +234,7 @@ module.exports = (app) => {
     })
   }),
   // 登录
-  app.post('/user/signin', (req, res) => {
+  app.post('/api/user/signin', (req, res) => {
     const _user = req.body
     const name = _user.name
     const password = _user.password
@@ -281,7 +281,7 @@ module.exports = (app) => {
     })
   }),
   // 获取历史记录
-  app.get('/history/message', async (req, res) => {
+  app.get('/api/history/message', async (req, res) => {
     const id = req.query.roomid;
     const current = req.query.current;
     const total = req.query.total || 0;
@@ -316,7 +316,7 @@ module.exports = (app) => {
     }
   }),
   // 机器人消息
-  app.get('/robotapi', (req, res) => {
+  app.get('/api/robotapi', (req, res) => {
     const response = res
     const info = req.query.info
     const userid = req.query.id

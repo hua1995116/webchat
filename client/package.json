@@ -1,0 +1,39 @@
+{
+  "name": "webchat",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build && rm -rf ../dist && cp -r dist ../",
+    "build-cdn": "CDN=1 vue-cli-service build && rm -rf ../dist && cp -r dist ../",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "core-js": "^2.6.5",
+    "lodash": "^4.17.11",
+    "muse-ui": "^3.0.2",
+    "randomcolor": "^0.5.4",
+    "socket.io-client": "^1.7.3",
+    "vue": "^2.6.10",
+    "vue-cropper": "^0.4.9",
+    "vue-flex-touch": "^1.0.0",
+    "vue-router": "^3.0.3",
+    "vuex": "^3.0.1",
+    "xss-filters-es6": "^1.0.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.7.0",
+    "@vue/cli-plugin-eslint": "^3.7.0",
+    "@vue/cli-plugin-unit-mocha": "^3.7.0",
+    "@vue/cli-service": "^3.7.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "babel-eslint": "^10.0.1",
+    "chai": "^4.1.2",
+    "eslint": "^5.16.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "vue-template-compiler": "^2.5.21"
+  }
+}
