@@ -99,6 +99,8 @@ export default {
           content: "账号密码不能为空"
         });
       }
+      this.username = '';
+      this.password = '';
     },
     login() {
       this.$router.push({ path: "login" });
