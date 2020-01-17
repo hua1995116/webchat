@@ -4,9 +4,22 @@ const router = Express.Router();
 
 // 注册
 router.post('/signup',  (req, res) => {
-  const _user = req.body
-  // console.log(_user)
-  User.findOne({name: _user.name},  (err, user) => {
+  const { name, password, src } = req.body;
+  if(name.length > 15) {
+    res.json({
+      errno: 1,
+      data: '用户名过长'
+    });
+    return;
+  }
+  if(password.length > 20) {
+    res.json({
+      errno: 1,
+      data: '密码过长'
+    });
+    return;
+  }
+  User.findOne({name},  (err, user) => {
     if (err) {
       global.logger.error(err)
     }
