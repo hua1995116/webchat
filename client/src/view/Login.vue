@@ -88,12 +88,14 @@ export default {
             content: res.data.data
           });
         }
-        document.form2.reset();
+
+        // document.form2.reset();
       } else {
         Alert({
           content: "用户名和密码不能为空"
         });
       }
+      this.password = '';
     },
     register() {
       this.$router.push({ path: "register" });

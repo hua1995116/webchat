@@ -265,7 +265,7 @@
       handleTips() {
         Alert({
           title: '请我喝杯奶茶',
-          html: '<div><img style="width: 200px" src="//s3.qiufengh.com/money/WechatIMG64.jpeg" /></div>'
+          html: '<div><img style="width: 150px" src="//s3.qiufengh.com/money/WechatIMG64.jpeg" /><br><img style="width: 150px" src="https://s3.qiufengh.com/webchat/wechat-pay.jpeg"></div>'
         });
       },
       goback () {

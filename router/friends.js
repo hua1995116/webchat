@@ -2,9 +2,10 @@ const Express = require('express');
 const Message = require('../models/message');
 const Friend = require('../models/friend');
 const User = require('../models/user');
+const Socket = require('../models/socket');
 const router = Express.Router();
 
-// 获取历史记录
+// 添加好友
 router.post('/add', async (req, res) => {
   const {selfId, friendId} = req.body;
   if (!selfId || !friendId) {
@@ -65,7 +66,18 @@ router.post('/add', async (req, res) => {
     res.json({
       data: '添加成功',
       errno: 0,
-    })
+    });
+    const friendRes = await Friend.find({selfId: friendId}).populate({
+      path: 'friendId',
+      select: 'name src socketId'
+    }).exec();
+    const selfSockets = await Socket.find({ userId: friendId });
+    selfSockets.forEach((socket) => {
+      // 兼容多端设备
+      // io.to(socket.socketId).emit('message', mess);
+      global.socketIO.to(socket.socketId).emit('friend', friendRes);
+    });
+
   } catch(e) {
     console.log(e);
     res.json({
