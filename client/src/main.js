@@ -50,13 +50,16 @@ const popNotice = function(msgInfo) {
   }
 };
 
-socket.on('connect', async () => {
-  console.log('connect');
+socket.on('reconnect', (attemptNumber) => {
   Toast({
     content: '又可以愉快地上网啦',
     timeout: 2000,
     background: "#2196f3"
   });
+});
+
+socket.on('connect', async () => {
+  console.log('connect');
   const roomId = queryString(window.location.href, 'roomId');
   const userName = store.state.userInfo.userid;
   const userId = store.state.userInfo.id;
@@ -99,7 +102,7 @@ socket.on('message', function (obj) {
   console.log(Notification.permission);
   if (Notification.permission === "granted") {
     popNotice(obj);
-  } else if (Notification.permission !== "denied") {
+  } else if (Notification.permission === "denied") {
     Notification.requestPermission(function (permission) {
       popNotice(obj);
     });
@@ -114,6 +117,9 @@ socket.on('roomout', (obj) => {
 });
 
 document.addEventListener('touchstart', (e) => {
+  if(!e.target.className) {
+    return;
+  }
   if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
     store.commit('setEmoji', true);
   } else {
