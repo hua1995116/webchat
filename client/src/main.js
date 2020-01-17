@@ -115,6 +115,9 @@ socket.on('room', (obj) => {
 socket.on('roomout', (obj) => {
   store.commit('setUsers', obj);
 });
+socket.on('friend', (obj) => {
+  store.commit('setFriendList', obj);
+})
 
 document.addEventListener('touchstart', (e) => {
   if(!e.target.className) {

@@ -28,6 +28,7 @@ const roomList = ['room1', 'room2'];
 
 function websocket(server) {
     const io = require('socket.io')(server);
+    global.socketIO = io;
     const users = {};
 
     setInterval(async () => {
