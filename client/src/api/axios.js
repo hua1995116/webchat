@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Toast from "@components/Toast";
 
 const baseURL = '';
 
@@ -24,9 +25,18 @@ instance.interceptors.response.use(response => {
   return Promise.reject(response);
 }, error => {
   if (error) {
-    console.log(JSON.stringify(error));
+    console.log(error);
+    Toast({
+      content: '网络异常，请检查你的网络。',
+      timeout: 2000,
+      background: "#f44336"
+    });
   } else {
-    console.log('出了点问题，暂时加载不出来，请稍后再来吧');
+    Toast({
+      content: '未知错误。',
+      timeout: 2000,
+      background: "#f44336"
+    });
   }
   return Promise.reject(error);
 });
