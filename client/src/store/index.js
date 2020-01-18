@@ -6,12 +6,12 @@ import Vuex from 'vuex';
 import url from '@api/server.js';
 import {setItem, getItem} from '@utils/localStorage';
 import {ROBOT_NAME, ROBOT_URL} from '@const/index';
-import {updateRoomInfo, getRoomInfo, updateCache, getCache} from '@utils/cache';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
+    // 个人信息
     userInfo: {
       src: getItem('src'),
       userid: getItem('userid'),
@@ -19,17 +19,13 @@ const store = new Vuex.Store({
     },
     lookUserInfo: {
     },
+    // 朋友列表
     friendList: [],
     isDiscount: false,
     isLogin: false,
-    // 存放房间信息，为了方便以后做多房间
-    roomdetail: {
-      id: '',
-      users: {},
-      infos: [],
-      current: 1,
-      total: 0
-    },
+    // 存放聊天记录 key - []
+    roomdetail: {},
+    roomUsers: {},
     // 存放机器人开场白
     robotmsg: [
     {
@@ -78,22 +74,14 @@ const store = new Vuex.Store({
     theme: "#2196f3"
   },
   getters: {
-    getTotal: state => state.roomdetail.total,
-    getCurrent: state => state.roomdetail.current,
-    getUsers: state => state.roomdetail.users,
+    // getUsers: state => state.roomdetail.users,
     getInfos: state => state.roomdetail.infos,
     getRobotMsg: state => state.robotmsg,
     getEmoji: state => state.emojiShow
   },
   mutations: {
-    setTotal(state, value) {
-      state.roomdetail.total = value;
-    },
     setDiscount(state, value) {
       state.isDiscount = value;
-    },
-    setCurrent(state, value) {
-      state.roomdetail.current = value;
     },
     setUnread(state, value) {
       for (let i in value) {
@@ -115,25 +103,29 @@ const store = new Vuex.Store({
       state.svgmodal = data;
     },
     setRoomDetailInfosAfter(state, data) {
-      state.roomdetail.infos.push(...data);
+      const { roomid, msgs } = data;
+      state.roomdetail[roomid].push(...msgs);
     },
     setRoomDetailInfosBefore(state, {data, roomid}) {
-      const list = state.roomdetail.infos;
+      const list = state.roomdetail[roomid] || [];
       const newData = data.concat(list);
-      state.roomdetail.infos = newData;
-      updateCache(roomid, {
-        data: newData
-      });
+      state.roomdetail = {
+        ...(state.roomdetail),
+        [roomid]: newData
+      }
     },
     setRoomDetailInfos(state, {data, roomid}) {
       state.roomdetail.infos = data;
-      console.log(data);
-      updateCache(roomid, {
-        data
-      });
     },
     setUsers(state, data) {
-      state.roomdetail.users = data;
+      const { roomid, onlineUsers } = data;
+      const roomUsers = []
+      const list = onlineUsers;
+      state.roomUsers = {
+        ...(state.roomUsers),
+        [roomid]: list
+      }
+      console.log(state.roomUsers);
     },
     setRobotMsg(state, data) {
       state.robotmsg.push(data);
@@ -230,35 +222,18 @@ const store = new Vuex.Store({
     async getAllMessHistory({state, commit}, data) {
       try {
         const res = await url.RoomHistoryAll(data);
-        if (res.data.data.errno === 0) {
+        if (res.data.errno === 0) {
           const result = res.data.data;
-          if(data.current === 1) {
-            commit('setRoomDetailInfos', {
-              data: result.data,
-              roomid: data.roomid
-            });
-
-          } else {
-            commit('setRoomDetailInfosBefore', {
-              data: result.data,
-              roomid: data.roomid
-            });
-          }
-          updateRoomInfo(data.roomid, {
-            current: data.current,
-            total: result.total
-          })
+          commit('setRoomDetailInfosBefore', {
+            data: result.data,
+            roomid: data.roomid
+          });
           return {
             data: result.data
           }
         }
       } catch(e) {
-        const cache = getCache(data.roomid);
-        console.log(cache);
-        commit('setRoomDetailInfos', {
-          data: cache.data,
-          roomid: data.roomid
-        });
+
       }
     },
     async getRobatMess({commit}, data) {

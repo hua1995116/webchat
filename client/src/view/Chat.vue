@@ -7,7 +7,7 @@
             <mu-icon value="chevron_left"></mu-icon>
           </mu-button>
           <div class="center">
-            {{roomType === 'group' ? `聊天(${Object.keys(getUsers).length})` : friendName}}
+            {{roomType === 'group' ? `聊天(${Object.keys(roomUsers[roomid] || {}).length})` : friendName}}
           </div>
           <mu-button v-if="roomType === 'group'" icon slot="right" @click="openSimpleDialog">
             <mu-icon value="people"></mu-icon>
@@ -27,8 +27,8 @@
       </div> -->
       <div class="chat-inner" @scroll="bindScroll">
         <div class="chat-container">
-          <div v-if="getInfos.length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-          <div v-if="getInfos.length !== 0 && isloading" class="chat-loading">
+          <div v-if="(roomdetail[roomid] || []).length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
+          <div v-if="(roomdetail[roomid] || []).length !== 0 && isloading" class="chat-loading">
             <div class="lds-css ng-scope">
               <div class="lds-rolling">
                 <div>
@@ -36,9 +36,9 @@
               </div>
             </div>
           </div>
-          <div v-if="isEnd && getInfos.length !== 0" class="chat-top">到顶啦~</div>
+          <div v-if="isEnd && (roomdetail[roomid] || []).length !== 0" class="chat-top">到顶啦~</div>
           <Message
-            v-for="obj in getInfos"
+            v-for="(obj, index) in (roomdetail[roomid] || [])"
             @avatarClick="handleInfo"
             @flexTouch="hadnleTouch"
             :key="obj._id"
@@ -50,6 +50,7 @@
             :img="obj.img"
             :mytime="obj.time"
             :container="container"
+            :isLast="roomdetail[roomid].length - 1 === index"
             ></Message>
           <div class="clear"></div>
         </div>
@@ -121,11 +122,11 @@
   import url from '@api/server';
   import { setTimeout } from 'timers';
   import ios from '@utils/ios';
-  import {updateRoomInfo, getRoomInfo} from '@utils/cache';
 
   let isMore = false;
 
-  export default{
+  export default {
+    name: 'Chat',
     data() {
       const notice = getItem('notice') || {};
       const {noticeBar, noticeVersion} = notice;
@@ -185,7 +186,9 @@
       // socket内部，this指针指向问题
       const that = this;
       this.isloading = true;
-      await this.getRoomMessage();
+      if(!this.roomdetail[this.roomid]) {
+        await this.getRoomMessage();
+      }
       this.isloading = false;
       loading.hide();
 
@@ -193,7 +196,6 @@
     },
     methods: {
       handleInfo(item) {
-        console.log(item);
         this.$router.push({ path: "/persionDetail", query: { id: item.id } });
       },
       hadnleTouch(data) {
@@ -223,15 +225,15 @@
         });
       },
       async getRoomMessage() {
-        const {current, total} = getRoomInfo(this.roomid);
         const data = {
-          total,
-          current: current + 1,
           roomid: this.roomid
         };
+        if(this.roomdetail[this.roomid] && this.roomdetail[this.roomid].length > 0) {
+          const id = this.roomdetail[this.roomid][0]._id;
+          data.msgid = id;
+        }
         try {
           const result = await this.$store.dispatch('getAllMessHistory', data);
-          console.log(result);
           if(!result.data.length) {
             this.isEnd = true;
           }
@@ -255,7 +257,7 @@
         });
       },
       openSimpleDialog () {
-        this.$router.push({ path: "/groupDetail" });
+        this.$router.push({ path: "/groupDetail", query: { roomId: this.roomid} });
       },
       handleGithub() {
         Alert({
@@ -276,10 +278,6 @@
         socket.emit('roomout', obj);
         this.$router.isBack = true;
         this.$router.goBack();
-        updateRoomInfo(this.roomid, {
-          total: 0,
-          current: 0,
-        })
       },
       setLog() {
         // 版本更新日志
@@ -310,7 +308,9 @@
               to: that.to,
               from: that.from,
             };
-            socket.emit('message', obj);
+            socket.emit('message', obj, function() {
+              console.log(arguments);
+            });
           };
           fr.readAsDataURL(file1);
           this.$nextTick(() => {
@@ -348,7 +348,10 @@
             type: 'text'
           };
           // 传递消息信息
-          socket.emit('message', obj);
+          socket.emit('message', obj, (data) =>{
+              console.log(2222);
+              console.log(data);
+          });
           this.chatValue = '';
         } else {
           Alert({
@@ -360,13 +363,13 @@
     computed: {
       ...mapGetters([
         'getEmoji',
-        'getInfos',
-        'getUsers',
-        'getCurrent',
-        'getTotal'
+        // 'getInfos',
+        // 'getUsers',
       ]),
       ...mapState([
-        'isbind'
+        'isbind',
+        'roomdetail',
+        'roomUsers'
       ]),
       ...mapState({
         username: state => state.userInfo.userid,

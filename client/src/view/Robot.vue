@@ -46,6 +46,7 @@ import InputSumbit from "@components/input-sumbit";
 import { HOSTER_URL, HOSTER_NAME } from "@const/index";
 
 export default {
+  name: 'Robot',
   data() {
     return {
       hoster: HOSTER_NAME,

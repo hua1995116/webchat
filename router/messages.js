@@ -3,6 +3,39 @@ const superagent = require('superagent');
 const Message = require('../models/message');
 const router = Express.Router();
 
+
+router.get('/v2/history', async (req, res) => {
+  const { roomid, msgid } = req.query;
+  if (!roomid) {
+    global.logger.error('roomid | msgid current can\'t find')
+    res.json({
+      errno: 1
+    });
+  }
+  try {
+    const message = {};
+    console.log(typeof msgid);
+    if(!msgid) {
+      const messageData = await Message.find( { roomid }).sort({"_id": -1}).limit(20).exec();
+      message.data = messageData.reverse();
+    } else {
+      const messageData = await Message.find({'_id': { '$lt': msgid }, roomid }).sort({"_id": -1}).limit(20).exec();
+      message.data = messageData.reverse();
+    }
+
+    res.json({
+      errno: 0,
+      data: message
+    })
+  } catch(e) {
+    console.log(e);
+    res.json({
+      errno: 1,
+      data: {}
+    })
+  }
+})
+
 // 获取历史记录
 router.get('/history', async (req, res) => {
   const id = req.query.roomid;

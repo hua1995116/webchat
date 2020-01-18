@@ -33,7 +33,7 @@ const router = new Router({
         {
           path: '',
           name: 'index',
-          component: Index
+          component: Index,
         },
         {
           path: '/chat',

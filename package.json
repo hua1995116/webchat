@@ -9,7 +9,8 @@
     "deploy": "node deploy/index.js",
     "prod": "cross-env NODE_ENV=production node prod.server.js",
     "lint": "eslint --ext .js,.vue src",
-    "pm2-prod": "pm2 start pm2.json --env production"
+    "pm2-prod": "pm2 start pm2.json --env production",
+    "commit": "git-cz"
   },
   "dependencies": {
     "axios": "^0.16.1",
@@ -34,8 +35,10 @@
     "xss-filters": "^1.2.7"
   },
   "devDependencies": {
+    "commitizen": "^4.0.3",
     "cos-nodejs-sdk-v5": "^2.4.9",
     "cross-env": "^5.2.0",
+    "cz-conventional-changelog": "^3.0.2",
     "mime": "^2.3.1",
     "qiniu": "^7.2.1"
   },

@@ -50,6 +50,7 @@ import Bottom from "@components/Bottom";
 import UserHead from "@components/userHead";
 
 export default {
+  name: 'Home',
   data() {
     return {};
   },

@@ -13,7 +13,7 @@
       </mu-chip>
 
       <mu-sub-header>热门用户</mu-sub-header>
-      <mu-chip class="list-chip" :color="getColor()" v-for="item in hotUserList" :key="item._id" @click="lookInfo(item)">
+      <mu-chip class="list-chip" :color="item.color" v-for="item in mapHotList" :key="item._id" @click="lookInfo(item)">
         <mu-avatar :size="32">
           <img :src="item.user.src">
         </mu-avatar>
@@ -37,6 +37,7 @@ const randomColor = require('randomcolor');
 import { sort } from '@utils/tools';
 
 export default {
+  name: 'Search',
   data() {
     return {};
   },
@@ -49,25 +50,27 @@ export default {
     changeAvatar() {
       this.$router.push("/avatar");
     },
-    getColor() {
-      return randomColor();
-    },
     lookInfo(item) {
       this.$router.push({ path: "/persionDetail", query: { id: item._id } });
     },
     handleSearch() {
-      // Alert({
-      //   content: '尽情期待'
-      // })
+
       this.$router.push("/searchResult");
-    }
+    },
+
   },
   computed: {
     ...mapState([
       'hotUserList',
       'userInfo',
       'vipUserList'
-    ])
+    ]),
+    mapHotList() {
+      return this.hotUserList.map(item => ({
+        ...item,
+        color: randomColor()
+      }))
+    }
   },
   components: {
     Bottom,

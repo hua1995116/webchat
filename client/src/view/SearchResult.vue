@@ -24,6 +24,7 @@ import SearchBar from "@components/searchBar";
 import debounce from 'lodash/debounce';
 
 export default {
+  name: 'SearchResult',
 
   components: {
     SearchBar

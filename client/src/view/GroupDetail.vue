@@ -9,8 +9,8 @@
       ></Header>
     <div class="all-chat">
       <div class="group-avatar group-list">
-        <Avatar v-for="(item,index) in Object.keys(getUsers).slice(0, 18)" class="list-avatar" :key="index" :src="getUsers[item].src"></Avatar>
-        <div class="group-more" v-show="Object.keys(getUsers).length > 18" @click="gotoMore">查看更多群成员</div>
+        <Avatar v-for="(item,index) in Object.keys(roomUsers[roomid] || {}).slice(0, 18)" class="list-avatar" :key="index" :src="roomUsers[roomid][item].src"></Avatar>
+        <div class="group-more" v-show="Object.keys(allUser).length > 18" @click="gotoMore">查看更多群成员</div>
       </div>
       <div class="group-list">
         <mu-list>
@@ -78,7 +78,9 @@
 import Header from "@components/Header";
 import Avatar from "@components/Avatar";
 import {mapGetters, mapState} from 'vuex';
+import {queryString} from '@utils/queryString';
 export default {
+  name: 'GroupDetail',
 
   components: {
     Header,
@@ -92,6 +94,7 @@ export default {
       notifications: false,
       sounds: false,
       videoSounds: false,
+      roomid: '',
       allUser: {
         '005': {
           src: 'static/files/825836avatar-hua1995116.jpeg'
@@ -101,22 +104,24 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-        'getUsers'
-      ]),
+    ...mapState([
+      'roomUsers'
+    ]),
   },
 
   mounted() {
-    const allUser = {}
-    let i = 0;
-    while(i < 18) {
-      allUser[i] = {
-        src: 'static/files/825836avatar-hua1995116.jpeg'
-      }
-      i++;
-      console.log(i);
-    }
-    this.allUser = allUser;
+    const roomId = queryString(window.location.href, 'roomId');
+    this.roomid = roomId;
+    // const allUser = {}
+    // let i = 0;
+    // while(i < 180) {
+    //   allUser[i] = {
+    //     src: 'static/files/825836avatar-hua1995116.jpeg'
+    //   }
+    //   i++;
+    //   console.log(i);
+    // }
+    // this.allUser = allUser;
   },
 
   methods: {
@@ -125,7 +130,7 @@ export default {
       this.$router.goBack();
     },
     gotoMore() {
-      this.$router.push({ path: "/groupMember" });
+      this.$router.push({ path: "/groupMember", query: {roomId: this.roomid} });
     }
   }
 }

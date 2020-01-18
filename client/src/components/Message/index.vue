@@ -13,9 +13,9 @@
               ></Avatar>
             <div v-if="img">
                 <img
-                    :src="pic"
+                    v-imgSize="pic"
                     alt=""
-                    v-preview="img"
+                    :data-item="isLast && 'last'"
                     class="img"
                     preview-title-enable="true"
                     preview-nav-enable="true">
@@ -36,7 +36,7 @@ export default {
   components: {
     Avatar,
   },
-  props: ["id", "name", "img", "msg", "head", "mytime", "is-self", "container", "isNeedScroll", "firstNode"],
+  props: ["id", "name", "img", "msg", "head", "mytime", "is-self", "container", "isNeedScroll", "firstNode", 'isLast'],
   computed: {
     getdate() {
       return dateFormat(new Date(this.mytime), "yyyy-MM-dd HH:mm:ss");
