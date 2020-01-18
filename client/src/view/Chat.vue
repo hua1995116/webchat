@@ -306,7 +306,9 @@
               roomType: that.roomType,
               roomid: that.roomid,
               type: 'img',
-              time: new Date()
+              time: new Date(),
+              to: that.to,
+              from: that.from,
             };
             socket.emit('message', obj);
           };
