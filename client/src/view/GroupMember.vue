@@ -9,7 +9,7 @@
       ></Header>
     <div class="all-chat">
       <div class="group-avatar">
-        <Avatar v-for="(obj,index) in getUsers" class="list-avatar" :key="index" :src="obj.src"></Avatar>
+        <Avatar v-for="(obj,index) in roomUsers[roomid]" class="list-avatar" :key="index" :src="obj.src"></Avatar>
       </div>
     </div>
   </div>
@@ -18,8 +18,10 @@
 <script>
 import Header from "@components/Header";
 import Avatar from "@components/Avatar";
+import {queryString} from '@utils/queryString';
 import {mapGetters, mapState} from 'vuex';
 export default {
+  name: 'GroupMember',
 
   components: {
     Header,
@@ -27,27 +29,19 @@ export default {
   },
   data () {
     return {
-      allUser: {}
+      roomid: '',
     };
   },
 
   computed: {
-    ...mapGetters([
-        'getUsers'
-      ]),
+   ...mapState([
+      'roomUsers'
+    ]),
   },
 
   mounted() {
-    const allUser = {}
-    let i = 0;
-    while(i < 180) {
-      allUser[i] = {
-        src: 'static/files/825836avatar-hua1995116.jpeg'
-      }
-      i++;
-      console.log(i);
-    }
-    this.allUser = allUser;
+    const roomId = queryString(window.location.href, 'roomId');
+    this.roomid = roomId;
   },
 
   methods: {

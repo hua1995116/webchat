@@ -84,6 +84,7 @@ import { ROBOT_URL, HOST_URL1, HOST_URL2 } from "@const/index";
 import socket from "../socket";
 
 export default {
+  name: 'Loan',
   data() {
     return {
       house1: HOST_URL1,

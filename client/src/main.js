@@ -17,6 +17,7 @@ import env from '@utils/env';
 import Toast from "@components/Toast";
 
 import vuePicturePreview from './components/photo-viewer';
+import imgSize from './directive/imgSize';
 import flexTouch from "vue-flex-touch";
 
 Vue.directive('focus', {
@@ -26,6 +27,7 @@ Vue.directive('focus', {
 })
 
 Vue.use(vuePicturePreview);
+Vue.use(imgSize);
 Vue.use(flexTouch, { timeout: 900, preventDefault: false });
 Vue.use(MuseUI);
 Vue.config.productionTip = false;
@@ -54,9 +56,10 @@ socket.on('reconnect', (attemptNumber) => {
   Toast({
     content: '又可以愉快地上网啦',
     timeout: 2000,
-    background: "#2196f3"
+    background: "#f44336"
   });
 });
+
 
 socket.on('connect', async () => {
   console.log('connect');
@@ -92,14 +95,17 @@ socket.on('disconnect', () => {
   Toast({
     content: '抱歉网络开了小差',
     timeout: 2000,
-    background: "#2196f3"
+    background: "#f44336"
   });
   store.commit('setDiscount', true);
 });
 
 socket.on('message', function (obj) {
-  store.commit('setRoomDetailInfosAfter', [obj]);
-  console.log(Notification.permission);
+  const { roomid } = obj;
+  store.commit('setRoomDetailInfosAfter', {
+    roomid,
+    msgs: [obj]
+  });
   if (Notification.permission === "granted") {
     popNotice(obj);
   } else if (Notification.permission === "denied") {

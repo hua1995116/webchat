@@ -37,7 +37,7 @@
   import Confirm from '@components/Confirm';
   import loading from '@components/loading/loading';
   export default {
-
+    name: 'Avatar',
     components: {
       VueCropper: VueCropper,
       Header: Header

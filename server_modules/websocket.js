@@ -65,8 +65,10 @@ function websocket(server) {
     io.on('connection',  (socket) => {
       //监听用户发布聊天内容
       global.logger.info('socket connect!');
-      socket.on('message', async (msgObj) => {
+      socket.on('message', async (msgObj, fn) => {
         global.logger.info('socket message!');
+        // console.log(name, msgObj, fn);
+        fn(msgObj);
         //向所有客户端广播发布的消息
         const {username, src, msg, img, roomid, roomType, time, type, to, from} = msgObj;
         if(!msg && !img) {
@@ -212,7 +214,7 @@ function websocket(server) {
           onlineUsers[item] = {};
           onlineUsers[item].src = users[roomid][item].src;
         }
-        io.to(roomid).emit('room', onlineUsers);
+        io.to(roomid).emit('room', { onlineUsers, roomid });
         global.logger.info(`${name} 加入了 ${roomid}`);
       });
 

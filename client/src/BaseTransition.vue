@@ -1,13 +1,17 @@
 <template>
   <div class="webview">
     <transition :name="transitionName">
-      <router-view class="child-view"></router-view>
+      <!-- <keep-alive include="Chat"> -->
+          <router-view class="child-view"></router-view>
+      <!-- </keep-alive> -->
+      <!-- <router-view class="child-view"></router-view> -->
     </transition>
   </div>
 </template>
 
 <script>
   export default {
+    name: 'BaseTransition',
     data () {
       return {
         transitionName: 'slide-left'

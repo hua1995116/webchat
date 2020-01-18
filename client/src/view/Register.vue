@@ -41,6 +41,7 @@ import Arrow from '@components/arrow';
 import Input from '@components/input';
 
 export default {
+  name: 'Register',
   components: {
     Arrow,
     SvgModal,

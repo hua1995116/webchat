@@ -62,6 +62,7 @@ import {queryString} from '@utils/queryString';
 import {mapGetters, mapState} from 'vuex';
 import Alert from '@components/Alert';
 export default {
+  name: 'PersonDetail',
 
   components: {
     Header,
