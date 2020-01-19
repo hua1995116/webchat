@@ -202,7 +202,7 @@
         this.chatValue = this.chatValue + data;
       },
       bindScroll: debounce(async function (e) {
-        if (e.target.scrollTop >= 0 && e.target.scrollTop < 100) {
+        if (e.target.scrollTop >= 0 && e.target.scrollTop < 150) {
           this.handleScroll();
         }
       }, 30),

@@ -15,6 +15,7 @@ import {queryString} from '@utils/queryString';
 import {getRoomInfo} from '@utils/cache';
 import env from '@utils/env';
 import Toast from "@components/Toast";
+import Alert from "@components/Alert";
 
 import vuePicturePreview from './components/photo-viewer';
 import imgSize from './directive/imgSize';
@@ -108,10 +109,10 @@ socket.on('message', function (obj) {
   });
   if (Notification.permission === "granted") {
     popNotice(obj);
-  } else if (Notification.permission === "denied") {
-    Notification.requestPermission(function (permission) {
-      popNotice(obj);
-    });
+  } else {
+    Alert({
+      content: '请去我的-检查通知检查权限'
+    })
   }
 });
 
