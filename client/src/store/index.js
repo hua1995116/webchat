@@ -106,6 +106,11 @@ const store = new Vuex.Store({
       const { roomid, msgs } = data;
       state.roomdetail[roomid].push(...msgs);
     },
+    setRoomDetailInfosBeforeNoRefresh(state, {data, roomid}) {
+      const list = state.roomdetail[roomid] || [];
+      const newData = data.concat(list);
+      state.roomdetail[roomid] = newData;
+    },
     setRoomDetailInfosBefore(state, {data, roomid}) {
       const list = state.roomdetail[roomid] || [];
       const newData = data.concat(list);
@@ -224,10 +229,18 @@ const store = new Vuex.Store({
         const res = await url.RoomHistoryAll(data);
         if (res.data.errno === 0) {
           const result = res.data.data;
-          commit('setRoomDetailInfosBefore', {
-            data: result.data,
-            roomid: data.roomid
-          });
+          if(data.msgid) {
+            commit('setRoomDetailInfosBeforeNoRefresh', {
+              data: result.data,
+              roomid: data.roomid
+            });
+          } else {
+            commit('setRoomDetailInfosBefore', {
+              data: result.data,
+              roomid: data.roomid
+            });
+          }
+
           return {
             data: result.data
           }
