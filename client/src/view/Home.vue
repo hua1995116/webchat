@@ -1,18 +1,15 @@
 <template>
   <div>
-    <UserHead
-      :src="src"
-      :username="username"
-      ></UserHead>
+    <UserHead :src="src" :username="username"></UserHead>
     <div class="content">
       <mu-list>
-        <mu-list-item button :ripple="true"  @click="changeAvatar">
+        <mu-list-item button :ripple="true" @click="changeAvatar">
           <mu-list-item-action>
             <mu-icon value="send"></mu-icon>
           </mu-list-item-action>
           <mu-list-item-title>修改头像</mu-list-item-title>
         </mu-list-item>
-        <mu-list-item button :ripple="true"  @click="handleTips">
+        <mu-list-item button :ripple="true" @click="handleTips">
           <mu-list-item-action>
             <mu-icon value="inbox"></mu-icon>
           </mu-list-item-action>
@@ -22,7 +19,7 @@
           <mu-list-item-action>
             <mu-icon value="grade"></mu-icon>
           </mu-list-item-action>
-          <mu-list-item-title >github地址</mu-list-item-title>
+          <mu-list-item-title>github地址</mu-list-item-title>
         </mu-list-item>
         <mu-list-item button :ripple="true" @click="rmLocalData">
           <mu-list-item-action>
@@ -30,11 +27,23 @@
           </mu-list-item-action>
           <mu-list-item-title>清除缓存</mu-list-item-title>
         </mu-list-item>
+        <mu-list-item button @click="checkNotice">
+          <mu-list-item-action>
+            <mu-icon value="email"></mu-icon>
+          </mu-list-item-action>
+          <mu-list-item-title>检查通知</mu-list-item-title>
+        </mu-list-item>
       </mu-list>
       <!--<mu-divider/>-->
     </div>
     <div class="logout">
-      <mu-button full-width class="demo-raised-button" color="error" @click="logout">退出</mu-button>
+      <mu-button
+        full-width
+        class="demo-raised-button"
+        color="error"
+        @click="logout"
+        >退出</mu-button
+      >
     </div>
     <div style="height:80px"></div>
     <Bottom></Bottom>
@@ -50,7 +59,7 @@ import Bottom from "@components/Bottom";
 import UserHead from "@components/userHead";
 
 export default {
-  name: 'Home',
+  name: "Home",
   data() {
     return {};
   },
@@ -70,6 +79,33 @@ export default {
     }
   },
   methods: {
+    checkNotice() {
+      if (!("Notification" in window)) {
+        Alert({
+          content: "您的浏览器暂不支持该功能"
+        });
+      }
+
+      // 检查用户是否同意接受通知
+      else if (Notification.permission === "granted") {
+        // If it's okay let's create a notification
+        Alert({
+          content: "您已开启通知"
+        });
+      }
+
+      // 否则我们需要向用户获取权限
+      else if (Notification.permission !== "denied") {
+        Notification.requestPermission(function(permission) {
+          // 如果用户同意，就可以向他们发送通知
+          if (permission === "granted") {
+            Alert({
+              content: "开启权限成功"
+            });
+          }
+        });
+      }
+    },
     changeAvatar() {
       this.$router.push("/avatar");
     },

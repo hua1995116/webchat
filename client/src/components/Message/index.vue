@@ -72,7 +72,9 @@ export default {
     }
   },
   mounted() {
-    this.$refs.msg.scrollIntoView();
+    if(this.isLast) {
+      this.$refs.msg.scrollIntoView();
+    }
   },
   methods: {
     handleClick() {
