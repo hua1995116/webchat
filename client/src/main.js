@@ -109,10 +109,6 @@ socket.on('message', function (obj) {
   });
   if (Notification.permission === "granted") {
     popNotice(obj);
-  } else {
-    Alert({
-      content: '请去我的-检查通知检查权限'
-    })
   }
 });
 
