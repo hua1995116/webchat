@@ -91,18 +91,11 @@ function websocket(server) {
         global.logger.info(msgObj);
 
         global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);
-        if (mess.img === '') {
-          const message = new Message(mess);
-          message.save(function (err, res) {
-            if (err) {
-              global.logger.error(err);
-              return;
-            }
-            global.logger.info(res);
-          })
-        }
+        let msgRes = {};
+        const message = new Message(mess);
+        msgRes = await message.save();
         if(roomType === 'group') {
-          io.to(mess.roomid).emit('message', mess);
+          io.to(mess.roomid).emit('message', msgRes);
           // 未读消息
           const usersList = await gethAllCache('socketId');
           usersList.map(async item => {
@@ -120,12 +113,12 @@ function websocket(server) {
           const selfSockets = await Socket.find({ userId: from });
           selfSockets.forEach((socket) => {
             // 兼容多端设备
-            io.to(socket.socketId).emit('message', mess);
+            io.to(socket.socketId).emit('message', msgRes);
           });
           const friendSockets = await Socket.find({ userId: to });
           friendSockets.forEach((socket) => {
             // 兼容多端设备
-            io.to(socket.socketId).emit('message', mess);
+            io.to(socket.socketId).emit('message', msgRes);
           });
         }
 

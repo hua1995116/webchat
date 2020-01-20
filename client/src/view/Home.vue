@@ -80,6 +80,7 @@ export default {
   },
   methods: {
     checkNotice() {
+
       if (!("Notification" in window)) {
         Alert({
           content: "您的浏览器暂不支持该功能"
@@ -96,14 +97,21 @@ export default {
 
       // 否则我们需要向用户获取权限
       else if (Notification.permission !== "denied") {
+        console.log('获取权限');
         Notification.requestPermission(function(permission) {
           // 如果用户同意，就可以向他们发送通知
           if (permission === "granted") {
             Alert({
               content: "开启权限成功"
             });
+          } else {
+            Alert({
+              content: "开启权限拒绝"
+            });
           }
         });
+      } else {
+        console.log(Notification.permission);
       }
     },
     changeAvatar() {

@@ -95,8 +95,6 @@ router.post('/uploadimg', upload.single('file'),  async (req, res, next) => {
 
       const {mimetype, filename, size, path: localPath} = file;
 
-      const {username, roomid, time, src} = req.body;
-
       const staticUrl = path.join('./static_temp', filename);
       let img = '';
       if(process.env.NODE_ENV === 'production') {
@@ -110,31 +108,11 @@ router.post('/uploadimg', upload.single('file'),  async (req, res, next) => {
         rmDirFiles('./static_temp');
         img = path.join(urlPath, filename);
       }
-
-      const mess = {
-        username,
-        src,
-        img,
-        roomid,
-        time,
-      }
-
-      const message = new Message(mess);
-      message.save((err, mess) => {
-        if (err) {
-          global.logger.error(err);
-          res.json({
-            errno: 500,
-            msg: '保存异常!'
-          });
-          return;
-        }
-        global.logger.info(mess);
-        res.json({
-          errno: 200,
-          msg: '保存成功!'
-        });
-      })
+      res.json({
+        errno: 0,
+        data: img,
+        msg: '保存异常!'
+      });
       return;
   } else {
       res.json({
@@ -147,8 +125,6 @@ router.post('/uploadimg', upload.single('file'),  async (req, res, next) => {
 
 router.post('/avatar', uploadAvatar.single('file'),  async (req, res, next) => {
   const file = req.file;
-  console.log(req.body);
-  console.log(file);
   if(file) {
       const {mimetype, filename, size, path: localPath} = file;
       const {username} = req.body;

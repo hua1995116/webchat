@@ -104,7 +104,15 @@ const store = new Vuex.Store({
     },
     setRoomDetailInfosAfter(state, data) {
       const { roomid, msgs } = data;
+      if(!state.roomdetail[roomid]) {
+        state.roomdetail[roomid] = [];
+      }
       state.roomdetail[roomid].push(...msgs);
+    },
+    setRoomDetailInfosBeforeNoRefresh(state, {data, roomid}) {
+      const list = state.roomdetail[roomid] || [];
+      const newData = data.concat(list);
+      state.roomdetail[roomid] = newData;
     },
     setRoomDetailInfosBefore(state, {data, roomid}) {
       const list = state.roomdetail[roomid] || [];
@@ -174,10 +182,25 @@ const store = new Vuex.Store({
       return res.data;
     },
     async uploadImg({}, data) {
-      const res = await url.postUploadFile(data);
-      if (res) {
-        if (res.data.errno === 0) {
-          console.log('上传成功');
+      try {
+        const res = await url.postUploadFile(data);
+        if (res) {
+          if (res.data.errno === 0) {
+            return {
+              data: res.data.data,
+              code: 0,
+            }
+          } else {
+            return {
+              data: '图片太大,请重新选择',
+              code: 500,
+            }
+          }
+        }
+      } catch(e) {
+        return {
+          data: '服务端异常,重新发送',
+          code: 500,
         }
       }
     },
@@ -224,10 +247,18 @@ const store = new Vuex.Store({
         const res = await url.RoomHistoryAll(data);
         if (res.data.errno === 0) {
           const result = res.data.data;
-          commit('setRoomDetailInfosBefore', {
-            data: result.data,
-            roomid: data.roomid
-          });
+          if(data.msgid) {
+            commit('setRoomDetailInfosBeforeNoRefresh', {
+              data: result.data,
+              roomid: data.roomid
+            });
+          } else {
+            commit('setRoomDetailInfosBefore', {
+              data: result.data,
+              roomid: data.roomid
+            });
+          }
+
           return {
             data: result.data
           }

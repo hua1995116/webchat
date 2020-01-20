@@ -13,10 +13,13 @@
               ></Avatar>
             <div v-if="img">
                 <img
-                    v-imgSize="pic"
+                    v-imgSize="pic.src"
+                    :width="pic.width"
+                    :height="pic.height"
                     alt=""
                     :data-item="isLast && 'last'"
                     class="img"
+                    v-preview="img"
                     preview-title-enable="true"
                     preview-nav-enable="true">
             </div>
@@ -32,6 +35,9 @@
 import Avatar from "@components/Avatar";
 import dateFormat from "../../utils/date";
 import { inHTMLData, uriInUnQuotedAttr } from "xss-filters-es6";
+const maxWidth = 200;
+const maxHeight = 200;
+
 export default {
   components: {
     Avatar,
@@ -61,24 +67,59 @@ export default {
       if (matches) {
         avatar = `//s3.qiufengh.com/avatar/${matches[1]}.jpeg`;
       }
-      return `${avatar}?imageView2/2/w/120/h/120`;
+      if(avatar.indexOf('?') > -1) {
+        return `${avatar}&imageView2/2/w/120/h/120`;
+      } else {
+        return `${avatar}?imageView2/2/w/120/h/120`;
+      }
     },
     pic() {
       let pic = this.img;
-      if (pic.indexOf("data:image") > -1) {
-        return pic;
+      let width = 200;
+      let height = 200;
+      const picParse = /width=([0-9]+)&height=([0-9]+)/.exec(pic);
+      if(picParse) {
+        const natureWidth = +picParse[1];
+        const naturehHeight = +picParse[2];
+        let scale = 1;
+        if (natureWidth * scale > maxWidth) {
+            scale = maxWidth / natureWidth;
+        }
+        if (naturehHeight * scale > maxHeight) {
+            scale = maxHeight / naturehHeight;
+        }
+        width = natureWidth * scale;
+        height = naturehHeight * scale;
       }
-      return `${pic}?imageView2/2/w/360`;
-    }
+      if (pic.indexOf("data:image") > -1) {
+        return {
+          src: pic,
+          width,
+          height
+        };
+      }
+      if(pic.indexOf('?') > -1) {
+        return {
+          src: `${pic}&imageView2/2/w/360`,
+          width,
+          height
+        };
+      } else {
+        return {
+          src: `${pic}?imageView2/2/w/360`,
+          width,
+          height
+        };
+      }
+    },
   },
   mounted() {
-    if(this.isLast) {
+    this.$nextTick(() => {
       this.$refs.msg.scrollIntoView();
-    }
+    })
   },
   methods: {
     handleClick() {
-      console.log(11);
       this.$emit('avatarClick', {
         id: this.name,
       });

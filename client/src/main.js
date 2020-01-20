@@ -102,17 +102,14 @@ socket.on('disconnect', () => {
 });
 
 socket.on('message', function (obj) {
-  const { roomid } = obj;
+  const { roomid, username } = obj;
   store.commit('setRoomDetailInfosAfter', {
     roomid,
     msgs: [obj]
   });
-  if (Notification.permission === "granted") {
+  const userName = store.state.userInfo.userid;
+  if (Notification.permission === "granted" && userName !== username) {
     popNotice(obj);
-  } else {
-    Alert({
-      content: '请去我的-检查通知检查权限'
-    })
   }
 });
 
