@@ -101,7 +101,7 @@
           </div>
           <mu-button class="demo-raised-button" color="primary" @click="submess">发送</mu-button>
         </div>
-        <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/*;capture=camera"
+        <input id="inputFile" name='inputFile' type='file' multiple='mutiple' accept="image/gif,image/jpeg,image/png,image/webp,image/jpg;capture=camera"
                 style="display: none" @change="fileup">
       </div>
     </div>
@@ -282,35 +282,42 @@
       setLog() {
         // 版本更新日志
       },
-      fileup() {
+      async fileup() {
         const that = this;
         const file1 = document.getElementById('inputFile').files[0];
         if (file1) {
           const formdata = new window.FormData();
           formdata.append('file', file1);
-          formdata.append('username', this.username);
-          formdata.append('src', this.src);
-          formdata.append('roomType', this.roomType);
-          formdata.append('roomid', this.roomid);
-          formdata.append('time', new Date());
-          this.$store.dispatch('uploadImg', formdata);
           const fr = new window.FileReader();
           fr.onload = function () {
-            const obj = {
-              username: that.username,
-              src: that.src,
-              img: fr.result,
-              msg: '',
-              roomType: that.roomType,
-              roomid: that.roomid,
-              type: 'img',
-              time: new Date(),
-              to: that.to,
-              from: that.from,
-            };
-            socket.emit('message', obj, function() {
-              console.log(arguments);
-            });
+            const img = new Image();
+            img.src = fr.result;
+            img.onload = async function() {
+              const imgurl = await that.$store.dispatch('uploadImg', formdata);
+              if(imgurl.code == 500) {
+                Alert({
+                  content: imgurl.data
+                })
+                return;
+              }
+              const obj = {
+                username: that.username,
+                src: that.src,
+                img: `${imgurl.data}?width=${img.width}&height=${img.height}`,
+                msg: '',
+                roomType: that.roomType,
+                roomid: that.roomid,
+                type: 'img',
+                time: new Date(),
+                to: that.to,
+                from: that.from,
+              };
+              socket.emit('message', obj, function() {
+                console.log(arguments);
+              });
+            }
+
+
           };
           fr.readAsDataURL(file1);
           this.$nextTick(() => {

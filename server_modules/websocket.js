@@ -92,10 +92,8 @@ function websocket(server) {
 
         global.logger.info(`${mess.username} 对房 ${mess.roomid} 说: ${mess.msg}`);
         let msgRes = {};
-        if (mess.img === '') {
-          const message = new Message(mess);
-          msgRes = await message.save();
-        }
+        const message = new Message(mess);
+        msgRes = await message.save();
         if(roomType === 'group') {
           io.to(mess.roomid).emit('message', msgRes);
           // 未读消息

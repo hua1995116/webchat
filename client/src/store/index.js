@@ -182,10 +182,25 @@ const store = new Vuex.Store({
       return res.data;
     },
     async uploadImg({}, data) {
-      const res = await url.postUploadFile(data);
-      if (res) {
-        if (res.data.errno === 0) {
-          console.log('上传成功');
+      try {
+        const res = await url.postUploadFile(data);
+        if (res) {
+          if (res.data.errno === 0) {
+            return {
+              data: res.data.data,
+              code: 0,
+            }
+          } else {
+            return {
+              data: '图片太大,请重新选择',
+              code: 500,
+            }
+          }
+        }
+      } catch(e) {
+        return {
+          data: '服务端异常,重新发送',
+          code: 500,
         }
       }
     },
