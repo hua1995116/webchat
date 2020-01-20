@@ -104,6 +104,9 @@ const store = new Vuex.Store({
     },
     setRoomDetailInfosAfter(state, data) {
       const { roomid, msgs } = data;
+      if(!state.roomdetail[roomid]) {
+        state.roomdetail[roomid] = [];
+      }
       state.roomdetail[roomid].push(...msgs);
     },
     setRoomDetailInfosBeforeNoRefresh(state, {data, roomid}) {
