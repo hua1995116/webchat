@@ -146,7 +146,7 @@ function websocket(server) {
           const addSocket = await new Socket(socketCtx).save();
           global.logger.info("addSocket", addSocket);
         } else {
-          const updateRes = await Socket.update({userId: id}, {socketId: socket.id}).exec();
+          const updateRes = await Socket.update({userId: id ,ip: ip, browser: browser, os: os}, {socketId: socket.id}).exec();
           global.logger.info('updateRes');
         }
         global.logger.info('socket login!', user, socket.id, address, ip);
