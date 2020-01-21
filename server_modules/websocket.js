@@ -130,6 +130,7 @@ function websocket(server) {
         const address = socket.handshake.headers['x-real-ip'] || socket.request.connection.remoteAddress;
         const ip = address.split(':').slice(-1).join('');
         const { browser, os, name, id, ua} = user;
+        global.logger.info({ browser, os, name, id, ua});
         const socketRes = await Socket.findOne({userId: id ,ip: ip, browser: browser, os: os}).exec();
         global.logger.info("socketRes", socketRes);
         if(!socketRes) {
@@ -146,7 +147,7 @@ function websocket(server) {
           global.logger.info("addSocket", addSocket);
         } else {
           const updateRes = await Socket.update({userId: id}, {socketId: socket.id}).exec();
-          global.logger.info('updateRes', updateRes);
+          global.logger.info('updateRes');
         }
         global.logger.info('socket login!', user, socket.id, address, ip);
         if (!name) {
