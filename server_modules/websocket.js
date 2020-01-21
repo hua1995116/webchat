@@ -113,11 +113,13 @@ function websocket(server) {
           const selfSockets = await Socket.find({ userId: from });
           selfSockets.forEach((socket) => {
             // 兼容多端设备
+            global.logger.info('自己的id', socket.socketId);
             io.to(socket.socketId).emit('message', msgRes);
           });
           const friendSockets = await Socket.find({ userId: to });
           friendSockets.forEach((socket) => {
             // 兼容多端设备
+            global.logger.info('被通知的id', socket.socketId);
             io.to(socket.socketId).emit('message', msgRes);
           });
         }
@@ -125,7 +127,7 @@ function websocket(server) {
       })
       // 建立连接
       socket.on('login',async (user) => {
-        const address = socket.request.connection.remoteAddress;
+        const address = socket.handshake.headers['x-real-ip'] || socket.request.connection.remoteAddress;
         const ip = address.split(':').slice(-1).join('');
         const { browser, os, name, id, ua} = user;
         const socketRes = await Socket.findOne({userId: id ,ip: ip, browser: browser, os: os}).exec();
