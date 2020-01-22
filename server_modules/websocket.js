@@ -31,37 +31,37 @@ function websocket(server) {
     global.socketIO = io;
     const users = {};
 
-    setInterval(async () => {
-      const usersList = await gethAllCache('socketId');
-      for (let i = 0; i < usersList.length; i++) {
-        const name = usersList[i];
-        for (let j = 0; j < roomList.length; j++) {
-          const roomid = roomList[j];
-          const username = `${name}-${roomid}`;
-          const roomInfo = await getCacheById(username);
-          const res = await findOne({username});
-          if(res) {
-            Count.update({username}, {roomInfo}, (err) => {
-              if(err) {
-                console.log('更新失败');
-              }
-            })
-          } else {
-            const count = new Count({
-              username,
-              roomInfo: +roomInfo
-            });
-            count.save(function(err, res) {
-              if(err) {
-                global.logger.error(err);
-                return;
-              }
-              global.logger.info(res);
-            })
-          }
-        }
-      }
-    }, 1 * 60 * 1000);
+    // setInterval(async () => {
+    //   const usersList = await gethAllCache('socketId');
+    //   for (let i = 0; i < usersList.length; i++) {
+    //     const name = usersList[i];
+    //     for (let j = 0; j < roomList.length; j++) {
+    //       const roomid = roomList[j];
+    //       const username = `${name}-${roomid}`;
+    //       const roomInfo = await getCacheById(username);
+    //       const res = await findOne({username});
+    //       if(res) {
+    //         Count.update({username}, {roomInfo}, (err) => {
+    //           if(err) {
+    //             console.log('更新失败');
+    //           }
+    //         })
+    //       } else {
+    //         const count = new Count({
+    //           username,
+    //           roomInfo: +roomInfo
+    //         });
+    //         count.save(function(err, res) {
+    //           if(err) {
+    //             global.logger.error(err);
+    //             return;
+    //           }
+    //           global.logger.info(res);
+    //         })
+    //       }
+    //     }
+    //   }
+    // }, 1 * 60 * 1000);
     io.on('connection',  (socket) => {
       //监听用户发布聊天内容
       global.logger.info('socket connect!');
@@ -94,21 +94,25 @@ function websocket(server) {
         let msgRes = {};
         const message = new Message(mess);
         msgRes = await message.save();
+
+        // 处理未读消息
+        // const usersList = await gethAllCache('socketId');
+        // console.log({usersList, users});
+        // usersList.map(async item => {
+        //   if(users[roomid][item]) {
+        //     const key = `${item}-${roomid}`
+        //     await inrcCache(key);
+        //     const socketid = await gethCacheById('socketId', item);
+        //     const count = await getCacheById(key);
+        //     const roomInfo = {};
+        //     roomInfo[roomid] = count;
+        //     console.log({roomInfo});
+        //     socket.to(socketid).emit('count', roomInfo);
+        //   }
+        // })
+        // 处理消息通知
         if(roomType === 'group') {
           io.to(mess.roomid).emit('message', msgRes);
-          // 未读消息
-          const usersList = await gethAllCache('socketId');
-          usersList.map(async item => {
-            if(!users[roomid][item]) {
-              const key = `${item}-${roomid}`
-              await inrcCache(key);
-              const socketid = await gethCacheById('socketId', item);
-              const count = await getCacheById(key);
-              const roomInfo = {};
-              roomInfo[roomid] = count;
-              socket.to(socketid).emit('count', roomInfo);
-            }
-          })
         } else {
           const selfSockets = await Socket.find({ userId: from });
           selfSockets.forEach((socket) => {
@@ -127,6 +131,7 @@ function websocket(server) {
       })
       // 建立连接
       socket.on('login',async (user) => {
+        // 更新自己的 socketId
         const address = socket.handshake.headers['x-real-ip'] || socket.request.connection.remoteAddress;
         const ip = address.split(':').slice(-1).join('');
         const { browser, os, name, id, ua} = user;
@@ -157,28 +162,28 @@ function websocket(server) {
           return;
         }
         socket.name = name;
-        const roomInfo = {};
-        await updatehCache('socketId', name, socket.id);
+        // const roomInfo = {};
+        // await updatehCache('socketId', name, socket.id);
 
-        for(let i = 0; i < roomList.length; i++) {
-          const roomid = roomList[i];
-          const key = `${name}-${roomid}`;
-          // 循环所有房间
-          const res = await findOne({username: key});
-          const count = await getCacheById(key);
+        // for(let i = 0; i < roomList.length; i++) {
+        //   const roomid = roomList[i];
+        //   const key = `${name}-${roomid}`;
+        //   // 循环所有房间
+        //   const res = await findOne({username: key});
+        //   const count = await getCacheById(key);
 
-          if(res) {
-            // 数据库查数据， 若缓存中没有数据，更新缓存
-            if(+count === 0) {
-              updateCache(key, res.roomInfo);
-            }
-            roomInfo[roomid] = res.roomInfo;
-          } else {
-            roomInfo[roomid] = +count;
-          }
-        }
+        //   if(res) {
+        //     // 数据库查数据， 若缓存中没有数据，更新缓存
+        //     if(+count === 0) {
+        //       updateCache(key, res.roomInfo);
+        //     }
+        //     roomInfo[roomid] = res.roomInfo;
+        //   } else {
+        //     roomInfo[roomid] = +count;
+        //   }
+        // }
         // 通知自己有多少条未读消息
-        socket.emit('count', roomInfo);
+        // socket.emit('count', roomInfo);
 
       });
       // 加入房间
@@ -198,11 +203,11 @@ function websocket(server) {
         }, user);
 
         // 初始化user
-        const key = `${name}-${roomid}`;
-        await updatehCache('socketId', name, socket.id);
+        // const key = `${name}-${roomid}`;
+        // await updatehCache('socketId', name, socket.id);
 
         // 进入房间默认置空，表示全部已读
-        await resetCacheById(key);
+        // await resetCacheById(key);
         // 进行会话
         socket.join(roomid);
 
@@ -217,25 +222,33 @@ function websocket(server) {
 
       socket.on('roomout', async (user) => {
         global.logger.info('socket loginout!');
+        handleLogoutRoom(socket);
       })
 
       socket.on('disconnect', async () => {
         global.logger.info('socket disconnect!');
+        handleLogoutRoom(socket);
       })
 
       const handleLogoutRoom = async (socket) => {
         try {
-          socket.roomids.forEach(async (item) => {
-            const {name, roomid} = item;
+          ['room1', 'room2'].forEach(async (item) => {
+            const roomid = item;
+            const name = socket.name;
             if(users[roomid] && users[roomid].hasOwnProperty(name)) {
-              const key = `${name}-${roomid}`;
-              const roomInfo = {};
-              const count = await getCacheById(key);
-              roomInfo[roomid] = count;
-              socket.emit('count', roomInfo);
+              // const key = `${name}-${roomid}`;
+              // const roomInfo = {};
+              // const count = await getCacheById(key);
+              // roomInfo[roomid] = count;
+              // socket.emit('count', roomInfo);
               delete users[roomid][name];
               global.logger.info(`${name} 退出了 ${roomid}`);
-              io.to(roomid).emit('roomout', users[roomid]);
+              const onlineUsers = {};
+              for(let item in users[roomid]) {
+                onlineUsers[item] = {};
+                onlineUsers[item].src = users[roomid][item].src;
+              }
+              io.to(roomid).emit('roomout', { onlineUsers, roomid });
               socket.leave(roomid);
             }
           })

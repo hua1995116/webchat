@@ -106,10 +106,17 @@ socket.on('message', function (obj) {
   }
 });
 
+socket.on('count', (obj) => {
+  console.log(obj);
+  store.commit("setUnread", obj);
+})
+
 socket.on('room', (obj) => {
+  console.log(obj);
   store.commit('setUsers', obj);
 });
 socket.on('roomout', (obj) => {
+  console.log(obj);
   store.commit('setUsers', obj);
 });
 socket.on('friend', (obj) => {
