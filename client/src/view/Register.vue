@@ -39,6 +39,7 @@ import socket from "../socket";
 import ios from '@utils/ios';
 import Arrow from '@components/arrow';
 import Input from '@components/input';
+import { handleInit } from '../socket-handle';
 
 export default {
   name: 'Register',
@@ -86,10 +87,13 @@ export default {
             type: "id",
             value: res.data.id
           });
-          this.getSvgModal.$root.$options.clear();
-          this.$store.commit("setSvgModal", null);
+          await handleInit({
+            name,
+            id: res.data.id,
+            src: data.src,
+            roomList: ['room1', 'room2']
+          })
           this.$router.push({ path: "/" });
-          socket.emit("login", { name });
         } else {
           await Alert({
             content: res.data.data

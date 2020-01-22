@@ -38,6 +38,7 @@ import socket from "../socket";
 import ios from '@utils/ios';
 import Arrow from '@components/arrow';
 import Input from '@components/input';
+import { handleInit } from '../socket-handle';
 
 export default {
   name: 'Login',
@@ -82,15 +83,18 @@ export default {
             type: "id",
             value: res.data.id
           });
+          await handleInit({
+            name,
+            id: res.data.id,
+            src: data.src,
+            roomList: ['room1', 'room2']
+          })
           this.$router.push({ path: "/" });
-          socket.emit("login", { name });
         } else {
           Alert({
             content: res.data.data
           });
         }
-
-        // document.form2.reset();
       } else {
         Alert({
           content: "用户名和密码不能为空"

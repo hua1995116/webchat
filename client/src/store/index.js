@@ -152,6 +152,9 @@ const store = new Vuex.Store({
     },
     setSearchList(state, data) {
       state.searchUserList = data;
+    },
+    setAllmsg(state, data) {
+      state.roomdetail = data;
     }
   },
   actions: {
@@ -240,6 +243,15 @@ const store = new Vuex.Store({
       const res = await url.postListFriend(data);
       if(res.data.errno === 0) {
         commit('setFriendList', res.data.data);
+      }
+    },
+    async getRoomHistory({state, commit}, data) {
+      const res = await url.getRoomHistory(data);
+      if(res.data.errno === 0) {
+        const result = res.data.data;
+        if(result) {
+          commit('setAllmsg', result);
+        }
       }
     },
     async getAllMessHistory({state, commit}, data) {

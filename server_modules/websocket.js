@@ -130,6 +130,9 @@ function websocket(server) {
         const address = socket.handshake.headers['x-real-ip'] || socket.request.connection.remoteAddress;
         const ip = address.split(':').slice(-1).join('');
         const { browser, os, name, id, ua} = user;
+        if(!browser || !os || !name || !id || !ua) {
+          return;
+        }
         global.logger.info({ browser, os, name, id, ua});
         const socketRes = await Socket.findOne({userId: id ,ip: ip, browser: browser, os: os}).exec();
         global.logger.info("socketRes", socketRes);
@@ -146,7 +149,7 @@ function websocket(server) {
           const addSocket = await new Socket(socketCtx).save();
           global.logger.info("addSocket", addSocket);
         } else {
-          const updateRes = await Socket.update({userId: id ,ip: ip, browser: browser, os: os}, {socketId: socket.id}).exec();
+          const updateRes = await Socket.update({_id: socketRes._id}, {socketId: socket.id}).exec();
           global.logger.info('updateRes');
         }
         global.logger.info('socket login!', user, socket.id, address, ip);
@@ -185,8 +188,6 @@ function websocket(server) {
         if (!name || !roomid) {
           return;
         }
-        socket.name = name;
-        socket.roomid = roomid;
 
         if (!users[roomid]) {
           users[roomid] = {};
@@ -216,29 +217,29 @@ function websocket(server) {
 
       socket.on('roomout', async (user) => {
         global.logger.info('socket loginout!');
-        const {name, roomid} = user;
-        await handleLogoutRoom(roomid, name);
       })
 
       socket.on('disconnect', async () => {
         global.logger.info('socket disconnect!');
-        const {name, roomid} = socket;
-        await handleLogoutRoom(roomid, name);
       })
 
-      const handleLogoutRoom = async (roomid, name) => {
+      const handleLogoutRoom = async (socket) => {
         try {
-          if(users[roomid] && users[roomid].hasOwnProperty(name)) {
-            const key = `${name}-${roomid}`;
-            const roomInfo = {};
-            const count = await getCacheById(key);
-            roomInfo[roomid] = count;
-            socket.emit('count', roomInfo);
-            delete users[roomid][name];
-            global.logger.info(`${name} 退出了 ${roomid}`);
-            io.to(roomid).emit('roomout', users[roomid]);
-            socket.leave(roomid);
-          }
+          socket.roomids.forEach(async (item) => {
+            const {name, roomid} = item;
+            if(users[roomid] && users[roomid].hasOwnProperty(name)) {
+              const key = `${name}-${roomid}`;
+              const roomInfo = {};
+              const count = await getCacheById(key);
+              roomInfo[roomid] = count;
+              socket.emit('count', roomInfo);
+              delete users[roomid][name];
+              global.logger.info(`${name} 退出了 ${roomid}`);
+              io.to(roomid).emit('roomout', users[roomid]);
+              socket.leave(roomid);
+            }
+          })
+
         } catch(e) {
           global.logger.info(e);
         }

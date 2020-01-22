@@ -57,6 +57,7 @@ import Confirm from "@components/Confirm";
 import Alert from "@components/Alert";
 import Bottom from "@components/Bottom";
 import UserHead from "@components/userHead";
+import socket from "../socket";
 
 export default {
   name: "Home",
@@ -132,6 +133,7 @@ export default {
         content: "你忍心离开吗？"
       });
       if (data === "submit") {
+        socket.emit('roomout');
         clear();
         this.$store.commit("setUserInfo", {
           type: "userid",

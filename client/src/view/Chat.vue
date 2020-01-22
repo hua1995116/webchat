@@ -179,9 +179,6 @@
       });
       // 微信 回弹 bug
       ios();
-      if(this.roomType === 'group') {
-        this.emitRoom();
-      }
       this.container = document.querySelector('.chat-inner');
       // socket内部，this指针指向问题
       const that = this;
@@ -241,14 +238,6 @@
 
         }
       },
-      emitRoom() {
-        const obj = {
-          name: this.username,
-          src: this.src,
-          roomid: this.roomid
-        };
-        socket.emit('room', obj);
-      },
       handleNotice() {
         this.noticeBar = !this.noticeBar;
         setItem('notice', {
@@ -271,11 +260,6 @@
         });
       },
       goback () {
-        const obj = {
-          name: this.username,
-          roomid: this.roomid
-        };
-        socket.emit('roomout', obj);
         this.$router.isBack = true;
         this.$router.goBack();
       },
@@ -370,8 +354,6 @@
     computed: {
       ...mapGetters([
         'getEmoji',
-        // 'getInfos',
-        // 'getUsers',
       ]),
       ...mapState([
         'isbind',
