@@ -135,18 +135,19 @@ export default {
       if (data === "submit") {
         socket.emit('roomout');
         clear();
-        this.$store.commit("setUserInfo", {
-          type: "userid",
-          value: ""
-        });
-        this.$store.commit("setUserInfo", {
-          type: "src",
-          value: ""
-        });
-        this.$store.commit("setUserInfo", {
-          type: "id",
-          value: ""
-        });
+        // this.$store.commit("setUserInfo", {
+        //   type: "userid",
+        //   value: ""
+        // });
+        // this.$store.commit("setUserInfo", {
+        //   type: "src",
+        //   value: ""
+        // });
+        // this.$store.commit("setUserInfo", {
+        //   type: "id",
+        //   value: ""
+        // });
+        this.$store.commit("setUserInfo", {});
         this.$store.commit("setUnread", {
           room1: 0,
           room2: 0

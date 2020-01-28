@@ -31,7 +31,6 @@
     "shelljs": "^0.7.6",
     "socket.io": "^1.7.3",
     "superagent": "^3.5.2",
-    "vivus": "^0.4.1",
     "webpack-merge": "^4.2.1",
     "xss-filters": "^1.2.7"
   },

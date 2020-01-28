@@ -26,7 +26,7 @@ instance.interceptors.response.use(response => {
 }, error => {
   if (error) {
     let msg = '';
-    if (error.response.status === 401) {
+    if (error.response && error.response.status === 401) {
       msg = error.response.data.msg;
       return;
     }

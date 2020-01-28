@@ -16,6 +16,7 @@ const store = new Vuex.Store({
       src: getItem('src'),
       userid: getItem('userid'),
       id: getItem('id'),
+      token: getItem('token'),
     },
     lookUserInfo: {
     },
@@ -93,8 +94,26 @@ const store = new Vuex.Store({
     },
     setUserInfo(state, data) {
       const {type, value} = data;
-      setItem(type, value);
-      state.userInfo[type] = value;
+      // 如果是 key - value 形式，为单项设置
+      if(value) {
+        setItem(type, value);
+        state.userInfo[type] = value;
+      } else {
+        const info = Object.keys(data);
+        // 清空所有
+        if(info.length == 0) {
+          Object.keys(state.userInfo).map(item => {
+            state.userInfo[item] = '';
+            setItem(item, '');
+          });
+        } else {
+          // 多数据一次性设置
+          info.map(item => {
+            state.userInfo[item] = data[item];
+            setItem(item, data[item]);
+          });
+        }
+      }
     },
     setEmoji(state, data) {
       state.emojiShow = data;

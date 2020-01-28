@@ -34,7 +34,14 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.use(function(req, res, next) {
   const pathUrl = req.url.split('?')[0];
-  if(['/api/user/signup', '/api/user/signup', '/api/message/history/byUser', '/api/friend/list'].includes(pathUrl)) {
+  if(['/api/user/signup',
+    '/api/user/signin',
+    '/api/message/history/byUser',
+    '/api/friend/list',
+    '/api/user/vipuser',
+    '/api/user/getInfo',
+    '/api/user/search',
+    '/api/message/getHot'].includes(pathUrl)) {
     return next();
   }
   let token;
