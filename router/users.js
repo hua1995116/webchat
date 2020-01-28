@@ -1,6 +1,8 @@
 const Express = require('express');
 const User = require('../models/user');
 const router = Express.Router();
+var jwtConfig = require('../config/jwt');
+var jwt = require('jwt-simple');
 
 // 注册
 router.post('/signup',  (req, res) => {
@@ -34,11 +36,15 @@ router.post('/signup',  (req, res) => {
         if (err) {
           global.logger.error(err)
         }
-        res.json({
-          errno: 0,
+        const userInfo = {
           name: name,
           src: user.src,
           id: user.id,
+        }
+        res.json({
+          errno: 0,
+          userInfo,
+          token: jwt.encode(userInfo, jwtConfig.secret),
           data: '注册成功'
         })
       })
@@ -66,14 +72,17 @@ router.post('/signin', (req, res) => {
             global.logger.error(err);
           }
           if (isMatch) {
-            req.session.user = user;
             global.logger.info('success');
+            const userInfo = {
+              name: name,
+              src: user.src,
+              id: user.id,
+            }
             res.json({
               errno: 0,
               data: '登录成功',
-              name: name,
-              src: user.src,
-              id: user.id
+              userInfo,
+              token: jwt.encode(userInfo, jwtConfig.secret),
             })
           } else {
             res.json({

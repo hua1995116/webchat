@@ -113,7 +113,7 @@ export default {
       return this.getTailMsg(roomID);
     },
     getTailMsg(roomid) {
-      const roomData = this.roomdetail[roomid];
+      const roomData = this.roomdetail[roomid] || [];
       if(roomData.length === 0) {
         return '暂无消息';
       }
