@@ -1,38 +1,50 @@
 <template>
-    <div class="clear" :class="[isSelf ? 'right' : 'left']" ref="msg">
-        <div class="item">
-            <div class="name">
-                <span v-if="mytime">{{getdate}}</span> &nbsp;&nbsp;{{name}}
-            </div>
-            <Avatar
-              @click.native="handleClick"
-              class="head-place"
-              size="small"
-              :src="avatar"
-              v-flex-touch="handleTouch"
-              ></Avatar>
-            <div v-if="img">
-                <img
-                    v-imgSize="pic.src"
-                    :width="pic.width"
-                    :height="pic.height"
-                    alt=""
-                    :data-item="isLast && 'last'"
-                    class="img"
-                    v-preview="img"
-                    preview-title-enable="true"
-                    preview-nav-enable="true">
-            </div>
-            <span v-if="msg">
-                <span v-html="linkMsg" class="msg"></span>
-                <!-- {{msg | link}} -->
-            </span>
-        </div>
+  <div class="clear" :class="[isSelf ? 'right' : 'left']" ref="msg">
+    <div class="name">
+      <span v-if="mytime">{{ getdate }}</span> &nbsp;&nbsp;{{ name }}
     </div>
+    <div class="body">
+      <div class="tip" v-if="isSelf">
+        <Status
+          :status="status"
+          @error="handleRetry">
+        </Status>
+      </div>
+      <div class="item">
+        <Avatar
+          @click.native="handleClick"
+          class="head-place"
+          size="small"
+          :src="avatar"
+          v-flex-touch="handleTouch"
+        ></Avatar>
+        <div v-if="img">
+          <div class="img-wrapper">
+            <div class="img-bg" v-if="loading && loading !== 100">{{loading}}%</div>
+            <img
+              v-imgSize="pic.src"
+              :width="pic.width"
+              :height="pic.height"
+              alt=""
+              :data-item="isLast && 'last'"
+              class="img"
+              v-preview="img"
+              preview-title-enable="true"
+              preview-nav-enable="true"
+            />
+          </div>
+        </div>
+        <span v-if="msg">
+          <span v-html="linkMsg" class="msg"></span>
+        </span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
 import Avatar from "@components/Avatar";
+import Status from './Status';
 import dateFormat from "../../utils/date";
 import { inHTMLData, uriInUnQuotedAttr } from "xss-filters-es6";
 const maxWidth = 200;
@@ -41,8 +53,9 @@ const maxHeight = 200;
 export default {
   components: {
     Avatar,
+    Status,
   },
-  props: ["id", "name", "img", "msg", "head", "mytime", "is-self", "container", "isNeedScroll", "firstNode", 'isLast'],
+  props: ["id", "name", "img", "msg", "head", "mytime", "is-self", "container", "isNeedScroll", "firstNode", 'isLast', 'status', 'clientId', 'roomid', "obj", 'loading'],
   computed: {
     getdate() {
       return dateFormat(new Date(this.mytime), "yyyy-MM-dd HH:mm:ss");
@@ -93,7 +106,7 @@ export default {
       }
       if (pic.indexOf("data:image") > -1) {
         return {
-          src: pic,
+          src: pic.split('?')[0],
           width,
           height
         };
@@ -117,8 +130,32 @@ export default {
     this.$nextTick(() => {
       this.$refs.msg.scrollIntoView();
     })
+    this.handleLoading();
+  },
+  watch: {
+    status: function(newValue, oldValue) {
+      // 检测重新发送请求
+      if(newValue === 'loading') {
+        this.handleLoading();
+      }
+    }
   },
   methods: {
+    handleLoading() {
+      setTimeout(() => {
+        if(this.status === 'loading') {
+          this.$store.commit('setRoomDetailStatus', {
+            clientId: this.clientId,
+            roomid: this.roomid,
+            status: 'error',
+            typeList: ['status']
+          })
+        }
+      }, 3 * 1000);
+    },
+    handleRetry() {
+      this.$emit('retry', this.obj);
+    },
     handleClick() {
       this.$emit('avatarClick', {
         id: this.name,

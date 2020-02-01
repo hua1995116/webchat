@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Toast from "@components/Toast";
+import {setItem, getItem} from '@utils/localStorage';
 
 const baseURL = '';
 
@@ -13,6 +14,8 @@ instance.interceptors.request.use(async config => {
   if (config.url && config.url.charAt(0) === '/') {
     config.url = `${baseURL}${config.url}`;
   }
+
+  config.headers.authorization = `Bearer ${getItem('token')}`;
 
   return config;
 }, error => Promise.reject(error));

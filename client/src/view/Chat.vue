@@ -41,14 +41,20 @@
             v-for="(obj, index) in (roomdetail[roomid] || [])"
             @avatarClick="handleInfo"
             @flexTouch="hadnleTouch"
+            @retry="handleRetry"
             :key="obj._id"
             :is-self="obj.username === username"
             :id="obj._id"
             :name="obj.username"
             :head="obj.src"
             :msg="obj.msg"
+            :clientId="obj.clientId"
+            :roomid="obj.roomid"
             :img="obj.img"
+            :loading="obj.loading"
+            :status="obj.status"
             :mytime="obj.time"
+            :obj="obj"
             :container="container"
             :isLast="roomdetail[roomid].length - 1 === index"
             ></Message>
@@ -122,6 +128,7 @@
   import url from '@api/server';
   import { setTimeout } from 'timers';
   import ios from '@utils/ios';
+  import { v4 as uuid } from 'uuid';
 
   let isMore = false;
 
@@ -161,7 +168,7 @@
       if (!roomId) {
         this.$router.push({path: '/'});
       }
-      if (!this.username && !this.userid) {
+      if (!this.token) {
         // 防止未登录
         this.$router.push({path: '/login'});
       }
@@ -192,6 +199,27 @@
       this.bindEmoji();
     },
     methods: {
+      handleRetry(obj) {
+        if(obj.img) {
+          Alert({
+            content: '图片暂时不支持重新发送'
+          })
+          return;
+        }
+        const clientId = uuid();
+        this.$store.commit('setRoomDetailStatus', {
+          clientId: obj.clientId,
+          newClientId: clientId,
+          roomid: obj.roomid,
+          status: 'loading',
+          typeList: ['status']
+        })
+        socket.emit('message', {
+          ...obj,
+          clientId,
+          status: 'loading'
+        });
+      },
       handleInfo(item) {
         this.$router.push({ path: "/persionDetail", query: { id: item.id } });
       },
@@ -277,17 +305,10 @@
             const img = new Image();
             img.src = fr.result;
             img.onload = async function() {
-              const imgurl = await that.$store.dispatch('uploadImg', formdata);
-              if(imgurl.code == 500) {
-                Alert({
-                  content: imgurl.data
-                })
-                return;
-              }
               const obj = {
                 username: that.username,
                 src: that.src,
-                img: `${imgurl.data}?width=${img.width}&height=${img.height}`,
+                img: `${fr.result}?width=${img.width}&height=${img.height}`,
                 msg: '',
                 roomType: that.roomType,
                 roomid: that.roomid,
@@ -295,12 +316,34 @@
                 time: new Date(),
                 to: that.to,
                 from: that.from,
+                clientId: uuid(),
               };
-              socket.emit('message', obj, function() {
-                console.log(arguments);
-              });
-            }
 
+               // 传递消息信息
+              that.$store.commit('setRoomDetailInfosAfter', {
+                roomid: that.roomid,
+                msgs: [{
+                  ...obj,
+                  status: 'loading',
+                  loading: 5,
+                }]
+              });
+
+              const imgurl = await that.$store.dispatch('uploadImg', formdata);
+              if(imgurl.code == 500) {
+                Alert({
+                  content: imgurl.data
+                })
+                that.$store.commit('delRoomDetailImg', {
+                  roomid: that.roomid,
+                  clientId: obj.clientId
+                })
+                return;
+              }
+              obj.img = `${imgurl.data}?width=${img.width}&height=${img.height}`;
+
+              socket.emit('message', obj);
+            }
 
           };
           fr.readAsDataURL(file1);
@@ -336,13 +379,19 @@
             roomType: this.roomType,
             roomid: this.roomid,
             time: new Date(),
-            type: 'text'
+            type: 'text',
+            clientId: uuid()
           };
           // 传递消息信息
-          socket.emit('message', obj, (data) =>{
-              console.log(2222);
-              console.log(data);
+          this.$store.commit('setRoomDetailInfosAfter', {
+            roomid: this.roomid,
+            msgs: [{
+              ...obj,
+              status: 'loading'
+            }]
           });
+
+          socket.emit('message', obj);
           this.chatValue = '';
         } else {
           Alert({
@@ -361,6 +410,7 @@
         'roomUsers'
       ]),
       ...mapState({
+        token: state => state.userInfo.token,
         username: state => state.userInfo.userid,
         userid: state => state.userInfo.id,
         src: state => state.userInfo.src

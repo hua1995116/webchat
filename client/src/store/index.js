@@ -6,6 +6,8 @@ import Vuex from 'vuex';
 import url from '@api/server.js';
 import {setItem, getItem} from '@utils/localStorage';
 import {ROBOT_NAME, ROBOT_URL} from '@const/index';
+import findLast from 'lodash/findLast';
+import findLastIndex from 'lodash/findLastIndex';
 
 Vue.use(Vuex);
 
@@ -121,6 +123,22 @@ const store = new Vuex.Store({
     setSvgModal(state, data) {
       state.svgmodal = data;
     },
+    delRoomDetailImg(state, data) {
+      const { roomid, clientId } = data;
+      const clientIndex = findLastIndex(state.roomdetail[roomid], {clientId});
+      state.roomdetail[roomid].splice(clientIndex, clientIndex + 1);
+    },
+    setRoomDetailStatus(state, data) {
+      const { roomid, status, clientId, typeList, newClientId } = data;
+      const clientItem = findLast(state.roomdetail[roomid], {clientId});
+      typeList.map(item => {
+        clientItem[item] = data[item];
+      })
+      // 重试
+      if(newClientId) {
+        clientItem.clientId = newClientId;
+      }
+    },
     setRoomDetailInfosAfter(state, data) {
       const { roomid, msgs } = data;
       if(!state.roomdetail[roomid]) {
@@ -152,7 +170,6 @@ const store = new Vuex.Store({
         ...(state.roomUsers),
         [roomid]: list
       }
-      console.log(state.roomUsers);
     },
     setRobotMsg(state, data) {
       state.robotmsg.push(data);
@@ -214,7 +231,7 @@ const store = new Vuex.Store({
             }
           } else {
             return {
-              data: '图片太大,请重新选择',
+              data: res.data.data,
               code: 500,
             }
           }

@@ -65,6 +65,24 @@ router.get('/v2/history', async (req, res) => {
     });
     return;
   }
+  if(roomid.includes('-')) {
+    // 单人房间
+    const users = roomid.split('-');
+    if(!req.user) {
+      res.json({
+        errno: 1,
+        msg: '你暂无权限'
+      })
+      return;
+    }
+    if(!users.includes(req.user.id)) {
+      res.json({
+        errno: 1,
+        msg: '你暂无权限'
+      });
+      return;
+    }
+  }
   try {
     const message = {};
     console.log(typeof msgid);

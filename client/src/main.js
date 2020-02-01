@@ -95,15 +95,38 @@ socket.on('disconnect', () => {
 });
 
 socket.on('message', function (obj) {
-  const { roomid, username } = obj;
-  store.commit('setRoomDetailInfosAfter', {
-    roomid,
-    msgs: [obj]
-  });
   const userName = store.state.userInfo.userid;
-  if (Notification.permission === "granted" && userName !== username) {
-    popNotice(obj);
+  const { roomid, username, img } = obj;
+  if(userName === username) {
+    if(img) {
+      console.log('img', obj);
+      store.commit('setRoomDetailStatus', {
+        clientId: obj.clientId,
+        roomid: obj.roomid,
+        status: 'finish',
+        loading: 100,
+        img: obj.img,
+        typeList: ['status', 'loading', 'img']
+      })
+    } else {
+      store.commit('setRoomDetailStatus', {
+        clientId: obj.clientId,
+        roomid: obj.roomid,
+        status: 'finish',
+        typeList: ['status']
+      })
+    }
+
+  } else {
+    store.commit('setRoomDetailInfosAfter', {
+      roomid,
+      msgs: [obj]
+    });
+    if (Notification.permission === "granted") {
+      popNotice(obj);
+    }
   }
+
 });
 
 socket.on('count', (obj) => {

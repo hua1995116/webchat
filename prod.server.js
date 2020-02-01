@@ -34,6 +34,12 @@ app.use(bodyParser.urlencoded({extended: true}))
 
 app.use(function(req, res, next) {
   const pathUrl = req.url.split('?')[0];
+  let token;
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.query && req.query.token) {
+    token = req.query.token;
+  }
   if(['/api/user/signup',
     '/api/user/signin',
     '/api/message/history/byUser',
@@ -41,31 +47,36 @@ app.use(function(req, res, next) {
     '/api/user/vipuser',
     '/api/user/getInfo',
     '/api/user/search',
+    '/api/message/v2/history',
     '/api/message/getHot'].includes(pathUrl)) {
-    return next();
+    // return next();
+    try {
+      const decoded = jwt.decode(token, jwtConfig.secret);
+      req.user = decoded;
+      return next();
+    } catch(e) {
+      return next();
+    }
+  } else {
+    if(!token) {
+      res.status(401).json({
+        msg: '请先登录',
+      });
+      return next();
+    }
+    try {
+      const decoded = jwt.decode(token, jwtConfig.secret);
+      res.user = decoded;
+      return next();
+    } catch(e) {
+      res.status(401).json({
+        msg: 'token 校验错误',
+      });
+      return next();
+    }
   }
-  let token;
-  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-    token = req.headers.authorization.split(' ')[1];
-  } else if (req.query && req.query.token) {
-    token = req.query.token;
-  }
-  if(!token) {
-    res.status(401).json({
-      msg: '请先登录',
-    });
-    return next();
-  }
-  try {
-    const decoded = jwt.decode(token, jwtConfig.secret);
-    res.user = decoded;
-    return next();
-  } catch(e) {
-    res.status(401).json({
-      msg: 'token 校验错误',
-    });
-    return next();
-  }
+
+
 })
 // sesstion 存储
 

@@ -58,14 +58,16 @@ import Alert from "@components/Alert";
 import Bottom from "@components/Bottom";
 import UserHead from "@components/userHead";
 import socket from "../socket";
+import loginMixin from '../mixin/login';
 
 export default {
   name: "Home",
+  mixins: [loginMixin],
   data() {
     return {};
   },
   async mounted() {
-    if (!this.username && !this.userid) {
+    if (this.isLogin()) {
       const data = await Confirm({
         title: "提示",
         content: "需要登录后才能查看哦~",
@@ -135,18 +137,6 @@ export default {
       if (data === "submit") {
         socket.emit('roomout');
         clear();
-        // this.$store.commit("setUserInfo", {
-        //   type: "userid",
-        //   value: ""
-        // });
-        // this.$store.commit("setUserInfo", {
-        //   type: "src",
-        //   value: ""
-        // });
-        // this.$store.commit("setUserInfo", {
-        //   type: "id",
-        //   value: ""
-        // });
         this.$store.commit("setUserInfo", {});
         this.$store.commit("setUnread", {
           room1: 0,

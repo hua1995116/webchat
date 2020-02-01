@@ -104,7 +104,9 @@ export default {
   },
   async mounted() {
     // 只全局监听一次
-    this.$store.dispatch('postListFriend', {selfId: this.userInfo.id})
+    if(this.userInfo.id) {
+      this.$store.dispatch('postListFriend', {selfId: this.userInfo.id})
+    }
   },
   methods: {
     getSingleTailMsg(friendId) {
@@ -131,7 +133,7 @@ export default {
       }
     },
     async chatwindow(roomID) {
-      if (!this.username && !this.userid) {
+      if (!this.userInfo.token) {
         const res = await Confirm({
           title: "提示",
           content: "聊天请先登录，但是你可以查看聊天记录哦~"

@@ -84,24 +84,11 @@ export default {
             id: res.data.userInfo.id,
             token: res.data.token,
           }
-          console.log('userInfo===', userInfo);
           this.$store.commit("setUserInfo", userInfo);
-          // this.$store.commit("setUserInfo", {
-          //   type: "userid",
-          //   value: res.data.name
-          // });
-          // this.$store.commit("setUserInfo", {
-          //   type: "src",
-          //   value: res.data.src
-          // });
-          // this.$store.commit("setUserInfo", {
-          //   type: "id",
-          //   value: res.data.id
-          // });
           await handleInit({
-            name,
-            id: res.data.id,
-            src: data.src,
+            name: userInfo.userid,
+            id: userInfo.id,
+            src: userInfo.src,
             roomList: ['room1', 'room2']
           })
           this.$router.push({ path: "/" });

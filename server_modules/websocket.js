@@ -65,12 +65,10 @@ function websocket(server) {
     io.on('connection',  (socket) => {
       //监听用户发布聊天内容
       global.logger.info('socket connect!');
-      socket.on('message', async (msgObj, fn) => {
+      socket.on('message', async (msgObj) => {
         global.logger.info('socket message!');
-        // console.log(name, msgObj, fn);
-        fn(msgObj);
         //向所有客户端广播发布的消息
-        const {username, src, msg, img, roomid, roomType, time, type, to, from} = msgObj;
+        const {username, src, msg, img, roomid, roomType, time, type, to, from, clientId} = msgObj;
         if(!msg && !img) {
           return;
         }
@@ -86,7 +84,8 @@ function websocket(server) {
           time,
           type,
           from,
-          to
+          to,
+          clientId
         }
         global.logger.info(msgObj);
 
@@ -127,7 +126,7 @@ function websocket(server) {
             io.to(socket.socketId).emit('message', msgRes);
           });
         }
-
+        // fn(msgRes);
       })
       // 建立连接
       socket.on('login',async (user) => {

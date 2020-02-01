@@ -2,7 +2,6 @@
     .item {
         max-width: 100%;
         position: relative;
-        clear: both;
         display: inline-block;
         padding: 16px 40px 16px 20px;
         margin: 20px 10px 20px 10px;
@@ -56,6 +55,19 @@
     }
 }
 
+.body {
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  padding: 0 10px;
+}
+
+.tip {
+
+}
+
 .left {
     .item {
         // animation: show-chat-even 0.25s 1 ease-in
@@ -85,6 +97,9 @@
 }
 
 .right {
+    .body {
+      justify-content: flex-end;
+    }
     .item {
         // animation: show-chat-odd 0.25s 1 ease-in
         float: right;
@@ -132,4 +147,19 @@
             margin-left: 0;
         }
     }
+}
+
+.img-wrapper {
+  position: relative;
+  .img-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
 }
