@@ -31,7 +31,11 @@ router.post('/signup',  (req, res) => {
         data: '用户名已存在'
       })
     } else {
-      user = new User(_user)
+      user = new User({
+        name,
+        password,
+        src
+      })
       user.save( (err, user) => {
         if (err) {
           global.logger.error(err)
