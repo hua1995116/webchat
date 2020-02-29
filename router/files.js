@@ -111,13 +111,13 @@ router.post('/uploadimg', upload.single('file'),  async (req, res, next) => {
       res.json({
         errno: 0,
         data: img,
-        msg: '保存异常!'
+        msg: '保存成功!'
       });
       return;
   } else {
       res.json({
           errno: 500,
-          msg: '保存异常!'
+          msg: '上传失败!'
       });
   }
 

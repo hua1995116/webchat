@@ -1,12 +1,13 @@
-var config = require('./config/index');
-var port = process.env.PORT || config.dev.port;
+var port = process.env.PORT || 9090;
 var env = process.env.NODE_ENV || 'development'
 var express = require('express');
+var path = require('path');
 
+var jwtConfig = require('./config/jwt');
+var jwt = require('jwt-simple');
 // sesstion 存储
 var bodyParser = require('body-parser')
-var cookieParser = require('cookie-parser')
-var session = require('cookie-session')
+
 // 日志
 var log4js = require('./server_modules/log.js').log4js;
 var logger = require('./server_modules/log.js').logger;
@@ -30,13 +31,54 @@ app.use(router);
 // 服务器提交的数据json化
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
+
+app.use(function(req, res, next) {
+  const pathUrl = req.url.split('?')[0];
+  let token;
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+    token = req.headers.authorization.split(' ')[1];
+  } else if (req.query && req.query.token) {
+    token = req.query.token;
+  }
+  if(['/api/user/signup',
+    '/api/user/signin',
+    '/api/message/history/byUser',
+    '/api/friend/list',
+    '/api/user/vipuser',
+    '/api/user/getInfo',
+    '/api/user/search',
+    '/api/message/v2/history',
+    '/api/message/getHot'].includes(pathUrl)) {
+    // return next();
+    try {
+      const decoded = jwt.decode(token, jwtConfig.secret);
+      req.user = decoded;
+      return next();
+    } catch(e) {
+      return next();
+    }
+  } else {
+    if(!token) {
+      res.status(401).json({
+        msg: '请先登录',
+      });
+      return next();
+    }
+    try {
+      const decoded = jwt.decode(token, jwtConfig.secret);
+      res.user = decoded;
+      return next();
+    } catch(e) {
+      res.status(401).json({
+        msg: 'token 校验错误',
+      });
+      return next();
+    }
+  }
+
+
+})
 // sesstion 存储
-app.use(cookieParser())
-app.use(session({
-  secret: 'vuechat',
-  resave: false,
-  saveUninitialized: true
-}))
 
 // require('./router/routes.js')(app)
 

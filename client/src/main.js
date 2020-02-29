@@ -16,6 +16,7 @@ import {getRoomInfo} from '@utils/cache';
 import env from '@utils/env';
 import Toast from "@components/Toast";
 import Alert from "@components/Alert";
+import { handleInit } from './socket-handle';
 
 import vuePicturePreview from './components/photo-viewer';
 import imgSize from './directive/imgSize';
@@ -53,7 +54,8 @@ const popNotice = function(msgInfo) {
   }
 };
 
-socket.on('reconnect', (attemptNumber) => {
+socket.on('reconnect', async (attemptNumber) => {
+  console.log('reconnect');
   Toast({
     content: '又可以愉快地上网啦',
     timeout: 2000,
@@ -66,28 +68,19 @@ socket.on('connect', async () => {
   console.log('connect');
   const roomId = queryString(window.location.href, 'roomId');
   const userName = store.state.userInfo.userid;
+  const src = store.state.userInfo.src;
   const userId = store.state.userInfo.id;
   if (userId) {
-    socket.emit('login', {name: userName, id: userId, ...env});
-  }
-  if (roomId) {
-    const obj = {
+    // 此处逻辑需要抽离复用
+    await handleInit({
+      socket,
+      store,
       name: userName,
       id: userId,
-      src: store.state.userInfo.src,
-      roomid: roomId
-    };
-    socket.emit('room', obj);
-
-    if (store.state.isDiscount) {
-      const {total, current} = getRoomInfo(roomId);
-      await store.commit('setDiscount', false);
-      await store.dispatch('getAllMessHistory', {
-        current: current + 1,
-        roomid: roomId,
-        total: total
-      });
-    }
+      src,
+      env,
+      roomList: ['room1', 'room2']
+    })
   }
 });
 
@@ -102,21 +95,51 @@ socket.on('disconnect', () => {
 });
 
 socket.on('message', function (obj) {
-  const { roomid, username } = obj;
-  store.commit('setRoomDetailInfosAfter', {
-    roomid,
-    msgs: [obj]
-  });
   const userName = store.state.userInfo.userid;
-  if (Notification.permission === "granted" && userName !== username) {
-    popNotice(obj);
+  const { roomid, username, img } = obj;
+  if(userName === username) {
+    if(img) {
+      console.log('img', obj);
+      store.commit('setRoomDetailStatus', {
+        clientId: obj.clientId,
+        roomid: obj.roomid,
+        status: 'finish',
+        loading: 100,
+        img: obj.img,
+        typeList: ['status', 'loading', 'img']
+      })
+    } else {
+      store.commit('setRoomDetailStatus', {
+        clientId: obj.clientId,
+        roomid: obj.roomid,
+        status: 'finish',
+        typeList: ['status']
+      })
+    }
+
+  } else {
+    store.commit('setRoomDetailInfosAfter', {
+      roomid,
+      msgs: [obj]
+    });
+    if (Notification.permission === "granted") {
+      popNotice(obj);
+    }
   }
+
 });
 
+socket.on('count', (obj) => {
+  console.log(obj);
+  store.commit("setUnread", obj);
+})
+
 socket.on('room', (obj) => {
+  console.log(obj);
   store.commit('setUsers', obj);
 });
 socket.on('roomout', (obj) => {
+  console.log(obj);
   store.commit('setUsers', obj);
 });
 socket.on('friend', (obj) => {

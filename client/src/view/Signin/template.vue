@@ -4,7 +4,6 @@
       <form action="" name="form2">
         <div class="context-logo">
           <img src="https://s3.qiufengh.com/webchat/webchat-logo-160.png" alt="">
-          <!-- <SvgModal></SvgModal> -->
         </div>
         <Input v-model="username" type="text" placeholder="输入账号"/>
         <br/>
@@ -16,7 +15,9 @@
       </form>
       <div class="bottom-wraper">
         <mu-flex align-items="center">
-          <mu-flex justify-content="center" fill><div @click="register" class="tip-user">注册帐号</div></mu-flex>
+          <mu-flex justify-content="center" fill>
+            <router-link :to="{ name: type === 'login' ? 'Register' : 'Login'}"><div class="tip-user">{{type === 'login' ? '注册帐号' : '去登录' }}</div></router-link>
+          </mu-flex>
           <mu-flex justify-content="center">|</mu-flex>
           <mu-flex justify-content="center" fill><div class="tip-user">忘记密码</div></mu-flex>
         </mu-flex>
@@ -34,13 +35,15 @@
 import SvgModal from "@components/svg-modal/index.vue";
 import Alert from "@components/Alert";
 import Toast from "@components/Toast";
-import socket from "../socket";
+import socket from "../../socket";
 import ios from '@utils/ios';
 import Arrow from '@components/arrow';
 import Input from '@components/input';
+import { handleInit } from '../../socket-handle';
 
 export default {
-  name: 'Login',
+  name: 'login-template-component',
+  props: ['type'],
   components: {
     Arrow,
     SvgModal,
@@ -63,34 +66,37 @@ export default {
           name: name,
           password: password
         };
-        const res = await this.$store.dispatch("loginSubmit", data);
+        let res;
+        if(this.type === 'login') {
+          res = await this.$store.dispatch("loginSubmit", data);
+        } else {
+          res = await this.$store.dispatch("registerSubmit", data);
+        }
         if (res.status === "success") {
           Toast({
             content: res.data.data,
             timeout: 1000,
             background: "#2196f3"
           });
-          this.$store.commit("setUserInfo", {
-            type: "userid",
-            value: res.data.name
-          });
-          this.$store.commit("setUserInfo", {
-            type: "src",
-            value: res.data.src
-          });
-          this.$store.commit("setUserInfo", {
-            type: "id",
-            value: res.data.id
-          });
+          const userInfo = {
+            userid: res.data.userInfo.name,
+            src: res.data.userInfo.src,
+            id: res.data.userInfo.id,
+            token: res.data.token,
+          }
+          this.$store.commit("setUserInfo", userInfo);
+          await handleInit({
+            name: userInfo.userid,
+            id: userInfo.id,
+            src: userInfo.src,
+            roomList: ['room1', 'room2']
+          })
           this.$router.push({ path: "/" });
-          socket.emit("login", { name });
         } else {
           Alert({
             content: res.data.data
           });
         }
-
-        // document.form2.reset();
       } else {
         Alert({
           content: "用户名和密码不能为空"
@@ -98,9 +104,6 @@ export default {
       }
       this.password = '';
     },
-    register() {
-      this.$router.push({ path: "register" });
-    }
   },
   mounted() {
     // 微信 回弹 bug

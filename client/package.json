@@ -20,7 +20,8 @@
     "vue-flex-touch": "^1.0.0",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1",
-    "xss-filters-es6": "^1.0.0"
+    "xss-filters-es6": "^1.0.0",
+    "vivus": "^0.4.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",

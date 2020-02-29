@@ -6,6 +6,9 @@ const Service = {
   // 注册接口
   RegisterUser: data => Axios.post('/api/user/signup', data),
   // 获取当前房间所有历史记录
+  getRoomHistory: data => Axios.get('/api/message/history/byUser', {
+    params: data
+  }),
   RoomHistoryAll: data => Axios.get('/api/message/v2/history', {
     params: data
   }),

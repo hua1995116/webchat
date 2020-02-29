@@ -6,6 +6,8 @@ import Vuex from 'vuex';
 import url from '@api/server.js';
 import {setItem, getItem} from '@utils/localStorage';
 import {ROBOT_NAME, ROBOT_URL} from '@const/index';
+import findLast from 'lodash/findLast';
+import findLastIndex from 'lodash/findLastIndex';
 
 Vue.use(Vuex);
 
@@ -16,6 +18,7 @@ const store = new Vuex.Store({
       src: getItem('src'),
       userid: getItem('userid'),
       id: getItem('id'),
+      token: getItem('token'),
     },
     lookUserInfo: {
     },
@@ -93,14 +96,48 @@ const store = new Vuex.Store({
     },
     setUserInfo(state, data) {
       const {type, value} = data;
-      setItem(type, value);
-      state.userInfo[type] = value;
+      // 如果是 key - value 形式，为单项设置
+      if(value) {
+        setItem(type, value);
+        state.userInfo[type] = value;
+      } else {
+        const info = Object.keys(data);
+        // 清空所有
+        if(info.length == 0) {
+          Object.keys(state.userInfo).map(item => {
+            state.userInfo[item] = '';
+            setItem(item, '');
+          });
+        } else {
+          // 多数据一次性设置
+          info.map(item => {
+            state.userInfo[item] = data[item];
+            setItem(item, data[item]);
+          });
+        }
+      }
     },
     setEmoji(state, data) {
       state.emojiShow = data;
     },
     setSvgModal(state, data) {
       state.svgmodal = data;
+    },
+    delRoomDetailImg(state, data) {
+      const { roomid, clientId } = data;
+      const clientIndex = findLastIndex(state.roomdetail[roomid], {clientId});
+      state.roomdetail[roomid].splice(clientIndex, clientIndex + 1);
+    },
+    setRoomDetailStatus(state, data) {
+      const { roomid, status, clientId, typeList, newClientId } = data;
+      const clientItem = findLast(state.roomdetail[roomid], {clientId});
+      typeList.map(item => {
+        clientItem[item] = data[item];
+      })
+      // 重试
+      if(newClientId) {
+        clientItem.clientId = newClientId;
+      }
     },
     setRoomDetailInfosAfter(state, data) {
       const { roomid, msgs } = data;
@@ -133,7 +170,6 @@ const store = new Vuex.Store({
         ...(state.roomUsers),
         [roomid]: list
       }
-      console.log(state.roomUsers);
     },
     setRobotMsg(state, data) {
       state.robotmsg.push(data);
@@ -152,6 +188,9 @@ const store = new Vuex.Store({
     },
     setSearchList(state, data) {
       state.searchUserList = data;
+    },
+    setAllmsg(state, data) {
+      state.roomdetail = data;
     }
   },
   actions: {
@@ -192,7 +231,7 @@ const store = new Vuex.Store({
             }
           } else {
             return {
-              data: '图片太大,请重新选择',
+              data: res.data.data,
               code: 500,
             }
           }
@@ -240,6 +279,15 @@ const store = new Vuex.Store({
       const res = await url.postListFriend(data);
       if(res.data.errno === 0) {
         commit('setFriendList', res.data.data);
+      }
+    },
+    async getRoomHistory({state, commit}, data) {
+      const res = await url.getRoomHistory(data);
+      if(res.data.errno === 0) {
+        const result = res.data.data;
+        if(result) {
+          commit('setAllmsg', result);
+        }
       }
     },
     async getAllMessHistory({state, commit}, data) {

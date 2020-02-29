@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Toast from "@components/Toast";
+import {setItem, getItem} from '@utils/localStorage';
 
 const baseURL = '';
 
@@ -14,6 +15,8 @@ instance.interceptors.request.use(async config => {
     config.url = `${baseURL}${config.url}`;
   }
 
+  config.headers.authorization = `Bearer ${getItem('token')}`;
+
   return config;
 }, error => Promise.reject(error));
 
@@ -25,9 +28,14 @@ instance.interceptors.response.use(response => {
   return Promise.reject(response);
 }, error => {
   if (error) {
-    console.log(error);
+    let msg = '';
+    if (error.response && error.response.status === 401) {
+      msg = error.response.data.msg;
+      return;
+    }
+    msg = '网络异常，请检查你的网络。';
     Toast({
-      content: '网络异常，请检查你的网络。',
+      content: msg,
       timeout: 2000,
       background: "#f44336"
     });
