@@ -70,6 +70,8 @@ export default {
         if(this.type === 'login') {
           res = await this.$store.dispatch("loginSubmit", data);
         } else {
+          const src = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 272)}.jpeg`;
+          data.src = src;
           res = await this.$store.dispatch("registerSubmit", data);
         }
         if (res.status === "success") {
