@@ -6,6 +6,8 @@
 
 [中文版](./README.md) [English](./zh_en.md)
 
+> 说明: master 分支还不太稳定，可以查看 https://github.com/hua1995116/webchat/tree/v2.2.0 稳定分支
+
 ## 功能
 
 - [x] 注册登录功能
