@@ -80,6 +80,7 @@
       </mu-paper>
     </div>
     <Bottom></Bottom>
+     <p style="text-align: center;position: absolute; bottom:0;width: 100%;">©2020 蓝色的秋风&nbsp&nbsp&nbsp<a href="http://beian.miit.gov.cn" target="_blank">浙ICP备16040413号-1</a></p>
   </div>
 </template>
 
@@ -181,7 +182,7 @@ export default {
 }
 .chat-list {
   overflow-y: scroll;
-  height: calc(100% - 112px);
+  height: calc(100% - 133px);
 }
 .avatar {
   position: relative;

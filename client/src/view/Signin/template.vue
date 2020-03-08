@@ -24,7 +24,7 @@
         <div class="bottom-arguemnt">
           登录即可代表同意协议
         </div>
-        <p style="text-align: center">浙ICP备16040413号-1</p>
+        <p style="text-align: center"><a href="http://beian.miit.gov.cn" target="_blank">浙ICP备16040413号-1</a></p>
       </div>
 
     </div>

@@ -34,7 +34,7 @@ export default {
 <style lang='stylus' scoped>
 .app-bottom {
   position: fixed;
-  bottom: 0;
+  bottom: 21px;
   z-index: 102;
   width: 100%;
 }
