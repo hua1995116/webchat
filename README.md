@@ -127,13 +127,8 @@ https://github.com/hua1995116/webchat/tree/v2.2.0
 <a href="./RELEASE.md">RELEASE</a>
 
 ## 项目wiki
-[vue+websocket+express+mongodb实战项目（实时聊天）（一）](http://blog.csdn.net/blueblueskyhua/article/details/70807847)
 
-[vue+websocket+express+mongodb实战项目（实时聊天）（二）](http://blog.csdn.net/blueblueskyhua/article/details/73250992)
-
-[vue-chat项目之重构与体验优化](http://blog.csdn.net/blueblueskyhua/article/details/78159672)
-
-[消息未读之点不完的小红点（Node+Websocket）](https://juejin.im/post/5bf227676fb9a049ac78bfcf)
+https://qiufeng.blue/node/#websocket-%E7%B3%BB%E5%88%97
 
 ## API
 
