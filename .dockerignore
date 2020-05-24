@@ -1,0 +1,7 @@
+node_modules
+npm-debug.log
+.idea
+.vscode
+node_modules
+client
+package-lock.json

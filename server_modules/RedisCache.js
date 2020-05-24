@@ -1,5 +1,10 @@
+const config = require('../config/config');
+
 const redis = require("redis"),
-    client = redis.createClient();
+    client = redis.createClient({
+      host: config.redis.host,
+      port: config.redis.port,
+    });
 
 client.on("error", function (err) {
     console.log("Error " + err);
@@ -19,7 +24,7 @@ function getCacheById(key) {
             resv(reply);
         });
     })
-    
+
 }
 
 function updateCache(key, value) {
