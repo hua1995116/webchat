@@ -81,7 +81,7 @@ npm run prod
 
 如果群过期加微信，拉你进群。
 
-<img src="https://s3.qiufengh.com/webchat/webcaht-my.jpeg" width="300" />
+<img src="https://s3.qiufengh.com/webchat/webcaht-my.jpeg?imageView2/2/w/360" width="300" />
 
 
 ## 技术栈
