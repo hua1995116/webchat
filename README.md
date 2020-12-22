@@ -77,9 +77,9 @@ npm run prod
 ## 技术交流
 
 
-<img src="https://s3.qiufengh.com/webchat/webchat-group.jpeg?imageView2/2/w/360" width="300" />
+qq群: 437938625
 
-如果群过期加微信，拉你进群。
+加微信，拉你进微信群。
 
 <img src="https://s3.qiufengh.com/webchat/webcaht-my.jpeg?imageView2/2/w/360" width="300" />
 
