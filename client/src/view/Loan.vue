@@ -13,40 +13,6 @@
     <div class="chat-list">
       <mu-paper>
         <mu-list>
-          <mu-sub-header>最近聊天记录</mu-sub-header>
-          <mu-list-item avatar button :ripple="true" @click="chatwindow('room1')">
-            <mu-list-item-action>
-              <div class="avatar">
-                <span class="tip" v-if="unRead1!==0">{{unRead1 > 99 ? '99+' : unRead1}}</span>
-                <Avatar :src="house1" size="small"></Avatar>
-              </div>
-            </mu-list-item-action>
-            <mu-list-item-content>
-              <mu-list-item-title>聊天室1</mu-list-item-title>
-              <mu-list-item-sub-title>{{getTailMsg('room1')}}</mu-list-item-sub-title>
-            </mu-list-item-content>
-            <mu-list-item-action>
-              <mu-icon value="chat_bubble"></mu-icon>
-            </mu-list-item-action>
-          </mu-list-item>
-          <mu-list-item avatar button :ripple="true" @click="chatwindow('room2')">
-            <mu-list-item-action>
-              <div class="avatar">
-                <span class="tip" v-if="unRead2!==0">{{unRead2 > 99 ? '99+' : unRead2}}</span>
-                <Avatar :src="house2" size="small"></Avatar>
-              </div>
-            </mu-list-item-action>
-            <mu-list-item-content>
-              <mu-list-item-title>聊天室2</mu-list-item-title>
-              <mu-list-item-sub-title>{{getTailMsg('room2')}}</mu-list-item-sub-title>
-            </mu-list-item-content>
-            <mu-list-item-action>
-              <mu-icon value="chat_bubble"></mu-icon>
-            </mu-list-item-action>
-          </mu-list-item>
-        </mu-list>
-        <mu-divider/>
-        <mu-list>
           <mu-sub-header>客服</mu-sub-header>
           <mu-list-item avatar button :ripple="true" @click="chatRobot('')">
             <mu-list-item-action>
@@ -60,23 +26,43 @@
             </mu-list-item-action>
           </mu-list-item>
         </mu-list>
+        <mu-divider/>
         <mu-list>
-          <mu-sub-header>好友</mu-sub-header>
-          <mu-list-item avatar button :ripple="true" @click="chatSingle(item.friendId._id, item.friendId.name)" v-for="item in friendList" :key="item._id">
+          <mu-sub-header>最近聊天记录</mu-sub-header>
+          <mu-list-item avatar button :ripple="true" v-for="group in groupList" :key="group.id" @click="chatwindow(group)">
             <mu-list-item-action>
-              <mu-avatar class="avatar">
-                <img :src="item.friendId.src">
-              </mu-avatar>
+              <div class="avatar">
+                <span class="tip" v-if="unRead1!==0">{{unRead1 > 99 ? '99+' : unRead1}}</span>
+                <Avatar :src="house1" size="small" v-if="group.avatar"></Avatar>
+                <span class="avatar_text" :style="{background: getColor(group.name)}" v-else>{{group.name.slice(0, 1)}}</span>
+              </div>
             </mu-list-item-action>
             <mu-list-item-content>
-              <mu-list-item-title>{{item.friendId.name}}</mu-list-item-title>
-              <mu-list-item-sub-title>{{getSingleTailMsg(item.friendId._id)}}</mu-list-item-sub-title>
+              <mu-list-item-title>{{group.name}}</mu-list-item-title>
+              <mu-list-item-sub-title>{{getTailMsg(group.id)}}</mu-list-item-sub-title>
             </mu-list-item-content>
             <mu-list-item-action>
               <mu-icon value="chat_bubble"></mu-icon>
             </mu-list-item-action>
           </mu-list-item>
         </mu-list>
+        <!-- <mu-list>
+          <mu-sub-header>好友</mu-sub-header>
+          <mu-list-item avatar button :ripple="true" @click="chatSingle(item.friendId._id, item.friendId.username)" v-for="item in friendList" :key="item._id">
+            <mu-list-item-action>
+              <mu-avatar class="avatar">
+                <img :src="item.friendId.avatar">
+              </mu-avatar>
+            </mu-list-item-action>
+            <mu-list-item-content>
+              <mu-list-item-title>{{item.friendId.username}}</mu-list-item-title>
+              <mu-list-item-sub-title>{{getSingleTailMsg(item.friendId._id)}}</mu-list-item-sub-title>
+            </mu-list-item-content>
+            <mu-list-item-action>
+              <mu-icon value="chat_bubble"></mu-icon>
+            </mu-list-item-action>
+          </mu-list-item>
+        </mu-list> -->
       </mu-paper>
     </div>
     <Bottom></Bottom>
@@ -98,6 +84,9 @@ export default {
   name: 'Loan',
   data() {
     return {
+      color: ['#3414A8', '#7752FF', '#5F36F5', '#A89803', '#F5E136'],
+      unRead1: 0, // 需要删除
+      unRead2: 0,// 需要删除
       house1: HOST_URL1,
       house2: HOST_URL2,
       robot: ROBOT_URL
@@ -105,11 +94,16 @@ export default {
   },
   async mounted() {
     // 只全局监听一次
-    if(this.userInfo.id) {
-      this.$store.dispatch('postListFriend', {selfId: this.userInfo.id})
+    if(this.userInfo.userId) {
+      // this.$store.dispatch('postListFriend', {selfId: this.userInfo.userId});
+      // this.$store.dispatch('getGroupList');
     }
   },
   methods: {
+    getColor(text) {
+      const index = text.charCodeAt(0);
+      return this.color[index % 4]
+    },
     getSingleTailMsg(friendId) {
       const userId = this.userInfo.id;
       const roomID = sort(userId, friendId);
@@ -133,7 +127,7 @@ export default {
         return content;
       }
     },
-    async chatwindow(roomID) {
+    async chatwindow(group) {
       if (!this.userInfo.token) {
         const res = await Confirm({
           title: "提示",
@@ -144,28 +138,36 @@ export default {
         }
         return;
       }
-      this.$router.push({ path: "/chat", query: { roomId: roomID, type: 'group' } });
+      if(group.roomType === 'group') {
+        this.$router.push({ path: "/chat", query: { roomId: group.groupId, type: 'group' } });
+      } else {
+        this.$router.push({ path: "/chat", query: { roomId: group.groupId, type: 'single', friendName: group.name } });
+      }
     },
-    async chatSingle(friendId, friendName) {
-      const userId = this.userInfo.id;
-      const roomID = sort(userId, friendId);
-      this.$router.push({ path: "/chat", query: { roomId: roomID, from: userId,to: friendId, type: 'single', friendName } });
-    },
+    // async chatSingle(friendId, friendName) {
+    //   const userId = this.userId;
+    //   const roomID = sort(userId, friendId);
+    //   this.$router.push({ path: "/chat", query: { roomId: roomID, from: userId,to: friendId, type: 'single', friendName } });
+    // },
     chatRobot() {
       this.$router.push({ path: "/robot" });
     }
   },
   computed: {
     ...mapState({
-      roomdetail: state => state.roomdetail,
-      username: state => state.userInfo.userid,
-      userid: state => state.userInfo.id,
-      src: state => state.userInfo.src,
-      isLogin: state => state.isLogin,
-      unRead1: state => state.unRead.room1,
-      unRead2: state => state.unRead.room2,
+      username: state => state.userInfo.username,
+      userId: state => state.userInfo.userId,
+      avatar: state => state.userInfo.avatar,
       userInfo: state => state.userInfo,
-      friendList: state => state.friendList
+    }),
+    ...mapState({
+      roomdetail: state => state.roomInfo.roomdetail,
+
+      // isLogin: state => state.isLogin,
+
+      friendList: state => state.friendInfo.friendList,
+
+      groupList: state => state.group.groupList,
     })
   },
   components: {
@@ -186,7 +188,15 @@ export default {
 }
 .avatar {
   position: relative;
-
+  .avatar_text {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    color: #fff
+  }
   .tip {
     position: absolute;
     right: -5px;

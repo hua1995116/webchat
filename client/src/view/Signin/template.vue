@@ -59,51 +59,65 @@ export default {
   },
   methods: {
     async submit() {
-      const name = this.username.trim();
+      const username = this.username.trim();
       const password = this.password.trim();
-      if (name !== "" && password !== "") {
+      if (username !== "" && password !== "") {
         const data = {
-          name: name,
-          password: password
+          username,
+          password
         };
         let res;
+        let msg = '注册成功';
         if(this.type === 'login') {
+          msg = '登录成功';
           res = await this.$store.dispatch("loginSubmit", data);
         } else {
-          const src = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 272)}.jpeg`;
-          data.src = src;
+          const avatar = `//s3.qiufengh.com/avatar/${Math.ceil(Math.random() * 272)}.jpeg`;
+          data.avatar = avatar;
           res = await this.$store.dispatch("registerSubmit", data);
         }
+
         if (res.status === "success") {
           Toast({
-            content: res.data.data,
+            content: msg,
             timeout: 1000,
             background: "#2196f3"
           });
-          const userInfo = {
-            userid: res.data.userInfo.name,
-            src: res.data.userInfo.src,
-            id: res.data.userInfo.id,
-            token: res.data.token,
-          }
+
+          const userInfo = res.userInfo;
+          userInfo.token = res.token;
+          const {userId, username, avatar} = userInfo;
+
+          // const userInfo = {
+          //   userid: res.data.userInfo.name,
+          //   src: res.data.userInfo.src,
+          //   id: res.data.userInfo.id,
+          //   token: res.data.token,
+          // }
           this.$store.commit("setUserInfo", userInfo);
+          await this.$store.dispatch('getGroupList', {
+            userId,
+          });
+          const groupList = this.$store.state.group.groupList;
           await handleInit({
-            name: userInfo.userid,
-            id: userInfo.id,
-            src: userInfo.src,
-            roomList: ['room1', 'room2']
+            username,
+            userId,
+            avatar,
+            groupList
           })
           this.$router.push({ path: "/" });
-        } else {
-          Alert({
-            content: res.data.data
-          });
         }
+        // else {
+        //   Alert({
+        //     content: res.data.data
+        //   });
+        // }
       } else {
         Alert({
           content: "用户名和密码不能为空"
         });
       }
+      this.username = '';
       this.password = '';
     },
   },

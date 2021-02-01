@@ -1,21 +1,31 @@
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
 //用于md5加密
-var bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs')
 //加盐数
-var SALT_WORK_FACTOR = 10
-var UserSchema = new mongoose.Schema({
-  name: {
-    unique: true,
-    type: String
+const SALT_WORK_FACTOR = 10
+const UserSchema = new mongoose.Schema({
+  username:{ // 用户名字
+    type: String,
+    max: 20
   },
-  nickname: String, // 昵称
-  sex: Boolean, // 性别 0-男  1-女
+  nickname: { // 用户名字
+    type: String,
+    max: 20
+  }, // 昵称
+  sex: { // 性别 0-男  1-女
+    type: Number,
+    max: 1
+  },
   iphone: {     // 电话号
     type: String,
     max: 20,
   },
-  password: String,
-  src: String,
+  email: { // 邮箱
+    type: String,
+    max: 30,
+  },
+  password: String,  // 密码
+  avatar: String, // 头像
   meta: {
     createAt: {
       type: Date,
@@ -29,7 +39,7 @@ var UserSchema = new mongoose.Schema({
 });
 //对密码进行加密
 UserSchema.pre('save', function (next) {
-  var user = this
+  const user = this
   if (this.isNew) {
     this.createAt = this.updateAt = Date.now()
   }
@@ -49,10 +59,14 @@ UserSchema.pre('save', function (next) {
 })
 //用于比较密码是否正确
 UserSchema.methods = {
-  comparePassword: function (_password, cb) {
-    bcrypt.compare(_password, this.password, function (err, isMatch) {
-      if (err) return cb(err)
-      cb(null, isMatch)
+  comparePassword: function (_password) {
+    const db = this;
+    return new Promise(function (rev, rej) {
+      console.log(_password, db.password, '==password');
+      bcrypt.compare(_password, db.password, function (err, isMatch) {
+        if (err) return rej(err)
+        rev(isMatch)
+      })
     })
   }
 }

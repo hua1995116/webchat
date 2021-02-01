@@ -1,13 +1,13 @@
 <template>
   <div class="user-header">
     <div class="head">
-      <img :src="src" alt="">
+      <img :src="avatar" alt="">
     </div>
     <div class="name">
       {{username}}
     </div>
     <div class="background">
-      <img :src="src" alt="">
+      <img :src="avatar" alt="">
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@
 export default {
 
   components: {},
-  props: ['src', 'username'],
+  props: ['avatar', 'username'],
   data () {
     return {
     };

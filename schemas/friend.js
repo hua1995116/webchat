@@ -1,7 +1,7 @@
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
 //聊天记录模型
-var FriendSchema = new mongoose.Schema({
-  selfId: String, // 使用默认 _id
+const FriendSchema = new mongoose.Schema({
+  selfId: mongoose.Schema.Types.ObjectId, // 使用默认 _id
   friendId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -12,6 +12,14 @@ var FriendSchema = new mongoose.Schema({
     default: Date.now()
   }
 })
+
+FriendSchema.virtual('frienInfo', {
+  ref: 'User',
+  localField: 'friendId',
+  foreignField: '_id',
+  justOne: true
+});
+
 //静态方法
 FriendSchema.statics = {
   fetch: function (cb) {

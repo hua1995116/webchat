@@ -7,7 +7,7 @@
             <mu-icon value="chevron_left"></mu-icon>
           </mu-button>
           <div class="center">
-            {{roomType === 'group' ? `聊天(${Object.keys(roomUsers[roomid] || {}).length})` : friendName}}
+            {{roomType === 'group' ? `聊天(${(roomUsers[roomId] || []).length})` : friendName}}
           </div>
           <mu-button v-if="roomType === 'group'" icon slot="right" @click="openSimpleDialog">
             <mu-icon value="people"></mu-icon>
@@ -27,8 +27,8 @@
       </div> -->
       <div class="chat-inner" @scroll="bindScroll">
         <div class="chat-container">
-          <div v-if="(roomdetail[roomid] || []).length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
-          <div v-if="(roomdetail[roomid] || []).length !== 0 && isloading" class="chat-loading">
+          <div v-if="(roomdetail[roomId] || []).length === 0" class="chat-no-people">暂无消息,赶紧来占个沙发～</div>
+          <div v-if="(roomdetail[roomId] || []).length !== 0 && isloading" class="chat-loading">
             <div class="lds-css ng-scope">
               <div class="lds-rolling">
                 <div>
@@ -36,27 +36,27 @@
               </div>
             </div>
           </div>
-          <div v-if="isEnd && (roomdetail[roomid] || []).length !== 0" class="chat-top">到顶啦~</div>
+          <div v-if="isEnd && (roomdetail[roomId] || []).length !== 0" class="chat-top">到顶啦~</div>
           <Message
-            v-for="(obj, index) in (roomdetail[roomid] || [])"
+            v-for="(obj, index) in (roomdetail[roomId] || [])"
             @avatarClick="handleInfo"
             @flexTouch="hadnleTouch"
             @retry="handleRetry"
             :key="obj._id"
-            :is-self="obj.username === username"
+            :is-self="obj.userInfo.username === username"
             :id="obj._id"
-            :name="obj.username"
-            :head="obj.src"
+            :username="obj.userInfo.username"
+            :avatar="obj.userInfo.avatar"
             :msg="obj.msg"
             :clientId="obj.clientId"
-            :roomid="obj.roomid"
-            :img="obj.img"
+            :groupId="obj.groupId"
+            :msgType="obj.msgType"
             :loading="obj.loading"
             :status="obj.status"
             :mytime="obj.time"
             :obj="obj"
             :container="container"
-            :isLast="roomdetail[roomid].length - 1 === index"
+            :isLast="roomdetail[roomId].length - 1 === index"
             ></Message>
           <div class="clear"></div>
         </div>
@@ -68,7 +68,7 @@
           </div>
           <div class="fun-li emoji">
             <i class="icon iconfont icon-emoji"></i>
-            <div class="emoji-content" v-show="getEmoji">
+            <div class="emoji-content" v-show="false">
               <div class="emoji-tabs">
                 <div class="emoji-container" ref="emoji">
                   <div class="emoji-block" :style="{width: Math.ceil(emoji.people.length / 5) * 48 + 'px'}">
@@ -139,7 +139,7 @@
       const {noticeBar, noticeVersion} = notice;
       return {
         isloading: false,
-        roomid: '',
+        roomId: '',
         roomType: 'group',
         container: {},
         chatValue: '',
@@ -160,7 +160,7 @@
       const to = queryString(window.location.href, 'to');
       const from = queryString(window.location.href, 'from');
       const friendName = queryString(window.location.href, 'friendName');
-      this.roomid = roomId;
+      this.roomId = roomId;
       this.roomType = roomType;
       this.to = to;
       this.from = from;
@@ -172,12 +172,12 @@
         // 防止未登录
         this.$router.push({path: '/login'});
       }
-      const res = await url.getNotice();
-      this.noticeList = res.data.noticeList;
-      if (res.data.version !== res.data.version) {
-        this.noticeBar = false;
-      }
-      this.noticeVersion = res.data.version;
+      // const res = await url.getNotice();
+      // this.noticeList = res.data.noticeList;
+      // if (res.data.version !== res.data.version) {
+      //   this.noticeBar = false;
+      // }
+      // this.noticeVersion = res.data.version;
     },
     async mounted() {
       loading.show({
@@ -188,15 +188,15 @@
       ios();
       this.container = document.querySelector('.chat-inner');
       // socket内部，this指针指向问题
-      const that = this;
       this.isloading = true;
-      if(!this.roomdetail[this.roomid]) {
+      if(!this.roomdetail[this.roomId]) {
+        console.log('获取详情')
         await this.getRoomMessage();
       }
       this.isloading = false;
       loading.hide();
 
-      this.bindEmoji();
+      // this.bindEmoji();
     },
     methods: {
       handleRetry(obj) {
@@ -210,7 +210,7 @@
         this.$store.commit('setRoomDetailStatus', {
           clientId: obj.clientId,
           newClientId: clientId,
-          roomid: obj.roomid,
+          groupId: obj.roomId,
           status: 'loading',
           typeList: ['status']
         })
@@ -251,11 +251,11 @@
       },
       async getRoomMessage() {
         const data = {
-          roomid: this.roomid
+          groupId: this.roomId
         };
-        if(this.roomdetail[this.roomid] && this.roomdetail[this.roomid].length > 0) {
-          const id = this.roomdetail[this.roomid][0]._id;
-          data.msgid = id;
+        if(this.roomdetail[this.roomId] && this.roomdetail[this.roomId].length > 0) {
+          const id = this.roomdetail[this.roomId][0]._id;
+          data.msgId = id;
         }
         try {
           const result = await this.$store.dispatch('getAllMessHistory', data);
@@ -274,7 +274,7 @@
         });
       },
       openSimpleDialog () {
-        this.$router.push({ path: "/groupDetail", query: { roomId: this.roomid} });
+        this.$router.push({ path: "/groupDetail", query: { roomId: this.roomId} });
       },
       handleGithub() {
         Alert({
@@ -295,7 +295,7 @@
         // 版本更新日志
       },
       async fileup() {
-        const that = this;
+        const _this = this;
         const file1 = document.getElementById('inputFile').files[0];
         if (file1) {
           const formdata = new window.FormData();
@@ -306,41 +306,32 @@
             img.src = fr.result;
             img.onload = async function() {
               const obj = {
-                username: that.username,
-                src: that.src,
-                img: `${fr.result}?width=${img.width}&height=${img.height}`,
-                msg: '',
-                roomType: that.roomType,
-                roomid: that.roomid,
-                type: 'img',
-                time: new Date(),
-                to: that.to,
-                from: that.from,
-                clientId: uuid(),
-              };
-
+                ...(_this.createMsg('img', `${fr.result}?width=${img.width}&height=${img.height}`)),
+                 userInfo: {
+                  avatar: _this.avatar,
+                  username: _this.username,
+                },
+                status: 'loading',
+                loading: 5,
+              }
                // 传递消息信息
-              that.$store.commit('setRoomDetailInfosAfter', {
-                roomid: that.roomid,
-                msgs: [{
-                  ...obj,
-                  status: 'loading',
-                  loading: 5,
-                }]
+              _this.$store.commit('setRoomDetailInfosAfter', {
+                groupId: _this.roomId,
+                msgs: [obj]
               });
 
-              const imgurl = await that.$store.dispatch('uploadImg', formdata);
+              const imgurl = await _this.$store.dispatch('uploadImg', formdata);
               if(imgurl.code == 500) {
                 Alert({
                   content: imgurl.data
                 })
-                that.$store.commit('delRoomDetailImg', {
-                  roomid: that.roomid,
+                _this.$store.commit('delRoomDetailImg', {
+                  roomId: _this.roomId,
                   clientId: obj.clientId
                 })
                 return;
               }
-              obj.img = `${imgurl.data}?width=${img.width}&height=${img.height}`;
+              obj.msg = `${imgurl.data}?width=${img.width}&height=${img.height}`;
 
               socket.emit('message', obj);
             }
@@ -358,37 +349,44 @@
         const file = document.getElementById('inputFile');
         file.click();
       },
+      createMsg(type, msg) {
+        const obj = {
+          userId: this.userId,
+          groupId: this.roomId,
+          msg,
+          // to: this.to,
+          roomType: this.roomType,
+          msgType: type,
+          clientId: uuid(),
+          time: Date.now()
+        };
+        return obj;
+      },
       submess() {
         // 判断发送信息是否为空
         if (this.chatValue !== '') {
           if (this.chatValue.length > 200) {
             Alert({
-              content: '请输入100字以内'
+              content: '请输入200字以内'
             });
             return;
           }
+          // msgType、msg、groupId、userId、roomType
+          // img / text/ video/ audio/ code / emjio
           const msg = inHTMLData(this.chatValue); // 防止xss
 
           const obj = {
-            username: this.username,
-            src: this.src,
-            img: '',
-            msg,
-            to: this.to,
-            from: this.from,
-            roomType: this.roomType,
-            roomid: this.roomid,
-            time: new Date(),
-            type: 'text',
-            clientId: uuid()
-          };
+            ...(this.createMsg('text', msg)),
+            status: 'loading',
+            userInfo: {
+              avatar: this.avatar,
+              username: this.username,
+            },
+          }
           // 传递消息信息
           this.$store.commit('setRoomDetailInfosAfter', {
-            roomid: this.roomid,
-            msgs: [{
-              ...obj,
-              status: 'loading'
-            }]
+            groupId: this.roomId,
+            msgs: [obj]
           });
 
           socket.emit('message', obj);
@@ -401,19 +399,18 @@
       }
     },
     computed: {
-      ...mapGetters([
-        'getEmoji',
-      ]),
-      ...mapState([
-        'isbind',
-        'roomdetail',
-        'roomUsers'
-      ]),
+      // ...mapGetters([
+      //   'getEmoji',
+      // ]),
+      ...mapState({
+        roomUsers: state => state.roomInfo.roomUsers,
+        roomdetail: state => state.roomInfo.roomdetail,
+      }),
       ...mapState({
         token: state => state.userInfo.token,
-        username: state => state.userInfo.userid,
-        userid: state => state.userInfo.id,
-        src: state => state.userInfo.src
+        username: state => state.userInfo.username,
+        userId: state => state.userInfo.userId,
+        avatar: state => state.userInfo.avatar,
       })
     },
     components: {

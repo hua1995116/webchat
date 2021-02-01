@@ -3,7 +3,7 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router/index';
-import store from './store';
+import store from './store/index1';
 import './styles/reset.css';
 import './styles/default.css';
 // 使用museui组件
@@ -66,20 +66,19 @@ socket.on('reconnect', async (attemptNumber) => {
 
 socket.on('connect', async () => {
   console.log('connect');
-  const roomId = queryString(window.location.href, 'roomId');
-  const userName = store.state.userInfo.userid;
-  const src = store.state.userInfo.src;
-  const userId = store.state.userInfo.id;
+  // const roomId = queryString(window.location.href, 'roomId');
+  const username = store.state.userInfo.username;
+  const avatar = store.state.userInfo.avatar;
+  const userId = store.state.userInfo.userId;
   if (userId) {
+    await store.dispatch('getGroupList', { userId });
+    const groupList = store.state.group.groupList;
     // 此处逻辑需要抽离复用
     await handleInit({
-      socket,
-      store,
-      name: userName,
-      id: userId,
-      src,
-      env,
-      roomList: ['room1', 'room2']
+      username,
+      userId,
+      avatar,
+      groupList
     })
   }
 });
@@ -95,23 +94,23 @@ socket.on('disconnect', () => {
 });
 
 socket.on('message', function (obj) {
-  const userName = store.state.userInfo.userid;
-  const { roomid, username, img } = obj;
-  if(userName === username) {
-    if(img) {
+  const userIdLocal = store.state.userInfo.userId;
+  const { groupId, userId, msgType, clientId, msg } = obj;
+  if(userIdLocal === userId) {
+    if(msgType === 'img') {
       console.log('img', obj);
       store.commit('setRoomDetailStatus', {
-        clientId: obj.clientId,
-        roomid: obj.roomid,
+        clientId,
+        groupId,
         status: 'finish',
         loading: 100,
-        img: obj.img,
+        img: msg,
         typeList: ['status', 'loading', 'img']
       })
     } else {
       store.commit('setRoomDetailStatus', {
-        clientId: obj.clientId,
-        roomid: obj.roomid,
+        clientId,
+        groupId,
         status: 'finish',
         typeList: ['status']
       })
@@ -119,7 +118,7 @@ socket.on('message', function (obj) {
 
   } else {
     store.commit('setRoomDetailInfosAfter', {
-      roomid,
+      groupId,
       msgs: [obj]
     });
     if (Notification.permission === "granted") {
@@ -131,7 +130,7 @@ socket.on('message', function (obj) {
 
 socket.on('count', (obj) => {
   console.log(obj);
-  store.commit("setUnread", obj);
+  // store.commit("setUnread", obj);
 })
 
 socket.on('room', (obj) => {
@@ -146,24 +145,28 @@ socket.on('friend', (obj) => {
   store.commit('setFriendList', obj);
 })
 
-document.addEventListener('touchstart', (e) => {
-  if(!e.target.className) {
-    return;
-  }
-  if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
-    store.commit('setEmoji', true);
-  } else {
-    store.commit('setEmoji', false);
-  }
-});
+// document.addEventListener('touchstart', (e) => {
+//   if(!e.target.className) {
+//     return;
+//   }
+//   console.log(e.target.className);
+//   if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
+//     store.commit('setEmoji', true);
+//   } else {
+//     store.commit('setEmoji', false);
+//   }
+// });
 
-document.addEventListener('click', (e) => {
-  if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
-    store.commit('setEmoji', true);
-  } else {
-    store.commit('setEmoji', false);
-  }
-});
+// document.addEventListener('click', (e) => {
+//   if(!e.target.className) {
+//     return;
+//   }
+//   if (e.target.className.indexOf('emoji') > -1 || e.target.parentNode.className.indexOf('emoji') > -1) {
+//     store.commit('setEmoji', true);
+//   } else {
+//     store.commit('setEmoji', false);
+//   }
+// });
 
 /* eslint-disable no-new */
 new Vue({

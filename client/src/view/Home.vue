@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UserHead :src="src" :username="username"></UserHead>
+    <UserHead :avatar="avatar" :username="username"></UserHead>
     <div class="content">
       <mu-list>
         <mu-list-item button :ripple="true" @click="changeAvatar">
@@ -138,10 +138,10 @@ export default {
         socket.emit('roomout');
         clear();
         this.$store.commit("setUserInfo", {});
-        this.$store.commit("setUnread", {
-          room1: 0,
-          room2: 0
-        });
+        // this.$store.commit("setUnread", {
+        //   room1: 0,
+        //   room2: 0
+        // });
         this.$router.push("/");
       }
     },
@@ -160,9 +160,9 @@ export default {
   },
   computed: {
     ...mapState({
-      username: state => state.userInfo.userid,
-      userid: state => state.userInfo.id,
-      src: state => state.userInfo.src
+     username: state => state.userInfo.username,
+      userId: state => state.userInfo.userId,
+      avatar: state => state.userInfo.avatar,
     })
   },
   components: {

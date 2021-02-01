@@ -1,7 +1,7 @@
 <template>
   <div class="clear" :class="[isSelf ? 'right' : 'left']" ref="msg">
     <div class="name">
-      <span v-if="mytime">{{ getdate }}</span> &nbsp;&nbsp;{{ name }}
+      <span v-if="mytime">{{ getdate }}</span> &nbsp;&nbsp;{{ username }}
     </div>
     <div class="body">
       <div class="tip" v-if="isSelf">
@@ -15,10 +15,10 @@
           @click.native="handleClick"
           class="head-place"
           size="small"
-          :src="avatar"
+          :src="avatarPro"
           v-flex-touch="handleTouch"
         ></Avatar>
-        <div v-if="img">
+        <div v-if="msgType === 'img'">
           <div class="img-wrapper">
             <div class="img-bg" v-if="loading && loading !== 100">{{loading}}%</div>
             <img
@@ -28,13 +28,13 @@
               alt=""
               :data-item="isLast && 'last'"
               class="img"
-              v-preview="img"
+              v-preview="pic.src"
               preview-title-enable="true"
               preview-nav-enable="true"
             />
           </div>
         </div>
-        <span v-if="msg">
+        <span v-if="msgType === 'text'">
           <span v-html="linkMsg" class="msg"></span>
         </span>
       </div>
@@ -55,7 +55,7 @@ export default {
     Avatar,
     Status,
   },
-  props: ["id", "name", "img", "msg", "head", "mytime", "is-self", "container", "isNeedScroll", "firstNode", 'isLast', 'status', 'clientId', 'roomid', "obj", 'loading'],
+  props: ["id", "username", "msg", "mytime", "is-self", "container", "isNeedScroll", "firstNode", 'isLast', 'status', 'clientId', 'groupId', "obj", 'loading', 'msgType', 'avatar'],
   computed: {
     getdate() {
       return dateFormat(new Date(this.mytime), "yyyy-MM-dd HH:mm:ss");
@@ -73,10 +73,10 @@ export default {
         }
       );
     },
-    avatar() {
-      let avatar = this.head;
+    avatarPro() {
+      let avatar = this.avatar;
       const reg = /\.\/static\/img\/(\d+)\.jpg/;
-      const matches = this.head.match(reg);
+      const matches = avatar.match(reg);
       if (matches) {
         avatar = `//s3.qiufengh.com/avatar/${matches[1]}.jpeg`;
       }
@@ -87,7 +87,7 @@ export default {
       }
     },
     pic() {
-      let pic = this.img;
+      let pic = this.msg;
       let width = 200;
       let height = 200;
       const picParse = /width=([0-9]+)&height=([0-9]+)/.exec(pic);
@@ -146,7 +146,7 @@ export default {
         if(this.status === 'loading') {
           this.$store.commit('setRoomDetailStatus', {
             clientId: this.clientId,
-            roomid: this.roomid,
+            groupId: this.groupId,
             status: 'error',
             typeList: ['status']
           })
@@ -158,12 +158,11 @@ export default {
     },
     handleClick() {
       this.$emit('avatarClick', {
-        id: this.name,
+        id: this.username,
       });
     },
     handleTouch(e) {
-      console.log(e);
-      this.$emit('flexTouch', `@${this.name}，`);
+      this.$emit('flexTouch', `@${this.username}，`);
     }
   }
 };

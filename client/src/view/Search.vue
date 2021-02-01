@@ -42,9 +42,10 @@ export default {
     return {};
   },
   async mounted() {
-    await this.$store.dispatch('getHostUserList');
-    await this.$store.dispatch('getvipuser');
-    console.log(this.vipUserList);
+    // await this.$store.dispatch('getHostUserList');
+    // await this.$store.dispatch('getvipuser');
+    // console.log(this.vipUserList);
+    console.log(this.$store.state.search.vipUserList)
   },
   methods: {
     changeAvatar() {
@@ -60,11 +61,10 @@ export default {
 
   },
   computed: {
-    ...mapState([
-      'hotUserList',
-      'userInfo',
-      'vipUserList'
-    ]),
+    ...mapState({
+      hotUserList: state => state.search.hotUserList,
+      vipUserList: state => state.search.vipUserList,
+    }),
     mapHotList() {
       return this.hotUserList.map(item => ({
         ...item,

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Toast from "@components/Toast";
+import Alert from "@components/Alert";
 import {setItem, getItem} from '@utils/localStorage';
 
 const baseURL = '';
@@ -23,8 +24,13 @@ instance.interceptors.request.use(async config => {
 // 对返回的内容做统一处理
 instance.interceptors.response.use(response => {
   if (response.status === 200) {
-    return response;
+    if (response.data.errno === 0) {
+      return response.data.data;
+    }
   }
+  Alert({
+    content: response.data.msg,
+  });
   return Promise.reject(response);
 }, error => {
   if (error) {

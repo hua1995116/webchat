@@ -8,7 +8,7 @@
       @leftClick="goback"
       ></Header>
     <div class="all-chat">
-      <UserHead :src="lookUserInfo.src" :username="lookUserInfo.name"></UserHead>
+      <UserHead :avatar="lookUserInfo.avatar" :username="lookUserInfo.username"></UserHead>
       <div class="group-list">
         <mu-list>
           <mu-sub-header>信息</mu-sub-header>
@@ -86,12 +86,16 @@ export default {
         'lookUserInfo',
         'userInfo'
       ]),
+    ...mapState({
+      lookUserInfo: state => state.userDetail.user,
+      userInfo: state => state.userInfo,
+    }),
   },
 
   async mounted() {
-    const id = queryString(window.location.href, 'id');
+    const username = queryString(window.location.href, 'id');
     await this.$store.dispatch('getUserInfo', {
-      id,
+      username
     });
   },
 
@@ -103,19 +107,24 @@ export default {
     },
     async handelAddFriend() {
       const res = await this.$store.dispatch('addFriend', {
-        selfId: this.userInfo.id,
-        friendId: this.lookUserInfo.id
+        selfId: this.userInfo.userId,
+        friendId: this.lookUserInfo._id
       });
-      if(res.data.errno === 0) {
-        console.log('1111');
+      if(res) {
         Alert({
-          content: res.data.data
-        })
-      } else {
-        Alert({
-          content: res.data.data
+          content: res
         })
       }
+      // if(res.data.errno === 0) {
+      //   console.log('1111');
+      //   Alert({
+      //     content: res.data.data
+      //   })
+      // } else {
+      //   Alert({
+      //     content: res.data.data
+      //   })
+      // }
     },
     goback() {
       this.$router.isBack = true;

@@ -5,7 +5,7 @@
   "author": "hua1995116",
   "private": true,
   "scripts": {
-    "dev": "nodemon prod.server.js --watch schemas --watch server_modules --watch models --watch router --watch utils --watch prod.server.js",
+    "dev": "nodemon prod.server.js --watch services --watch schemas --watch server_modules --watch models --watch router --watch utils --watch prod.server.js",
     "deploy": "node deploy/index.js",
     "prod": "cross-env NODE_ENV=production node prod.server.js",
     "lint": "eslint --ext .js,.vue src",

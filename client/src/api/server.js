@@ -44,7 +44,15 @@ const Service = {
   // 查询好友李彪
   postListFriend: data => Axios.post('/api/friend/list', data),
   // 请求公告
-  getNotice: () => Axios.get('https://s3.qiufengh.com/config/notice-config.js')
+  getNotice: () => Axios.get('https://s3.qiufengh.com/config/notice-config.js'),
+
+  getGroupList: (data) => Axios.get('/api/group/list', {
+    params: data
+  }),
+
+  getGroupUserList: (data) => Axios.get('/api/group/userList', {
+    params: data
+  }),
 };
 
 export default Service;

@@ -9,7 +9,7 @@
       ></Header>
     <div class="all-chat">
       <div class="group-avatar group-list">
-        <Avatar v-for="(item,index) in Object.keys(roomUsers[roomid] || {}).slice(0, 18)" class="list-avatar" :key="index" :src="roomUsers[roomid][item].src"></Avatar>
+        <Avatar v-for="(item,index) in groupAllUsers.slice(0, 18)" class="list-avatar" :key="index" :src="item.userInfo.avatar"></Avatar>
         <div class="group-more" v-show="Object.keys(allUser).length > 18" @click="gotoMore">查看更多群成员</div>
       </div>
       <div class="group-list">
@@ -94,7 +94,7 @@ export default {
       notifications: false,
       sounds: false,
       videoSounds: false,
-      roomid: '',
+      groupId: '',
       allUser: {
         '005': {
           src: 'static/files/825836avatar-hua1995116.jpeg'
@@ -104,14 +104,15 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      'roomUsers'
-    ]),
+    ...mapState({
+      groupAllUsers: state => state.roomInfo.groupAllUsers,
+    }),
   },
 
-  mounted() {
-    const roomId = queryString(window.location.href, 'roomId');
-    this.roomid = roomId;
+  async mounted() {
+    const groupId = queryString(window.location.href, 'roomId');
+    this.groupId = groupId;
+    await this.$store.dispatch('groupAllUsers', {groupId: this.groupId});
     // const allUser = {}
     // let i = 0;
     // while(i < 180) {

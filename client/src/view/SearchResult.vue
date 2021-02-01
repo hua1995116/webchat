@@ -35,9 +35,9 @@ export default {
   },
 
   computed: {
-    ...mapState([
-      'searchUserList'
-    ])
+    ...mapState({
+      searchUserList: state => state.search.searchUserList,
+    }),
   },
 
   mounted() {

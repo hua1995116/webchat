@@ -1,7 +1,7 @@
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
 // socket模型
 // 如果 os 和 browser 一致时，则更新数据，否则新建数据。
-var SocketSchema = new mongoose.Schema({
+const SocketSchema = new mongoose.Schema({
   socketId: {
     type: String,
     unique: true,
