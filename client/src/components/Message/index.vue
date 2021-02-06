@@ -34,7 +34,7 @@
             />
           </div>
         </div>
-        <span v-if="msg">
+        <span v-if="msg" :class="[confetti ? 'msg-text animation-confetti': 'msg-text']">
           <span v-html="linkMsg" class="msg"></span>
         </span>
       </div>
@@ -46,11 +46,21 @@
 import Avatar from "@components/Avatar";
 import Status from './Status';
 import dateFormat from "../../utils/date";
+import confetti from 'canvas-confetti';
 import { inHTMLData, uriInUnQuotedAttr } from "xss-filters-es6";
 const maxWidth = 200;
 const maxHeight = 200;
 
+function r(mi, ma) {
+	return parseInt(Math.random() * (ma - mi) + mi);
+}
+
 export default {
+  data() {
+    return {
+      confetti: false
+    }
+  },
   components: {
     Avatar,
     Status,
@@ -129,6 +139,23 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.$refs.msg.scrollIntoView();
+      if(this.msg === '🎉' && this.status) {
+        this.confetti = true;
+        const rect = this.$refs.msg.querySelector('.msg-text').getBoundingClientRect();
+        if(rect.left && rect.top) {
+          setTimeout(() => {
+            confetti({
+              particleCount: r(100, 150),
+              angle: this.isSelf ? 120 : 60,
+              spread: r(45, 80),
+              origin: {
+                x: rect.left / window.innerWidth,
+                y: rect.top / window.innerHeight
+              }
+            });
+          }, 200)
+        }
+      }
     })
     this.handleLoading();
   },

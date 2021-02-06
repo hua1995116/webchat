@@ -120,7 +120,10 @@ socket.on('message', function (obj) {
   } else {
     store.commit('setRoomDetailInfosAfter', {
       roomid,
-      msgs: [obj]
+      msgs: [{
+        ...obj,
+        status: 'finish',
+      }]
     });
     if (Notification.permission === "granted") {
       popNotice(obj);
