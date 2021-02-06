@@ -6,7 +6,7 @@
 
 [中文版](./README.md) [English](./zh_en.md)
 
-> 说明: master 分支还不太稳定，可以查看 https://github.com/hua1995116/webchat/tree/v2.2.0 稳定分支
+> 说明: master 分支还不太稳定，可以查看 https://github.com/hua1995116/webchat/tree/v2.2.0 稳定分支， 3.0 版本持续重构中。
 
 ## 功能
 
@@ -79,7 +79,7 @@ npm run prod
 
 qq群: 437938625
 
-加微信，拉你进微信群。
+微信群: 加微信拉你进微信群。
 
 <img src="https://s3.qiufengh.com/webchat/webcaht-my.jpeg?imageView2/2/w/360" width="300" />
 
